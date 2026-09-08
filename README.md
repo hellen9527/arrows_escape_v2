@@ -35,6 +35,28 @@ Lint covers authored code; the scaffold's unmodified Shadcn catalog and use-mobi
 
 Game art is code-native geometry. Code and level generation are independently implemented. This delivery is a browser game, not an Android/iOS store package; there are no ads, purchases, accounts or cloud saves.
 
-## Publishing
+## Publishing through GitHub and Cloudflare
 
-The Sites project ID is retained in `.openai/hosting.json`. Publish a built, committed source version through the Sites connector. Never save source write credentials in this repository.
+Production repository: https://github.com/hellen9527/arrows_escape_v2
+
+- Branch: `main`
+- Cloudflare Worker: `arrows-escape-v2`
+- Root directory: `/`
+- Build command: `npm run check && npm run build`
+- Deploy command: `npm run deploy`
+- Node version: `22` (also specified in `.node-version`)
+- No API keys, application secrets, database or build variables are needed by the game.
+
+Connect this repository to Cloudflare Workers Builds. A push to `main` triggers the production build and publishes the Worker plus `dist/client` assets. `wrangler.jsonc` is the source configuration; the Cloudflare Vite plugin generates `dist/server/wrangler.json`. Deploy only that generated build, not the repository source.
+
+For an initial manual deployment only when Git automatic builds are not configured:
+
+```sh
+npm run check
+npm run build
+npm run deploy
+```
+
+Cloudflare authentication is required for manual deployment. Never commit tokens. After Git integration is configured, use Git pushes instead of simultaneous local deployments.
+
+The `.openai/hosting.json` file records an earlier, unsuccessful Sites deployment attempt. It is retained as historical metadata and is not used by the Cloudflare build. The game has no login requirement on its public Cloudflare URL.
