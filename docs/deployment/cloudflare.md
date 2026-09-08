@@ -1,6 +1,6 @@
 # Cloudflare deployment
 
-The user requested migrating the existing game to `hellen9527/arrows_escape_v2` and publishing a public, link-accessible browser game. Preserve the existing Vinext/Cloudflare adapter, all game features, and the lockfile's dependency versions. No custom domain was requested; use the account's workers.dev address initially.
+The user requested migrating the existing game to `hellen9527/arrows_escape_v2` and publishing a public, link-accessible browser game. Preserve the existing Vinext/Cloudflare adapter, all game features, and the lockfile's dependency versions. The authorized production domain is `arrows.fategenie.com`, configured as a Worker Custom Domain in `wrangler.jsonc`. Keep the existing workers.dev address available. The zone is active in the same Cloudflare account; no existing `arrows` DNS record was present before binding. Custom Domains manages DNS and TLS. Preserve all unrelated zone records.
 
 Source configuration: `wrangler.jsonc`. Generated Worker entry: `dist/server/index.js`; public assets: `dist/client`. Build: `npm run check && npm run build`. Deploy: `npm run deploy`. Production branch: `main`. Node: 22. No game secrets or runtime bindings.
 

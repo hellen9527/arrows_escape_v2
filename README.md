@@ -39,6 +39,10 @@ Game art is code-native geometry. Code and level generation are independently im
 
 Production repository: https://github.com/hellen9527/arrows_escape_v2
 
+Game URL: https://arrows.fategenie.com
+
+The custom domain is maintained in `wrangler.jsonc`; Cloudflare manages its DNS and HTTPS certificate. The original workers.dev URL remains available. Saves are browser- and origin-local, so progress on the old URL does not automatically carry over to the custom domain.
+
 - Branch: `main`
 - Cloudflare Worker: `arrows-escape-v2`
 - Root directory: `/`

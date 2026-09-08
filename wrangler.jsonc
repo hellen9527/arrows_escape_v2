@@ -6,5 +6,6 @@
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
   "preview_urls": false,
+  "routes": [{ "pattern": "arrows.fategenie.com", "custom_domain": true }],
   "observability": { "enabled": true }
 }
