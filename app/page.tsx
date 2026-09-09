@@ -29,6 +29,7 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Progress as ProgressBar } from '@/components/ui/progress';
 import { Board } from '@/components/game/board';
+import { HomeScreenGuide } from '@/components/game/home-screen-guide';
 import {
   act,
   blockers,
@@ -714,6 +715,7 @@ export default function Home() {
                       'Progress and preferences save in this browser',
                     )}
               </p>
+              <HomeScreenGuide en={en} />
             </>
           )}
           {panel === 'help' && (

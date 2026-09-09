@@ -64,3 +64,21 @@ npm run deploy
 Cloudflare authentication is required for manual deployment. Never commit tokens. After Git integration is configured, use Git pushes instead of simultaneous local deployments.
 
 The `.openai/hosting.json` file records an earlier, unsuccessful Sites deployment attempt. It is retained as historical metadata and is not used by the Cloudflare build. The game has no login requirement on its public Cloudflare URL.
+
+## Mobile play and home-screen launch
+
+Phones use one viewport for the game. Zoom pans only the board; settings and level selection scroll within their dialogs. Short landscape screens place controls beside the board. Desktop layout is unchanged.
+
+Open Settings → Add to Home Screen for iOS/Android instructions. The manifest requests standalone launch and includes application icons. Browser toolbars are controlled by the browser, and system status/gesture bars may remain. Internet access is required; offline caching and account/cloud saves are not included. Home-screen installation may use storage separate from the browser.
+
+Browser regression checks require a local Chrome installation and a running game server:
+
+```sh
+npm run dev -- --port 4173
+# In another terminal (use a disposable test origin):
+npm run test:browser
+# To test a locally served production build instead:
+QA_URL=http://127.0.0.1:4174 npm run test:browser
+```
+
+Checks use isolated browser contexts for eight portrait/landscape/desktop sizes, touch escape, undo, board panning, dialog containment, language persistence, and manifest/icon responses. Screenshots are written to ignored `work/`. Real-device installation and Safari chrome/safe areas still require device QA.
