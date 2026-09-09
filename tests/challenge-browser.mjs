@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 import { blockers, defaultProgress, newRun } from '../lib/game/engine.ts';
 import { makeLevel } from '../lib/game/levels.ts';
 const origin = process.env.QA_URL || 'http://localhost:4175';
-const key = 'arrow-escape:challenge:v1';
+const key = 'arrow-escape:challenge:v2';
 const browser = await chromium.launch({
   channel: 'chrome',
   headless: true,
@@ -93,7 +93,7 @@ try {
   );
   await page.getByRole('button', { name: '选关', exact: true }).click();
   await page
-    .getByRole('button', { name: '挑战篇 · 30 关', exact: true })
+    .getByRole('button', { name: '挑战 2.0 · 30 关', exact: true })
     .click();
   await page.getByRole('button', { name: '关闭', exact: true }).click();
   await page.getByRole('dialog').waitFor({ state: 'hidden' });

@@ -1569,3 +1569,121 @@ button:active:not(:disabled) {
     margin-right: 0;
   }
 }
+
+/* Keys are marked by both shape and letter, so color is never the only cue. */
+.game-arrow.key-arrow {
+  color: #aa6615;
+}
+.game-arrow.locked-arrow {
+  color: #8066ac;
+}
+.arrow-token rect {
+  fill: #fff8e6;
+  stroke: #dca747;
+  stroke-width: 1.5;
+}
+.arrow-token.lock-token rect {
+  fill: #f6f1ff;
+  stroke: #b8a2d6;
+}
+.arrow-token text {
+  fill: currentColor;
+  font-size: 13px;
+  font-weight: 800;
+}
+.arrow-token.lock-token > g rect {
+  fill: none;
+  stroke: currentColor;
+}
+.key-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #9a651b;
+  margin-left: auto;
+  padding: 8px 4px;
+  font-size: 12px;
+  min-height: 40px;
+}
+.key-symbol {
+  color: #aa6615;
+  background: #fff5d9;
+}
+.key-explainer {
+  color: #63748e;
+  line-height: 1.8;
+  font-size: 14px;
+  margin: 12px 0 22px;
+}
+.revision-history {
+  color: #6e7892;
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 10px 0;
+}
+.revision-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 18px 0 24px;
+}
+.revision-features span {
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #3464ab;
+  background: #eef4ff;
+}
+.board-shell.has-breakthrough {
+  border-color: #8db0f0;
+  box-shadow: 0 0 0 2px #aac8ff30;
+}
+.release-feedback {
+  position: absolute;
+  z-index: 3;
+  left: 12px;
+  top: 8px;
+  max-width: calc(100% - 140px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  white-space: nowrap;
+  color: #2a63c2;
+  background: #edf5fff5;
+  padding: 6px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  animation: release-pulse 1.3s ease-out both;
+}
+.release-feedback.key-release {
+  background: #fff5dbf5;
+  color: #976116;
+}
+@keyframes release-pulse {
+  0% {
+    opacity: 0;
+    translate: 0 5px;
+  }
+  15%,
+  75% {
+    opacity: 1;
+    translate: 0 0;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}
+.reduce-motion .release-feedback {
+  animation: none;
+}
+@media (max-width: 740px), (pointer: coarse) and (max-height: 540px) {
+  .large-board.zoomed .puzzle-board {
+    width: max(200cqw, 125cqh);
+  }
+}
+
+.has-breakthrough .difficulty {
+  visibility: hidden;
+}

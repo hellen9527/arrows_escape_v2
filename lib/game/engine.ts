@@ -1,4 +1,9 @@
-export type Arrow = { id: number; points: number[][] };
+export type Arrow = {
+  id: number;
+  points: number[][];
+  key?: string;
+  lock?: string;
+};
 export type Campaign = 'classic' | 'challenge';
 export type Level = {
   id: number;
@@ -26,6 +31,16 @@ export function direction(a: Arrow): number[] {
   const q = a.points.at(-2)!;
   return [p[0] - q[0], p[1] - q[1]];
 }
+export function isLocked(
+  level: Level,
+  removed: number[],
+  arrow: Arrow,
+): boolean {
+  return Boolean(
+    arrow.lock &&
+    !level.arrows.some((a) => a.key === arrow.lock && removed.includes(a.id)),
+  );
+}
 export function blockers(
   level: Level,
   removed: number[],
@@ -35,7 +50,7 @@ export function blockers(
   if (!arrow || removed.includes(id)) return [];
   const [dx, dy] = direction(arrow);
   const [hx, hy] = arrow.points.at(-1)!;
-  return level.arrows
+  const blocked = level.arrows
     .filter(
       (a) =>
         a.id !== id &&
@@ -45,6 +60,12 @@ export function blockers(
         ),
     )
     .map((a) => a.id);
+  if (isLocked(level, removed, arrow)) {
+    const key = level.arrows.find((a) => a.key === arrow.lock);
+    if (!key) return [...blocked, -1];
+    if (!blocked.includes(key.id)) blocked.push(key.id);
+  }
+  return blocked;
 }
 export const newRun = (level: number): Run => ({
   level,
@@ -87,8 +108,13 @@ export function act(level: Level, r: Run, action: Action): Run {
     r.removed.includes(action.id)
   )
     return r;
-  if (blockers(level, r.removed, action.id).length)
-    return { ...r, mistakes: r.mistakes + 1 };
+  const arrow = level.arrows.find((a) => a.id === action.id)!;
+  if (isLocked(level, r.removed, arrow)) return r;
+  if (blockers(level, r.removed, action.id).length) {
+    const next = { ...r, mistakes: r.mistakes + 1 };
+    if (failed(level, next)) next.hint = null;
+    return next;
+  }
   return {
     ...r,
     removed: [...r.removed, action.id],
@@ -104,6 +130,9 @@ export const stars = (r: Run) =>
 export const defaultProgress = (campaign: Campaign = 'classic') => ({
   version: 1,
   campaign,
+  contentRevision: campaign === 'challenge' ? 2 : 1,
+  previousBest: {} as Record<string, number>,
+  showRevisionIntro: false,
   unlocked: 1,
   best: {} as Record<string, number>,
   run: newRun(1),
@@ -127,6 +156,23 @@ export function finishLevel(p: Progress): Progress {
     },
   };
 }
+function validBests(value: unknown, count: number): Record<string, number> {
+  const best: Record<string, number> = {};
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return best;
+  for (const [key, score] of Object.entries(value)) {
+    if (
+      Number.isInteger(+key) &&
+      +key >= 1 &&
+      +key <= count &&
+      typeof score === 'number' &&
+      Number.isInteger(score) &&
+      score >= 1 &&
+      score <= 3
+    )
+      best[key] = score;
+  }
+  return best;
+}
 export function restoreProgress(
   raw: string | null,
   campaign: Campaign = 'classic',
@@ -137,25 +183,30 @@ export function restoreProgress(
     const s = JSON.parse(raw || 'null');
     if (!s || s.version !== 1 || (s.campaign || 'classic') !== campaign)
       return p;
+    if (
+      campaign === 'challenge' &&
+      s.contentRevision != null &&
+      s.contentRevision !== 1 &&
+      s.contentRevision !== 2
+    )
+      return p;
     p.sound = typeof s.sound === 'boolean' ? s.sound : true;
     p.reducedMotion = s.reducedMotion === true;
     p.language = s.language === 'en' ? 'en' : 'zh';
-    if (s.best && typeof s.best === 'object')
-      for (const [k, v] of Object.entries(s.best)) {
-        if (
-          Number.isInteger(+k) &&
-          +k >= 1 &&
-          +k <= count &&
-          typeof v === 'number' &&
-          Number.isInteger(v) &&
-          v >= 1 &&
-          v <= 3
-        )
-          p.best[k] = v;
-      }
+    const migrating = campaign === 'challenge' && s.contentRevision !== 2;
+    p.previousBest =
+      campaign === 'challenge'
+        ? validBests(migrating ? s.best : s.previousBest, count)
+        : {};
+    p.best = migrating ? {} : validBests(s.best, count);
+    p.showRevisionIntro =
+      campaign === 'challenge' && (migrating || s.showRevisionIntro === true);
     p.unlocked = Math.min(
       count,
-      Math.max(1, ...Object.keys(p.best).map((k) => +k + 1)),
+      Math.max(
+        1,
+        ...Object.keys({ ...p.previousBest, ...p.best }).map((k) => +k + 1),
+      ),
     );
     const r = s.run;
     if (
@@ -164,6 +215,13 @@ export function restoreProgress(
       r.level >= 1 &&
       r.level <= p.unlocked
     ) {
+      p.run = newRun(
+        migrating && p.previousBest[r.level]
+          ? Math.min(p.unlocked, r.level + 1)
+          : r.level,
+      );
+      // Old arrow ids refer to a different puzzle. Carry achievements, never moves.
+      if (migrating) return p;
       let candidate = newRun(r.level);
       const l = makeLevel(r.level, campaign);
       if (Array.isArray(r.removed) && r.removed.length <= l.arrows.length) {

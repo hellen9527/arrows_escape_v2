@@ -21,6 +21,8 @@ import {
   Flag,
   Heart,
   Trophy,
+  KeyRound,
+  UnlockKeyhole,
 } from 'lucide-react';
 import {
   Dialog,
@@ -38,6 +40,7 @@ import {
   lives,
   type Campaign,
   blockers,
+  isLocked,
   defaultProgress,
   finishLevel,
   newRun,
@@ -45,13 +48,12 @@ import {
   stars,
   type Progress,
 } from '@/lib/game/engine';
+import { saveKey, readProgress } from '@/lib/game/storage';
 import { levelCount, makeLevel } from '@/lib/game/levels';
 import { challengeInfo } from '@/lib/game/challenge-levels';
 import { useGameTools } from '@/lib/game/webmcp';
 import { playSound } from '@/lib/game/sound';
 
-const saveKey = (campaign: Campaign) =>
-  campaign === 'classic' ? 'arrow-escape:v1' : 'arrow-escape:challenge:v1';
 const MODE_KEY = 'arrow-escape:campaign';
 const classicChapters = [
   ['初见方向', 'First directions'],
@@ -81,7 +83,16 @@ const challengeNotes = [
   ['耐心观察，连接线索。', 'Take your time. Connect the clues.'],
   ['用学会的技巧，完成最后挑战。', 'Bring it all together.'],
 ];
-type Panel = 'levels' | 'settings' | 'help' | 'restart' | 'win' | 'fail' | null;
+type Panel =
+  | 'levels'
+  | 'settings'
+  | 'help'
+  | 'restart'
+  | 'win'
+  | 'fail'
+  | 'revision'
+  | 'keys'
+  | null;
 
 export default function Home() {
   const [progress, setProgress] = useState<Progress>(() =>
@@ -99,10 +110,16 @@ export default function Home() {
   } | null>(null);
   const [notice, setNotice] = useState('');
   const [zoom, setZoom] = useState(false);
+  const [release, setRelease] = useState<{
+    serial: number;
+    count: number;
+    key: boolean;
+  } | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const winShown = useRef('');
   const blockedTap = useRef({ id: -1, at: 0 });
   const savedModes = useRef<Partial<Record<Campaign, Progress>>>({});
+  const storageLoaded = useRef(false);
   const [storageFailed, setStorageFailed] = useState(false);
   const en = progress.language === 'en';
   const t = (zh: string, english: string) => (en ? english : zh);
@@ -122,6 +139,9 @@ export default function Home() {
   const chapter = Math.floor((run.level - 1) / perChapter);
   const complete = run.removed.length === level.arrows.length;
   const remaining = level.arrows.length - run.removed.length;
+  const keyArrows = level.arrows.filter((a) => a.key);
+  const keysFound = keyArrows.filter((a) => run.removed.includes(a.id)).length;
+  const previousCount = Object.keys(progress.previousBest).length;
   const totalStars = Object.values(progress.best).reduce((a, b) => a + b, 0);
   const update = useCallback((next: Progress) => {
     progressRef.current = next;
@@ -138,13 +158,11 @@ export default function Home() {
           localStorage.getItem(MODE_KEY) === 'classic'
             ? 'classic'
             : 'challenge';
-        const restored = restoreProgress(
-          localStorage.getItem(saveKey(campaign)),
-          campaign,
-        );
+        const restored = readProgress(localStorage, campaign);
         if (
           !localStorage.getItem(saveKey(campaign)) &&
-          campaign === 'challenge'
+          campaign === 'challenge' &&
+          !localStorage.getItem('arrow-escape:challenge:v1')
         ) {
           const previous = restoreProgress(
             localStorage.getItem(saveKey('classic')),
@@ -154,6 +172,8 @@ export default function Home() {
           restored.reducedMotion = previous.reducedMotion;
         }
         update(restored);
+        storageLoaded.current = true;
+        if (restored.showRevisionIntro) setPanel('revision');
       } catch {
         setStorageFailed(true);
       }
@@ -166,6 +186,9 @@ export default function Home() {
   }, [update]);
   useEffect(() => {
     if (!ready) return;
+    document.documentElement.lang = en ? 'en' : 'zh-CN';
+    // Do not persist temporary defaults if the original save was unreadable.
+    if (!storageLoaded.current) return;
     try {
       savedModes.current[progress.campaign] = progress;
       localStorage.setItem(
@@ -176,7 +199,6 @@ export default function Home() {
     } catch {
       queueMicrotask(() => setStorageFailed(true));
     }
-    document.documentElement.lang = en ? 'en' : 'zh-CN';
   }, [progress, ready, en]);
   useEffect(() => {
     if (!ready || !complete || flying.length || panel !== null) return;
@@ -208,21 +230,20 @@ export default function Home() {
     timers.current = [];
     setFlying([]);
     setBump(null);
+    setRelease(null);
     setNotice('');
     setZoom(false);
     winShown.current = '';
     blockedTap.current = { id: -1, at: 0 };
   }
   function switchCampaign(campaign: Campaign) {
+    if (!storageLoaded.current) return;
     if (campaign === progressRef.current.campaign) return;
     const current = progressRef.current;
     savedModes.current[current.campaign] = current;
     let next = savedModes.current[campaign];
     try {
-      next ??= restoreProgress(
-        localStorage.getItem(saveKey(campaign)),
-        campaign,
-      );
+      next ??= readProgress(localStorage, campaign);
     } catch {
       setStorageFailed(true);
       // Keep the current campaign when the destination cannot be read.
@@ -244,7 +265,16 @@ export default function Home() {
     setChapterPage(
       Math.floor((next.run.level - 1) / (campaign === 'challenge' ? 6 : 12)),
     );
-    setPanel('levels');
+    setPanel(next.showRevisionIntro ? 'revision' : 'levels');
+  }
+  function closePanel() {
+    if (panel === 'revision')
+      update({ ...progressRef.current, showRevisionIntro: false });
+    setPanel(null);
+  }
+  function startRevision(id: number) {
+    update({ ...progressRef.current, showRevisionIntro: false });
+    startLevel(id);
   }
   function startLevel(id: number) {
     if (
@@ -263,7 +293,17 @@ export default function Home() {
     const l = makeLevel(p.run.level, p.campaign);
     if (failed(l, p.run)) return;
     const blocked = blockers(l, p.run.removed, id);
-    if (!l.arrows.some((a) => a.id === id)) return;
+    const arrow = l.arrows.find((a) => a.id === id);
+    if (!arrow) return;
+    if (isLocked(l, p.run.removed, arrow)) {
+      setNotice(
+        t(
+          `先移走 ${arrow.lock} 钥匙箭头，解开同字母的锁。查看锁不会扣心。`,
+          `Free key ${arrow.lock} to open matching locks. Inspecting a lock costs no heart.`,
+        ),
+      );
+      return;
+    }
     if (blocked.length) {
       const serial = Date.now();
       if (blockedTap.current.id === id && serial - blockedTap.current.at < 520)
@@ -297,14 +337,38 @@ export default function Home() {
           blockers(l, p.run.removed, a.id).length > 0 &&
           blockers(l, [...p.run.removed, id], a.id).length === 0,
       ).length;
+      const openedLocks = arrow.key
+        ? l.arrows.filter(
+            (a) => a.lock === arrow.key && !p.run.removed.includes(a.id),
+          ).length
+        : 0;
       setNotice(
-        p.campaign === 'challenge' && newlyFree >= 2
+        openedLocks
           ? t(
-              `突破了！打开 ${newlyFree} 条新通路。`,
-              `Breakthrough! ${newlyFree} new paths are clear.`,
+              `${arrow.key} 钥匙到手！${openedLocks} 支箭头已解锁。`,
+              `Key ${arrow.key} found! ${openedLocks} arrows unlocked.`,
             )
-          : '',
+          : p.campaign === 'challenge' && newlyFree >= 2
+            ? t(
+                `突破！打开 ${newlyFree} 条新通路。`,
+                `Breakthrough! ${newlyFree} new paths.`,
+              )
+            : '',
       );
+      if (p.campaign === 'challenge' && (openedLocks || newlyFree >= 3)) {
+        const serial = Date.now();
+        setRelease({
+          serial,
+          count: openedLocks || newlyFree,
+          key: Boolean(openedLocks),
+        });
+        later(
+          () =>
+            setRelease((value) => (value?.serial === serial ? null : value)),
+          1300,
+        );
+        if (p.sound && openedLocks) playSound('hint');
+      }
       setBump(null);
       if (p.sound) playSound('escape', p.run.removed.length);
       setFlying((old) => [...old, id]);
@@ -467,10 +531,10 @@ export default function Home() {
               <div className="section-eyebrow">
                 {t(
                   challenge
-                    ? `挑战篇 · ${info!.title[0]}`
+                    ? `挑战 2.0 · ${info!.title[0]}`
                     : `第 ${chapter + 1} 章 · ${chapters[chapter][0]}`,
                   challenge
-                    ? `CHALLENGE · ${info!.title[1]}`
+                    ? `CHALLENGE 2.0 · ${info!.title[1]}`
                     : `CHAPTER ${chapter + 1} · ${chapters[chapter][1].toUpperCase()}`,
                 )}
               </div>
@@ -485,7 +549,24 @@ export default function Home() {
               <span>{t('选关', 'Levels')}</span>
             </button>
           </div>
-          <div className="board-shell">
+          <div className={`board-shell ${release ? 'has-breakthrough' : ''}`}>
+            {release && (
+              <div
+                className={`release-feedback ${release.key ? 'key-release' : ''}`}
+                key={release.serial}
+                aria-hidden="true"
+              >
+                {release.key ? (
+                  <UnlockKeyhole size={16} />
+                ) : (
+                  <Sparkles size={16} />
+                )}
+                <span>
+                  {release.key ? t('解锁', 'UNLOCKED') : t('突破', 'OPENING')} +
+                  {release.count}
+                </span>
+              </div>
+            )}
             <div className="board-topline">
               <span className="difficulty">
                 <span />
@@ -556,7 +637,9 @@ export default function Home() {
                 <CircleHelp size={19} />
               </button>
             </div>
-            <div className={`board-viewport ${zoom ? 'zoomed' : ''}`}>
+            <div
+              className={`board-viewport ${zoom ? 'zoomed' : ''} ${level.size >= 18 ? 'large-board' : ''}`}
+            >
               <Board
                 disabled={!ready || lost || complete || panel !== null}
                 level={level}
@@ -585,6 +668,19 @@ export default function Home() {
                         `${remaining} arrows to go`,
                       )}
               </span>
+              {keyArrows.length > 0 && (
+                <button
+                  className="key-counter"
+                  onClick={() => setPanel('keys')}
+                  aria-label={t(
+                    `钥匙 ${keysFound}/${keyArrows.length}，查看规则`,
+                    `Keys ${keysFound}/${keyArrows.length}, show rules`,
+                  )}
+                >
+                  <KeyRound size={14} />
+                  {keysFound}/{keyArrows.length}
+                </button>
+              )}
               <button
                 className="zoom-button"
                 aria-label={
@@ -612,17 +708,24 @@ export default function Home() {
                     '做得漂亮。准备好下一个谜题了吗？',
                     'Nicely done. Ready for the next puzzle?',
                   )
-                : run.level === 1 && run.removed.length === 0
+                : keyArrows.length > 0 &&
+                    keysFound === 0 &&
+                    run.removed.length === 0
                   ? t(
-                      '轻点箭头。前方没有阻挡，它就能自由离开。',
-                      'Tap an arrow. If the path ahead is clear, it will escape.',
+                      '移走金色钥匙，打开同字母的锁；点锁不扣心。',
+                      'Free a gold key to open matching locks. Inspecting locks is free.',
                     )
-                  : info
-                    ? info.focus[en ? 1 : 0]
-                    : t(
-                        '顺着箭头看，找到一条畅通的路。',
-                        'Follow the arrow. Find a clear way out.',
-                      ))}
+                  : run.level === 1 && run.removed.length === 0
+                    ? t(
+                        '轻点箭头。前方没有阻挡，它就能自由离开。',
+                        'Tap an arrow. If the path ahead is clear, it will escape.',
+                      )
+                    : info
+                      ? info.focus[en ? 1 : 0]
+                      : t(
+                          '顺着箭头看，找到一条畅通的路。',
+                          'Follow the arrow. Find a clear way out.',
+                        ))}
           </output>
           {lost ? (
             <button
@@ -760,7 +863,7 @@ export default function Home() {
       <Dialog
         open={panel !== null}
         onOpenChange={(open) => {
-          if (!open) setPanel(null);
+          if (!open) closePanel();
         }}
       >
         <DialogContent
@@ -770,7 +873,7 @@ export default function Home() {
           <button
             className="dialog-close icon-button"
             aria-label={t('关闭', 'Close')}
-            onClick={() => setPanel(null)}
+            onClick={closePanel}
           >
             <X size={20} />
           </button>
@@ -784,8 +887,12 @@ export default function Home() {
               </DialogTitle>
               <DialogDescription>
                 {t(
-                  '已完成的关卡可以随时重玩，刷新自己的星级。',
-                  'Replay completed levels anytime to improve your stars.',
+                  challenge
+                    ? '新版 30 关：短关、长折线、大棋盘和钥匙解锁。'
+                    : '已完成的关卡可以随时重玩，刷新自己的星级。',
+                  challenge
+                    ? '30 remixed puzzles: short boards, long paths, large shapes and keys.'
+                    : 'Replay completed levels anytime to improve your stars.',
                 )}
               </DialogDescription>
               <fieldset
@@ -796,7 +903,7 @@ export default function Home() {
                   aria-pressed={challenge}
                   onClick={() => switchCampaign('challenge')}
                 >
-                  {t('挑战篇 · 30 关', 'Challenge · 30')}
+                  {t('挑战 2.0 · 30 关', 'Challenge 2.0 · 30')}
                 </button>
                 <button
                   aria-pressed={!challenge}
@@ -805,6 +912,14 @@ export default function Home() {
                   {t('经典篇 · 60 关', 'Classic · 60')}
                 </button>
               </fieldset>
+              {challenge && previousCount > 0 && (
+                <p className="revision-history">
+                  {t(
+                    `旧版已过 ${previousCount} 关，解锁范围已保留；新版星级单独记录。`,
+                    `${previousCount} original clears kept. Unlocks carry over; new stars start fresh.`,
+                  )}
+                </p>
+              )}
               <div className="chapter-tabs">
                 {chapters.map((_, i) => (
                   <button
@@ -867,9 +982,11 @@ export default function Home() {
                                 }
                               />
                             ))
-                          : id === run.level
-                            ? t('进行中', 'PLAYING')
-                            : t('开始', 'PLAY')}
+                          : progress.previousBest[id]
+                            ? t('旧版已过', 'PREVIOUS CLEAR')
+                            : id === run.level
+                              ? t('进行中', 'PLAYING')
+                              : t('开始', 'PLAY')}
                     </span>
                   </button>
                 ))}
@@ -880,6 +997,72 @@ export default function Home() {
                   'Finish a level to unlock the next one.',
                 )}
               </p>
+            </>
+          )}
+          {panel === 'revision' && (
+            <>
+              <span className="modal-symbol">
+                <Sparkles />
+              </span>
+              <span className="section-eyebrow">CHALLENGE 2.0</span>
+              <DialogTitle>
+                {t('这次，每关都有新变化', 'A different kind of challenge')}
+              </DialogTitle>
+              <DialogDescription>
+                {t(
+                  `旧版已过 ${previousCount} 关的记录已保留，解锁范围不变。新棋盘会重新开始，新版星级单独记录。`,
+                  `Your ${previousCount} original clears and unlocked levels are kept. New layouts start fresh, with their own stars.`,
+                )}
+              </DialogDescription>
+              <div className="revision-features">
+                <span>{t('大小棋盘交替', 'Boards big and small')}</span>
+                <span>
+                  {t('长折线与多种外形', 'Long paths and new shapes')}
+                </span>
+                <span>{t('钥匙打开成组箭头', 'Keys unlock groups')}</span>
+              </div>
+              <button
+                className="primary-button"
+                onClick={() => startRevision(Math.min(4, progress.unlocked))}
+              >
+                {t(
+                  `体验新版 · 从第 ${Math.min(4, progress.unlocked)} 关开始`,
+                  `Try the remix · level ${Math.min(4, progress.unlocked)}`,
+                )}
+                <ArrowUpRight size={18} />
+              </button>
+              <button
+                className="secondary-button"
+                onClick={() => startRevision(run.level)}
+              >
+                {t(`继续第 ${run.level} 关`, `Continue level ${run.level}`)}
+              </button>
+            </>
+          )}
+          {panel === 'keys' && (
+            <>
+              <span className="modal-symbol key-symbol">
+                <KeyRound />
+              </span>
+              <DialogTitle>
+                {t('先找到钥匙，再打开锁', 'Find the key. Open the locks.')}
+              </DialogTitle>
+              <DialogDescription>
+                {t(
+                  '金色钥匙和紫色锁用相同的字母配对。钥匙箭头离开后，对应的一组箭头就会解锁；之后仍需确认前方畅通。',
+                  'Gold keys and violet locks share a letter. Free the key arrow to unlock its group, then check that each exit path is clear.',
+                )}
+              </DialogDescription>
+              <p className="key-explainer">
+                {t(
+                  '点击锁只是查看规则，不扣心。撤销钥匙会重新上锁。大棋盘可以放大后拖动观察。',
+                  'Inspecting a lock costs no heart. Undoing a key relocks its group. Zoom and pan to read larger boards.',
+                )}
+              </p>
+              <button className="primary-button" onClick={closePanel}>
+                {t('明白了，寻找钥匙', 'Got it. Find the key')}
+                <KeyRound size={18} />
+              </button>
             </>
           )}
           {panel === 'settings' && (
@@ -1032,7 +1215,7 @@ export default function Home() {
                   )}
                 </p>
               </div>
-              <button className="primary-button" onClick={() => setPanel(null)}>
+              <button className="primary-button" onClick={closePanel}>
                 {t('明白了，开始解谜', 'Got it. Let’s play')}
                 <ArrowUpRight size={19} />
               </button>
@@ -1059,10 +1242,7 @@ export default function Home() {
                 {t('重新开始', 'Restart level')}
                 <RotateCcw size={18} />
               </button>
-              <button
-                className="secondary-button"
-                onClick={() => setPanel(null)}
-              >
+              <button className="secondary-button" onClick={closePanel}>
                 {t('继续当前游戏', 'Keep playing')}
               </button>
             </>

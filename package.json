@@ -16,7 +16,8 @@
     "deploy": "wrangler deploy --config dist/server/wrangler.json",
     "check": "npm test && npm run typecheck && npm run lint",
     "test:browser": "node tests/mobile-browser.mjs",
-    "test:challenge:browser": "node --experimental-strip-types tests/challenge-browser.mjs && node --experimental-strip-types tests/challenge-input.mjs && node --experimental-strip-types tests/challenge-storage.mjs"
+    "test:challenge:browser": "node --experimental-strip-types tests/challenge-browser.mjs && node --experimental-strip-types tests/challenge-input.mjs && node --experimental-strip-types tests/challenge-storage.mjs",
+    "test:remix:browser": "node --experimental-strip-types tests/remix-browser.mjs && node --experimental-strip-types tests/remix-regressions.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

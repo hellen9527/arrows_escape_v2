@@ -1,7 +1,13 @@
 /* oxlint-disable jsx-a11y/prefer-tag-over-role -- Interactive SVG paths cannot use HTML button elements; keyboard and accessible names are provided. */
 'use client';
 import { useRef, type CSSProperties } from 'react';
-import { direction, type Arrow, type Level, type Run } from '@/lib/game/engine';
+import {
+  direction,
+  isLocked,
+  type Arrow,
+  type Level,
+  type Run,
+} from '@/lib/game/engine';
 
 export function Board({
   level,
@@ -36,6 +42,8 @@ export function Board({
     if (run.removed.includes(a.id) && !outgoing) return null;
     const points = a.points.map(xy);
     const head = points.at(-1)!;
+    const locked = isLocked(level, run.removed, a);
+    const marker = points[0];
     const [dx, dy] = direction(a);
     const isBump = bump?.id === a.id;
     const highlighted = run.hint === a.id || bump?.blocked.includes(a.id);
@@ -60,7 +68,7 @@ export function Board({
     return (
       <g
         key={`${a.id}-${isBump ? bump?.serial : 'stable'}`}
-        className={`game-arrow ${outgoing ? 'escaping' : ''} ${isBump ? 'bumping' : ''} ${highlighted ? 'highlighted' : ''} ${reducedMotion ? 'quick-motion' : ''}`}
+        className={`game-arrow ${a.key ? 'key-arrow' : ''} ${locked ? 'locked-arrow' : ''} ${outgoing ? 'escaping' : ''} ${isBump ? 'bumping' : ''} ${highlighted ? 'highlighted' : ''} ${reducedMotion ? 'quick-motion' : ''}`}
         style={style}
       >
         {highlighted && !outgoing && (
@@ -82,6 +90,49 @@ export function Board({
           />
           <path className="arrow-head" d={headPath} />
         </g>
+        {!outgoing &&
+          [
+            { kind: 'key', letter: a.key, at: marker },
+            {
+              kind: 'lock',
+              letter: locked ? a.lock : undefined,
+              at: a.key ? points[1] : marker,
+            },
+          ]
+            .filter((token) => token.letter)
+            .map((token) => (
+              <g
+                key={token.kind}
+                transform={`translate(${token.at[0]} ${token.at[1]})`}
+                className={`arrow-token ${token.kind}-token`}
+                pointerEvents="none"
+                aria-hidden="true"
+              >
+                <rect x={-17} y={-13} width={34} height={26} rx={8} />
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  {token.kind === 'key' ? (
+                    <>
+                      <circle cx={-8} cy={-3} r={3.5} />
+                      <path d="M -5 -1 L 0 5 M -2 3 L -4 5 M 0 5 L -2 7" />
+                    </>
+                  ) : (
+                    <>
+                      <rect x={-12} y={-1} width={11} height={9} rx={2} />
+                      <path d="M -10 -1 V -5 A 3.5 3.5 0 0 1 -3 -5 V -1" />
+                    </>
+                  )}
+                </g>
+                <text x={7} y={5} textAnchor="middle">
+                  {token.letter}
+                </text>
+              </g>
+            ))}
         {!outgoing && (
           <path
             className="arrow-hit"
@@ -96,8 +147,8 @@ export function Board({
             role="button"
             aria-label={
               en
-                ? `Arrow ${a.id + 1}, ${directionWords[dirIndex]}`
-                : `箭头 ${a.id + 1}，向${directionWords[dirIndex]}`
+                ? `Arrow ${a.id + 1}, ${directionWords[dirIndex]}${a.key ? `, key ${a.key}` : ''}${locked ? `, lock ${a.lock}` : ''}`
+                : `箭头 ${a.id + 1}，向${directionWords[dirIndex]}${a.key ? `，钥匙 ${a.key}` : ''}${locked ? `，锁 ${a.lock}` : ''}`
             }
             onClick={() => {
               if (!disabled) onTap(a.id);
