@@ -4,7 +4,13 @@ import fs from 'node:fs/promises';
 import { chromium } from 'playwright';
 const origin = process.env.QA_URL || 'http://localhost:4173';
 (async () => {
-  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  const browser = await chromium.launch({
+    channel: 'chrome',
+    headless: true,
+    args: process.env.QA_RESOLVE
+      ? [`--host-resolver-rules=${process.env.QA_RESOLVE}`]
+      : [],
+  });
   try {
     await fs.mkdir('work', { recursive: true });
     for (const [width, height] of [
@@ -22,6 +28,10 @@ const origin = process.env.QA_URL || 'http://localhost:4173';
         viewport: { width, height },
         isMobile: mobile,
         hasTouch: mobile,
+      });
+      await context.addInitScript(() => {
+        if (!localStorage.getItem('arrow-escape:campaign'))
+          localStorage.setItem('arrow-escape:campaign', 'classic');
       });
       const page = await context.newPage();
       const errors = [];

@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { blockers, type Progress } from './engine';
+import { failed, blockers, type Progress } from './engine';
 import { makeLevel } from './levels';
 
 type Tool = {
@@ -36,9 +36,11 @@ export function useGameTools(bindings: Bindings) {
     const read = () => {
       const { ready, progress, panelOpen } = latest.current;
       if (!ready) throw new Error('The game is loading.');
-      const level = makeLevel(progress.run.level);
+      const level = makeLevel(progress.run.level, progress.campaign);
       return {
         level: level.id,
+        campaign: progress.campaign,
+        failed: failed(level, progress.run),
         size: level.size,
         unlocked: progress.unlocked,
         panelOpen,
@@ -89,7 +91,7 @@ export function useGameTools(bindings: Bindings) {
             ? input.arrowId
             : undefined;
         const state = read();
-        if (state.panelOpen)
+        if (state.panelOpen || state.failed)
           throw new Error('Close the open dialog before playing.');
         if (
           typeof id !== 'number' ||

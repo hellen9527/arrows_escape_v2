@@ -19,6 +19,8 @@ import {
   ZoomOut,
   Check,
   Flag,
+  Heart,
+  Trophy,
 } from 'lucide-react';
 import {
   Dialog,
@@ -32,6 +34,9 @@ import { Board } from '@/components/game/board';
 import { HomeScreenGuide } from '@/components/game/home-screen-guide';
 import {
   act,
+  failed,
+  lives,
+  type Campaign,
   blockers,
   defaultProgress,
   finishLevel,
@@ -40,29 +45,48 @@ import {
   stars,
   type Progress,
 } from '@/lib/game/engine';
-import { LEVEL_COUNT, makeLevel } from '@/lib/game/levels';
+import { levelCount, makeLevel } from '@/lib/game/levels';
+import { challengeInfo } from '@/lib/game/challenge-levels';
 import { useGameTools } from '@/lib/game/webmcp';
 import { playSound } from '@/lib/game/sound';
 
-const SAVE_KEY = 'arrow-escape:v1';
-const chapters = [
+const saveKey = (campaign: Campaign) =>
+  campaign === 'classic' ? 'arrow-escape:v1' : 'arrow-escape:challenge:v1';
+const MODE_KEY = 'arrow-escape:campaign';
+const classicChapters = [
   ['初见方向', 'First directions'],
   ['转角之后', 'Around the corner'],
   ['交错之间', 'Woven paths'],
   ['向内探索', 'Look within'],
   ['自由之境', 'The great escape'],
 ];
-const chapterNotes = [
+const classicNotes = [
   ['找到出口，轻轻出发。', 'Find an opening. Make your first move.'],
   ['换个方向，答案就在转角。', 'Follow the bends. Find a new way.'],
   ['耐心观察，解开交错的线。', 'Untangle the paths, one at a time.'],
   ['从外到内，慢慢找到线索。', 'Look a little closer. Follow the clues.'],
   ['相信直觉，也享受思考。', 'Trust your eye. Enjoy the challenge.'],
 ];
-type Panel = 'levels' | 'settings' | 'help' | 'restart' | 'win' | null;
+const challengeChapters = [
+  ['寻找突破', 'Find the opening'],
+  ['追踪线索', 'Trace the paths'],
+  ['层层解锁', 'Peel the layers'],
+  ['交织之境', 'Woven together'],
+  ['最后的突破', 'The final escape'],
+];
+const challengeNotes = [
+  ['看清方向，再出发。', 'Look before you move.'],
+  ['顺着阻挡，追到源头。', 'Trace a block back to its source.'],
+  ['解开关键，豁然开朗。', 'One key move opens new paths.'],
+  ['耐心观察，连接线索。', 'Take your time. Connect the clues.'],
+  ['用学会的技巧，完成最后挑战。', 'Bring it all together.'],
+];
+type Panel = 'levels' | 'settings' | 'help' | 'restart' | 'win' | 'fail' | null;
 
 export default function Home() {
-  const [progress, setProgress] = useState<Progress>(defaultProgress);
+  const [progress, setProgress] = useState<Progress>(() =>
+    defaultProgress('challenge'),
+  );
   const progressRef = useRef(progress);
   const [ready, setReady] = useState(false);
   const [panel, setPanel] = useState<Panel>(null);
@@ -77,12 +101,25 @@ export default function Home() {
   const [zoom, setZoom] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const winShown = useRef('');
+  const blockedTap = useRef({ id: -1, at: 0 });
+  const savedModes = useRef<Partial<Record<Campaign, Progress>>>({});
   const [storageFailed, setStorageFailed] = useState(false);
   const en = progress.language === 'en';
   const t = (zh: string, english: string) => (en ? english : zh);
+  const challenge = progress.campaign === 'challenge';
+  const count = levelCount(progress.campaign);
+  const perChapter = challenge ? 6 : 12;
+  const chapters = challenge ? challengeChapters : classicChapters;
+  const chapterNotes = challenge ? challengeNotes : classicNotes;
   const run = progress.run;
-  const level = useMemo(() => makeLevel(run.level), [run.level]);
-  const chapter = Math.floor((run.level - 1) / 12);
+  const info = challenge ? challengeInfo(run.level) : null;
+  const level = useMemo(
+    () => makeLevel(run.level, progress.campaign),
+    [run.level, progress.campaign],
+  );
+  const lost = failed(level, run);
+  const hearts = lives(level, run);
+  const chapter = Math.floor((run.level - 1) / perChapter);
   const complete = run.removed.length === level.arrows.length;
   const remaining = level.arrows.length - run.removed.length;
   const totalStars = Object.values(progress.best).reduce((a, b) => a + b, 0);
@@ -97,7 +134,26 @@ export default function Home() {
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
-        update(restoreProgress(localStorage.getItem(SAVE_KEY)));
+        const campaign =
+          localStorage.getItem(MODE_KEY) === 'classic'
+            ? 'classic'
+            : 'challenge';
+        const restored = restoreProgress(
+          localStorage.getItem(saveKey(campaign)),
+          campaign,
+        );
+        if (
+          !localStorage.getItem(saveKey(campaign)) &&
+          campaign === 'challenge'
+        ) {
+          const previous = restoreProgress(
+            localStorage.getItem(saveKey('classic')),
+          );
+          restored.sound = previous.sound;
+          restored.language = previous.language;
+          restored.reducedMotion = previous.reducedMotion;
+        }
+        update(restored);
       } catch {
         setStorageFailed(true);
       }
@@ -111,7 +167,12 @@ export default function Home() {
   useEffect(() => {
     if (!ready) return;
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(progress));
+      savedModes.current[progress.campaign] = progress;
+      localStorage.setItem(
+        saveKey(progress.campaign),
+        JSON.stringify(progress),
+      );
+      localStorage.setItem(MODE_KEY, progress.campaign);
     } catch {
       queueMicrotask(() => setStorageFailed(true));
     }
@@ -119,7 +180,7 @@ export default function Home() {
   }, [progress, ready, en]);
   useEffect(() => {
     if (!ready || !complete || flying.length || panel !== null) return;
-    const key = `${run.level}:${run.mistakes}:${run.hints}`;
+    const key = `${progress.campaign}:${run.level}:${run.mistakes}:${run.hints}`;
     if (winShown.current === key) return;
     const timer = setTimeout(() => {
       winShown.current = key;
@@ -129,6 +190,7 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [
     complete,
+    progress.campaign,
     flying.length,
     ready,
     run.level,
@@ -136,8 +198,12 @@ export default function Home() {
     run.hints,
     panel,
   ]);
-  function startLevel(id: number) {
-    if (id > progressRef.current.unlocked || id < 1 || id > LEVEL_COUNT) return;
+  useEffect(() => {
+    if (!ready || !lost) return;
+    const timer = setTimeout(() => setPanel('fail'), 180);
+    return () => clearTimeout(timer);
+  }, [ready, lost, progress.campaign, run.level]);
+  function clearEffects() {
     timers.current.forEach(clearTimeout);
     timers.current = [];
     setFlying([]);
@@ -145,23 +211,74 @@ export default function Home() {
     setNotice('');
     setZoom(false);
     winShown.current = '';
+    blockedTap.current = { id: -1, at: 0 };
+  }
+  function switchCampaign(campaign: Campaign) {
+    if (campaign === progressRef.current.campaign) return;
+    const current = progressRef.current;
+    savedModes.current[current.campaign] = current;
+    let next = savedModes.current[campaign];
+    try {
+      next ??= restoreProgress(
+        localStorage.getItem(saveKey(campaign)),
+        campaign,
+      );
+    } catch {
+      setStorageFailed(true);
+      // Keep the current campaign when the destination cannot be read.
+      // A default save could otherwise overwrite progress on recovery.
+      return;
+    }
+    try {
+      localStorage.setItem(saveKey(current.campaign), JSON.stringify(current));
+    } catch {
+      setStorageFailed(true);
+    }
+    clearEffects();
+    update({
+      ...next,
+      sound: current.sound,
+      language: current.language,
+      reducedMotion: current.reducedMotion,
+    });
+    setChapterPage(
+      Math.floor((next.run.level - 1) / (campaign === 'challenge' ? 6 : 12)),
+    );
+    setPanel('levels');
+  }
+  function startLevel(id: number) {
+    if (
+      id > progressRef.current.unlocked ||
+      id < 1 ||
+      id > levelCount(progressRef.current.campaign)
+    )
+      return;
+    clearEffects();
     update({ ...progressRef.current, run: newRun(id) });
     setPanel(null);
   }
   function tap(id: number) {
     if (!ready || panel || progressRef.current.run.removed.includes(id)) return;
     const p = progressRef.current;
-    const l = makeLevel(p.run.level);
+    const l = makeLevel(p.run.level, p.campaign);
+    if (failed(l, p.run)) return;
     const blocked = blockers(l, p.run.removed, id);
     if (!l.arrows.some((a) => a.id === id)) return;
     if (blocked.length) {
-      if (bump?.id === id) return;
       const serial = Date.now();
-      setBump({ id, blocked, serial });
+      if (blockedTap.current.id === id && serial - blockedTap.current.at < 520)
+        return;
+      blockedTap.current = { id, at: serial };
+      const teach = p.campaign === 'classic' || l.id <= 3;
+      setBump({ id, blocked: teach ? blocked : [], serial });
       setNotice(
         t(
-          '前方被挡住了，先解开蓝色标记的箭头。',
-          'Path blocked. Free the highlighted arrow first.',
+          teach
+            ? '前方被挡住了，先解开蓝色标记的箭头。'
+            : `前方有阻挡。${p.run.mistakes >= 2 ? '本次挑战结束，重试再来。' : `还剩 ${2 - p.run.mistakes} 颗心，仔细观察再出发。`}`,
+          teach
+            ? 'Path blocked. Free the highlighted arrow first.'
+            : `Path blocked. ${p.run.mistakes >= 2 ? 'Attempt over. Try again.' : `${2 - p.run.mistakes} hearts left. Look before you move.`}`,
         ),
       );
       later(
@@ -173,7 +290,21 @@ export default function Home() {
       );
       if (p.sound) playSound('block');
     } else {
-      setNotice('');
+      const newlyFree = l.arrows.filter(
+        (a) =>
+          !p.run.removed.includes(a.id) &&
+          a.id !== id &&
+          blockers(l, p.run.removed, a.id).length > 0 &&
+          blockers(l, [...p.run.removed, id], a.id).length === 0,
+      ).length;
+      setNotice(
+        p.campaign === 'challenge' && newlyFree >= 2
+          ? t(
+              `突破了！打开 ${newlyFree} 条新通路。`,
+              `Breakthrough! ${newlyFree} new paths are clear.`,
+            )
+          : '',
+      );
       setBump(null);
       if (p.sound) playSound('escape', p.run.removed.length);
       setFlying((old) => [...old, id]);
@@ -185,9 +316,13 @@ export default function Home() {
     update(finishLevel({ ...p, run: act(l, p.run, { type: 'tap', id }) }));
   }
   function hint() {
+    if (!ready || panel) return;
     setBump(null);
     const p = progressRef.current;
-    const next = act(makeLevel(p.run.level), p.run, { type: 'hint' });
+    const next = act(makeLevel(p.run.level, p.campaign), p.run, {
+      type: 'hint',
+    });
+    if (next === p.run) return;
     update({ ...p, run: next });
     setNotice(
       t(
@@ -198,9 +333,12 @@ export default function Home() {
     if (p.sound) playSound('hint');
   }
   function undo() {
-    if (flying.length) return;
+    if (!ready || panel || flying.length) return;
     const p = progressRef.current;
-    update({ ...p, run: act(makeLevel(p.run.level), p.run, { type: 'undo' }) });
+    update({
+      ...p,
+      run: act(makeLevel(p.run.level, p.campaign), p.run, { type: 'undo' }),
+    });
     setNotice('');
     setBump(null);
     winShown.current = '';
@@ -215,7 +353,7 @@ export default function Home() {
     : ['右', '下', '左', '上'];
   return (
     <main
-      className={`escape-app ${progress.reducedMotion ? 'reduce-motion' : ''}`}
+      className={`escape-app ${challenge ? 'challenge-mode' : ''} ${progress.reducedMotion ? 'reduce-motion' : ''}`}
     >
       <header className="site-header">
         <div className="brand">
@@ -231,7 +369,7 @@ export default function Home() {
           <span className="header-star">
             <Star size={17} fill="currentColor" />
             {totalStars}
-            <span>/ 180</span>
+            <span>/ {count * 3}</span>
           </span>
           <button
             className="icon-button sound-button"
@@ -268,7 +406,7 @@ export default function Home() {
           <nav className="chapter-list" aria-label={t('章节', 'Chapters')}>
             {chapters.map((names, i) => {
               const done = Object.keys(progress.best).filter(
-                (k) => Math.floor((+k - 1) / 12) === i,
+                (k) => Math.floor((+k - 1) / perChapter) === i,
               ).length;
               return (
                 <button
@@ -284,14 +422,14 @@ export default function Home() {
                     <small>
                       {i === chapter
                         ? t('正在探索', 'EXPLORING')
-                        : done === 12
+                        : done === perChapter
                           ? t('已完成', 'COMPLETED')
-                          : `${i * 12 + 1} – ${(i + 1) * 12}`}
+                          : `${i * perChapter + 1} – ${(i + 1) * perChapter}`}
                     </small>
                   </span>
-                  {done === 12 ? (
+                  {done === perChapter ? (
                     <Check size={16} />
-                  ) : i * 12 + 1 > progress.unlocked ? (
+                  ) : i * perChapter + 1 > progress.unlocked ? (
                     <LockKeyhole size={14} />
                   ) : (
                     <ChevronRight size={16} />
@@ -305,11 +443,11 @@ export default function Home() {
               <span>{t('旅程进度', 'Journey progress')}</span>
               <strong>
                 {Object.keys(progress.best).length}
-                <small> / {LEVEL_COUNT}</small>
+                <small> / {count}</small>
               </strong>
             </div>
             <ProgressBar
-              value={(Object.keys(progress.best).length / LEVEL_COUNT) * 100}
+              value={(Object.keys(progress.best).length / count) * 100}
               aria-label={t('总关卡完成进度', 'Overall level progress')}
             />
           </div>
@@ -328,8 +466,12 @@ export default function Home() {
             <div>
               <div className="section-eyebrow">
                 {t(
-                  `第 ${chapter + 1} 章 · ${chapters[chapter][0]}`,
-                  `CHAPTER ${chapter + 1} · ${chapters[chapter][1].toUpperCase()}`,
+                  challenge
+                    ? `挑战篇 · ${info!.title[0]}`
+                    : `第 ${chapter + 1} 章 · ${chapters[chapter][0]}`,
+                  challenge
+                    ? `CHALLENGE · ${info!.title[1]}`
+                    : `CHAPTER ${chapter + 1} · ${chapters[chapter][1].toUpperCase()}`,
                 )}
               </div>
               <h1>
@@ -347,21 +489,65 @@ export default function Home() {
             <div className="board-topline">
               <span className="difficulty">
                 <span />
-                <span className={chapter > 0 ? 'on' : ''} />
-                <span className={chapter > 2 ? 'on' : ''} />
-                {t(
-                  chapter === 0
-                    ? '轻松起步'
-                    : chapter < 3
-                      ? '渐入佳境'
-                      : '进阶挑战',
-                  chapter === 0
-                    ? 'Easy does it'
-                    : chapter < 3
-                      ? 'Getting deeper'
-                      : 'A little challenge',
-                )}
+                <span
+                  className={
+                    (challenge ? info!.tier !== 'tutorial' : chapter > 0)
+                      ? 'on'
+                      : ''
+                  }
+                />
+                <span
+                  className={
+                    (challenge ? info!.tier === 'hard' : chapter > 2)
+                      ? 'on'
+                      : ''
+                  }
+                />
+                {challenge
+                  ? t(
+                      info!.tier === 'hard'
+                        ? '挑战关'
+                        : info!.tier === 'tutorial'
+                          ? '教学关'
+                          : info!.tier === 'relief'
+                            ? '轻松一刻'
+                            : '步步深入',
+                      info!.tier === 'hard'
+                        ? 'Hard'
+                        : info!.tier === 'tutorial'
+                          ? 'Tutorial'
+                          : info!.tier === 'relief'
+                            ? 'Breather'
+                            : 'Focus',
+                    )
+                  : t(
+                      chapter === 0 ? '轻松起步' : '渐入佳境',
+                      chapter === 0 ? 'Easy does it' : 'Getting deeper',
+                    )}
               </span>
+              {challenge && (
+                <output
+                  className="heart-meter"
+                  aria-label={
+                    hearts === null
+                      ? t('教学关，不扣生命', 'Tutorial, no lives lost')
+                      : t(`剩余 ${hearts} 颗心`, `${hearts} hearts left`)
+                  }
+                >
+                  {hearts === null ? (
+                    <span>{t('练习 · 不扣心', 'Practice')}</span>
+                  ) : (
+                    [1, 2, 3].map((n) => (
+                      <Heart
+                        key={n}
+                        size={17}
+                        fill={n <= hearts ? 'currentColor' : 'none'}
+                        className={n <= hearts ? '' : 'heart-empty'}
+                      />
+                    ))
+                  )}
+                </output>
+              )}
               <button
                 className="board-help"
                 aria-label={t('玩法说明', 'How to play')}
@@ -372,6 +558,7 @@ export default function Home() {
             </div>
             <div className={`board-viewport ${zoom ? 'zoomed' : ''}`}>
               <Board
+                disabled={!ready || lost || complete || panel !== null}
                 level={level}
                 run={run}
                 flying={flying}
@@ -391,7 +578,12 @@ export default function Home() {
                 <span className="status-dot" />
                 {complete
                   ? t('所有方向，都已解开', 'Every path is clear')
-                  : t(`还剩 ${remaining} 支箭头`, `${remaining} arrows to go`)}
+                  : lost
+                    ? t('本次挑战结束', 'Attempt over')
+                    : t(
+                        `还剩 ${remaining} 支箭头`,
+                        `${remaining} arrows to go`,
+                      )}
               </span>
               <button
                 className="zoom-button"
@@ -425,21 +617,29 @@ export default function Home() {
                       '轻点箭头。前方没有阻挡，它就能自由离开。',
                       'Tap an arrow. If the path ahead is clear, it will escape.',
                     )
-                  : t(
-                      '顺着箭头看，找到一条畅通的路。',
-                      'Follow the arrow. Find a clear way out.',
-                    ))}
+                  : info
+                    ? info.focus[en ? 1 : 0]
+                    : t(
+                        '顺着箭头看，找到一条畅通的路。',
+                        'Follow the arrow. Find a clear way out.',
+                      ))}
           </output>
-          {complete ? (
+          {lost ? (
+            <button
+              className="next-level-button retry-button"
+              onClick={() => startLevel(run.level)}
+            >
+              <RotateCcw size={20} />
+              {t('重试本关 · 恢复 3 颗心', 'Retry · 3 fresh hearts')}
+            </button>
+          ) : complete ? (
             <button
               className="next-level-button"
               onClick={() =>
-                run.level < LEVEL_COUNT
-                  ? startLevel(run.level + 1)
-                  : openLevels()
+                run.level < count ? startLevel(run.level + 1) : openLevels()
               }
             >
-              {run.level < LEVEL_COUNT
+              {run.level < count
                 ? t('下一关', 'Next level')
                 : t('重温旅程', 'Explore again')}
               <ArrowUpRight size={22} />
@@ -449,7 +649,7 @@ export default function Home() {
               <button
                 className="tool-button"
                 onClick={undo}
-                disabled={!run.removed.length || flying.length > 0}
+                disabled={!ready || !run.removed.length || flying.length > 0}
               >
                 <Undo2 />
                 <span>{t('撤销', 'Undo')}</span>
@@ -461,9 +661,18 @@ export default function Home() {
                 <RotateCcw />
                 <span>{t('重来', 'Restart')}</span>
               </button>
-              <button className="tool-button hint-button" onClick={hint}>
+              <button
+                className="tool-button hint-button"
+                onClick={hint}
+                disabled={
+                  !ready || (challenge && (run.hints >= 2 || run.hint !== null))
+                }
+              >
                 <Lightbulb />
-                <span>{t('提示', 'Hint')}</span>
+                <span>
+                  {t('提示', 'Hint')}
+                  {challenge && ` ${Math.max(0, 2 - run.hints)}/2`}
+                </span>
                 <span className="hint-spark">
                   <Sparkles size={14} />
                 </span>
@@ -497,11 +706,19 @@ export default function Home() {
               )}
             </p>
             <div className="note-divider" />
-            <h4>{t('被挡住了？没关系。', 'A blocked path? All good.')}</h4>
+            <h4>
+              {challenge
+                ? t('看清楚，再出发。', 'Look before you move.')
+                : t('被挡住了？没关系。', 'A blocked path? All good.')}
+            </h4>
             <p>
               {t(
-                '先移走挡路的箭头，再回来试试。每一步，都会打开新的出口。',
-                'Clear the arrow in its way, then try again. Every move opens a new possibility.',
+                challenge
+                  ? '第 4 关起每局 3 颗心。点错会扣心，耗尽后可以立即重试。拖动放大的棋盘不会扣心。'
+                  : '先移走挡路的箭头，再回来试试。每一步，都会打开新的出口。',
+                challenge
+                  ? 'From level 4, each attempt has 3 hearts. Blocked taps cost a heart. Retry immediately when you run out.'
+                  : 'Clear the arrow in its way, then try again. Every move opens a new possibility.',
               )}
             </p>
             <button className="text-button" onClick={() => setPanel('help')}>
@@ -571,6 +788,23 @@ export default function Home() {
                   'Replay completed levels anytime to improve your stars.',
                 )}
               </DialogDescription>
+              <fieldset
+                className="campaign-tabs"
+                aria-label={t('选择篇章', 'Choose campaign')}
+              >
+                <button
+                  aria-pressed={challenge}
+                  onClick={() => switchCampaign('challenge')}
+                >
+                  {t('挑战篇 · 30 关', 'Challenge · 30')}
+                </button>
+                <button
+                  aria-pressed={!challenge}
+                  onClick={() => switchCampaign('classic')}
+                >
+                  {t('经典篇 · 60 关', 'Classic · 60')}
+                </button>
+              </fieldset>
               <div className="chapter-tabs">
                 {chapters.map((_, i) => (
                   <button
@@ -589,11 +823,11 @@ export default function Home() {
               </div>
               <div className="level-grid">
                 {Array.from(
-                  { length: 12 },
-                  (_, i) => chapterPage * 12 + i + 1,
+                  { length: perChapter },
+                  (_, i) => chapterPage * perChapter + i + 1,
                 ).map((id) => (
                   <button
-                    className={`level-tile ${id === run.level ? 'current' : ''} ${progress.best[id] ? 'done' : ''}`}
+                    className={`level-tile ${challenge && challengeInfo(id).tier === 'hard' ? 'hard-tile' : ''} ${id === run.level ? 'current' : ''} ${progress.best[id] ? 'done' : ''}`}
                     key={id}
                     disabled={id > progress.unlocked}
                     onClick={() =>
@@ -610,6 +844,13 @@ export default function Home() {
                       <LockKeyhole size={20} />
                     ) : (
                       <strong>{String(id).padStart(2, '0')}</strong>
+                    )}
+                    {challenge && challengeInfo(id).tier === 'hard' && (
+                      <Trophy
+                        className="tile-trophy"
+                        size={12}
+                        aria-label={t('挑战关', 'Hard level')}
+                      />
                     )}
                     <span>
                       {id > progress.unlocked
@@ -728,8 +969,12 @@ export default function Home() {
               </DialogTitle>
               <DialogDescription>
                 {t(
-                  '清空棋盘，就能进入下一关。没有倒计时，也没有生命限制。',
-                  'Clear the board to finish the level. No timers and no lives to lose.',
+                  challenge
+                    ? '清空棋盘即可过关。前 3 关练习；第 4 关起每局 3 颗心，点错 3 次需要重试。没有倒计时。'
+                    : '清空棋盘，就能进入下一关。没有倒计时，也没有生命限制。',
+                  challenge
+                    ? 'Clear the board to win. Levels 1–3 are practice. From level 4, three blocked taps end your attempt. No timer.'
+                    : 'Clear the board to finish the level. No timers and no lives to lose.',
                 )}
               </DialogDescription>
               <ol className="help-steps">
@@ -751,8 +996,12 @@ export default function Home() {
                     <h3>{t('先解开挡路的箭头', 'Clear the way')}</h3>
                     <p>
                       {t(
-                        '前方有其他箭头时会轻轻弹回。先移开被标记的箭头，再试一次。',
-                        'Blocked arrows bounce back. Remove the highlighted obstacle, then try again.',
+                        challenge
+                          ? '前方有其他箭头时会弹回并扣心。沿着阻挡关系观察，找出当前能离开的箭头。教学关会帮你标记。'
+                          : '前方有其他箭头时会轻轻弹回。先移开被标记的箭头，再试一次。',
+                        challenge
+                          ? 'Blocked arrows bounce back and cost a heart. Follow their paths to find an opening. Tutorials highlight obstacles.'
+                          : 'Blocked arrows bounce back. Remove the highlighted obstacle, then try again.',
                       )}
                     </p>
                   </div>
@@ -763,8 +1012,12 @@ export default function Home() {
                     <h3>{t('卡住时，借一点灵感', 'A little help is here')}</h3>
                     <p>
                       {t(
-                        '提示会点亮一支可离开的箭头；撤销可恢复上一步。小屏幕可以放大棋盘。',
-                        'Hints light up a clear arrow. Undo restores your last move. Zoom in for a closer look.',
+                        challenge
+                          ? '每局 2 次提示。撤销不退还爱心或提示。放大后可拖动棋盘；重试会恢复本关的全部爱心和提示。'
+                          : '提示会点亮一支可离开的箭头；撤销可恢复上一步。小屏幕可以放大棋盘。',
+                        challenge
+                          ? 'Two hints per attempt. Undo does not refund hearts or hints. Zoom to pan; retry restores your hearts and hints.'
+                          : 'Hints light up a clear arrow. Undo restores your last move. Zoom in for a closer look.',
                       )}
                     </p>
                   </div>
@@ -814,10 +1067,46 @@ export default function Home() {
               </button>
             </>
           )}
+          {panel === 'fail' && (
+            <>
+              <span className="modal-symbol fail-symbol">
+                <Heart />
+              </span>
+              <span className="section-eyebrow">
+                {t(
+                  `挑战篇 · 第 ${run.level} 关`,
+                  `CHALLENGE · LEVEL ${run.level}`,
+                )}
+              </span>
+              <DialogTitle>
+                {t('差一点，再试一次。', 'Take a breath. Try again.')}
+              </DialogTitle>
+              <DialogDescription>
+                {t(
+                  '3 颗心已用完。这次找到的线索，下一次用得上。重试会恢复同一棋盘、3 颗心和 2 次提示。',
+                  'Your 3 hearts are gone. Keep what you learned. Retry the same puzzle with 3 hearts and 2 hints.',
+                )}
+              </DialogDescription>
+              <button
+                className="primary-button"
+                onClick={() => startLevel(run.level)}
+              >
+                <RotateCcw size={18} />
+                {t('重试本关', 'Retry level')}
+              </button>
+              <button className="secondary-button" onClick={() => openLevels()}>
+                {t('返回选关', 'Choose a level')}
+              </button>
+            </>
+          )}
           {panel === 'win' && (
             <>
               <div className="win-orbit">
-                <Flag size={32} />
+                {info?.tier === 'hard' ? (
+                  <Trophy size={32} />
+                ) : (
+                  <Flag size={32} />
+                )}
                 <i />
                 <i />
                 <i />
@@ -829,17 +1118,24 @@ export default function Home() {
                 )}
               </span>
               <DialogTitle>
-                {run.level === LEVEL_COUNT
+                {run.level === count
                   ? t('每个方向，都有出口。', 'Every path found its way.')
-                  : stars(run) === 3
-                    ? t('漂亮，完美出逃！', 'A perfect escape!')
-                    : t('解开了，做得漂亮！', 'Clear skies. Nicely done!')}
+                  : info?.tier === 'hard'
+                    ? t(
+                        stars(run) === 3 ? '完美攻克，漂亮！' : '挑战攻克！',
+                        stars(run) === 3
+                          ? 'A flawless breakthrough!'
+                          : 'Challenge conquered!',
+                      )
+                    : stars(run) === 3
+                      ? t('漂亮，完美出逃！', 'A perfect escape!')
+                      : t('解开了，做得漂亮！', 'Clear skies. Nicely done!')}
               </DialogTitle>
               <DialogDescription>
-                {run.level === LEVEL_COUNT
+                {run.level === count
                   ? t(
-                      '60 个谜题全部完成。回头看看，试着收集所有星星吧。',
-                      'All 60 puzzles complete. Revisit your favorites and collect every star.',
+                      `${count} 个谜题全部完成。回头看看，试着收集所有星星吧。`,
+                      `All ${count} puzzles complete. Revisit your favorites and collect every star.`,
                     )
                   : t(
                       '每一条交错的线，都找到了自己的方向。',
@@ -873,12 +1169,10 @@ export default function Home() {
               <button
                 className="primary-button"
                 onClick={() =>
-                  run.level < LEVEL_COUNT
-                    ? startLevel(run.level + 1)
-                    : openLevels()
+                  run.level < count ? startLevel(run.level + 1) : openLevels()
                 }
               >
-                {run.level < LEVEL_COUNT
+                {run.level < count
                   ? t('继续 · 下一关', 'On to the next level')
                   : t('重温旅程', 'Explore again')}
                 <ArrowUpRight size={21} />

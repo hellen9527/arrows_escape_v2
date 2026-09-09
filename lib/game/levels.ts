@@ -1,5 +1,8 @@
-import type { Level, Arrow } from './engine.ts';
+import { challengeLevel, CHALLENGE_COUNT } from './challenge-levels.ts';
+import type { Campaign, Level, Arrow } from './engine.ts';
 export const LEVEL_COUNT = 60;
+export const levelCount = (campaign: Campaign = 'classic') =>
+  campaign === 'challenge' ? CHALLENGE_COUNT : LEVEL_COUNT;
 const cache = new Map<number, Level>();
 const directions = [
   [1, 0],
@@ -19,7 +22,11 @@ function random(seed: number) {
   };
 }
 
-export function makeLevel(requested: number): Level {
+export function makeLevel(
+  requested: number,
+  campaign: Campaign = 'classic',
+): Level {
+  if (campaign === 'challenge') return challengeLevel(requested);
   const id = Math.max(1, Math.min(LEVEL_COUNT, Math.floor(requested) || 1));
   if (cache.has(id)) return cache.get(id)!;
   const chapter = Math.floor((id - 1) / 12);

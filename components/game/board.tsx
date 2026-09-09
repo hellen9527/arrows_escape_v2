@@ -1,10 +1,11 @@
 /* oxlint-disable jsx-a11y/prefer-tag-over-role -- Interactive SVG paths cannot use HTML button elements; keyboard and accessible names are provided. */
 'use client';
-import type { CSSProperties } from 'react';
+import { useRef, type CSSProperties } from 'react';
 import { direction, type Arrow, type Level, type Run } from '@/lib/game/engine';
 
 export function Board({
   level,
+  disabled = false,
   run,
   flying,
   bump,
@@ -15,6 +16,7 @@ export function Board({
   en,
 }: {
   level: Level;
+  disabled?: boolean;
   run: Run;
   flying: number[];
   bump: { id: number; blocked: number[]; serial: number } | null;
@@ -24,6 +26,7 @@ export function Board({
   label: string;
   en: boolean;
 }) {
+  const gesture = useRef({ x: 0, y: 0, pointer: -1, cancelled: true });
   const unit = 40,
     pad = 42,
     extent = (level.size - 1) * unit + pad * 2;
@@ -88,16 +91,19 @@ export function Board({
             strokeWidth={26}
             stroke="transparent"
             fill="none"
-            tabIndex={0}
+            tabIndex={disabled ? -1 : 0}
+            aria-disabled={disabled}
             role="button"
             aria-label={
               en
                 ? `Arrow ${a.id + 1}, ${directionWords[dirIndex]}`
                 : `箭头 ${a.id + 1}，向${directionWords[dirIndex]}`
             }
-            onClick={() => onTap(a.id)}
+            onClick={() => {
+              if (!disabled) onTap(a.id);
+            }}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
+              if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
                 e.preventDefault();
                 onTap(a.id);
               }
@@ -113,6 +119,39 @@ export function Board({
       viewBox={`0 0 ${extent} ${extent}`}
       aria-label={label}
       role="group"
+      onPointerDownCapture={(e) => {
+        gesture.current = {
+          x: e.clientX,
+          y: e.clientY,
+          pointer: e.pointerId,
+          cancelled: !e.isPrimary || e.button !== 0,
+        };
+      }}
+      onPointerMoveCapture={(e) => {
+        const g = gesture.current;
+        if (
+          e.pointerId !== g.pointer ||
+          Math.hypot(e.clientX - g.x, e.clientY - g.y) > 8
+        )
+          g.cancelled = true;
+      }}
+      onPointerUpCapture={(e) => {
+        const g = gesture.current;
+        if (
+          e.pointerId !== g.pointer ||
+          Math.hypot(e.clientX - g.x, e.clientY - g.y) > 8
+        )
+          g.cancelled = true;
+      }}
+      onPointerCancelCapture={() => {
+        gesture.current.cancelled = true;
+      }}
+      onClickCapture={(e) => {
+        if (disabled || (e.detail !== 0 && gesture.current.cancelled)) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
     >
       <defs>
         <pattern
