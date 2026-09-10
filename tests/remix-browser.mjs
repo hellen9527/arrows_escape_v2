@@ -9,7 +9,7 @@ import {
 } from '../lib/game/engine.ts';
 import { makeLevel } from '../lib/game/levels.ts';
 const origin = process.env.QA_URL || 'http://localhost:4176';
-const key = 'arrow-escape:challenge:v2',
+const key = 'arrow-escape:challenge:v3',
   legacyKey = 'arrow-escape:challenge:v1';
 const browser = await chromium.launch({
   channel: 'chrome',
@@ -73,7 +73,7 @@ try {
     ...defaultProgress('challenge'),
     previousBest: old.best,
     unlocked: 21,
-    run: newRun(5),
+    run: newRun(11),
     sound: false,
     reducedMotion: true,
   };
@@ -83,7 +83,7 @@ try {
   );
   await page.reload();
   await page.getByRole('button', { name: /钥匙 0\/1，查看规则/ }).waitFor();
-  const level = makeLevel(5, 'challenge');
+  const level = makeLevel(11, 'challenge');
   const locked = level.arrows.find((a) => a.lock);
   assert(locked, 'first key lesson needs locks');
   const hit = async (id) =>
@@ -206,7 +206,7 @@ try {
       await page.screenshot({ path: `work/remix-zoom-${id}.png` });
     }
   }
-  // A transient read error must never replace the existing revision2 save.
+  // A transient read error must never replace the existing revision3 save.
   const prior = await page.evaluate((k) => localStorage.getItem(k), key);
   await page.getByRole('button', { name: '选关', exact: true }).click();
   await page
@@ -224,7 +224,7 @@ try {
   }, key);
   await page.getByRole('button', { name: '选关', exact: true }).click();
   await page
-    .getByRole('button', { name: '挑战 2.0 · 30 关', exact: true })
+    .getByRole('button', { name: '挑战 3.0 · 30 关', exact: true })
     .click();
   assert.equal(
     await page

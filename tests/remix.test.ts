@@ -76,7 +76,7 @@ void test('old challenge progress migrates without reusing any old arrow ids or 
     language: 'en',
   };
   const p = restoreProgress(JSON.stringify(old), 'challenge');
-  assert.equal(p.contentRevision, 2);
+  assert.equal(p.contentRevision, 3);
   assert.equal(p.unlocked, 21);
   assert.deepEqual(p.previousBest, best);
   assert.deepEqual(p.best, {});
@@ -96,4 +96,59 @@ void test('fresh challenge saves and classic saves do not trigger migration', ()
   classic.unlocked = 2;
   classic.run = newRun(2);
   assert.deepEqual(restoreProgress(JSON.stringify(classic)), classic);
+});
+
+void test('revision2 migration merges historical and recent best scores and resets obsolete attempts', () => {
+  const old = {
+    ...defaultProgress('challenge'),
+    contentRevision: 2,
+    previousBest: { 1: 3, 2: 1, 7: 2, 99: 3 },
+    best: { 1: 2, 2: 3, 4: 2, 5: 8 },
+    unlocked: 30,
+    run: { level: 8, removed: [999, 2], mistakes: 2, hints: 2, hint: 2 },
+    sound: false,
+    reducedMotion: true,
+    language: 'en',
+  };
+  const migrated = restoreProgress(JSON.stringify(old), 'challenge');
+  assert.equal(migrated.contentRevision, 3);
+  assert.deepEqual(migrated.previousBest, { 1: 3, 2: 3, 4: 2, 7: 2 });
+  assert.deepEqual(migrated.best, {});
+  assert.equal(migrated.unlocked, 8);
+  assert.deepEqual(migrated.run, newRun(8));
+  assert.equal(migrated.showRevisionIntro, true);
+  assert.equal(migrated.sound, false);
+  assert.equal(migrated.reducedMotion, true);
+  assert.equal(migrated.language, 'en');
+  assert.deepEqual(
+    restoreProgress(JSON.stringify(migrated), 'challenge'),
+    migrated,
+  );
+});
+
+void test('known challenge revisions migrate and unknown revisions cannot be reinterpreted', () => {
+  for (const contentRevision of [undefined, 1, 2]) {
+    const old = {
+      ...defaultProgress('challenge'),
+      contentRevision,
+      previousBest: { 1: 3 },
+      best: { 2: 2 },
+    };
+    const restored = restoreProgress(JSON.stringify(old), 'challenge');
+    assert.equal(restored.contentRevision, 3);
+    assert.deepEqual(restored.previousBest, { 1: 3, 2: 2 });
+    assert.equal(restored.unlocked, 3);
+  }
+  for (const contentRevision of [0, 4, 999, '3', null]) {
+    const unknown = {
+      ...defaultProgress('challenge'),
+      contentRevision,
+      best: { 1: 3 },
+      sound: false,
+    };
+    assert.deepEqual(
+      restoreProgress(JSON.stringify(unknown), 'challenge'),
+      defaultProgress('challenge'),
+    );
+  }
 });

@@ -10,6 +10,7 @@ export type Level = {
   size: number;
   arrows: Arrow[];
   campaign?: Campaign;
+  objective?: { type: 'rescue'; targets: number[]; moves: number };
 };
 export type Run = {
   level: number;
@@ -24,7 +25,25 @@ export const lives = (level: Level, run: Run) =>
   level.campaign === 'challenge' && level.id > 3
     ? Math.max(0, 3 - run.mistakes)
     : null;
-export const failed = (level: Level, run: Run) => lives(level, run) === 0;
+export const isComplete = (level: Level, run: Run): boolean =>
+  level.objective?.type === 'rescue'
+    ? level.objective.targets.every((id) => run.removed.includes(id))
+    : level.arrows.every((arrow) => run.removed.includes(arrow.id));
+export const movesLeft = (level: Level, run: Run): number | null =>
+  level.objective?.type === 'rescue'
+    ? Math.max(0, level.objective.moves - run.removed.length)
+    : null;
+export const failureReason = (
+  level: Level,
+  run: Run,
+): 'hearts' | 'moves' | null =>
+  lives(level, run) === 0
+    ? 'hearts'
+    : !isComplete(level, run) && movesLeft(level, run) === 0
+      ? 'moves'
+      : null;
+export const failed = (level: Level, run: Run) =>
+  failureReason(level, run) !== null;
 
 export function direction(a: Arrow): number[] {
   const p = a.points.at(-1)!;
@@ -67,6 +86,21 @@ export function blockers(
   }
   return blocked;
 }
+export function requiredArrowIds(
+  level: Level,
+  removed: number[] = [],
+): number[] {
+  if (level.objective?.type !== 'rescue')
+    return level.arrows.filter((a) => !removed.includes(a.id)).map((a) => a.id);
+  const required = new Set<number>();
+  const visit = (id: number) => {
+    if (removed.includes(id) || required.has(id)) return;
+    required.add(id);
+    blockers(level, removed, id).forEach(visit);
+  };
+  level.objective.targets.forEach(visit);
+  return level.arrows.filter((a) => required.has(a.id)).map((a) => a.id);
+}
 export const newRun = (level: number): Run => ({
   level,
   removed: [],
@@ -79,7 +113,7 @@ export type Action =
   | { type: 'undo' }
   | { type: 'hint' };
 export function act(level: Level, r: Run, action: Action): Run {
-  if (failed(level, r) || r.removed.length === level.arrows.length) return r;
+  if (failed(level, r) || isComplete(level, r)) return r;
   if (action.type === 'undo')
     return r.removed.length
       ? { ...r, removed: r.removed.slice(0, -1), hint: null }
@@ -87,9 +121,9 @@ export function act(level: Level, r: Run, action: Action): Run {
   if (action.type === 'hint') {
     if (r.hint !== null && !r.removed.includes(r.hint)) return r;
     if (level.campaign === 'challenge' && r.hints >= 2) return r;
+    const required = new Set(requiredArrowIds(level, r.removed));
     const free = level.arrows.filter(
-      (a) =>
-        !r.removed.includes(a.id) && !blockers(level, r.removed, a.id).length,
+      (a) => required.has(a.id) && !blockers(level, r.removed, a.id).length,
     );
     // Prefer the move releasing the most other arrows.
     free.sort(
@@ -115,11 +149,13 @@ export function act(level: Level, r: Run, action: Action): Run {
     if (failed(level, next)) next.hint = null;
     return next;
   }
-  return {
+  const next = {
     ...r,
     removed: [...r.removed, action.id],
     hint: r.hint === action.id ? null : r.hint,
   };
+  if (failed(level, next) || isComplete(level, next)) next.hint = null;
+  return next;
 }
 export const stars = (r: Run) =>
   r.mistakes === 0 && r.hints === 0
@@ -130,7 +166,7 @@ export const stars = (r: Run) =>
 export const defaultProgress = (campaign: Campaign = 'classic') => ({
   version: 1,
   campaign,
-  contentRevision: campaign === 'challenge' ? 2 : 1,
+  contentRevision: campaign === 'challenge' ? 3 : 1,
   previousBest: {} as Record<string, number>,
   showRevisionIntro: false,
   unlocked: 1,
@@ -143,7 +179,7 @@ export const defaultProgress = (campaign: Campaign = 'classic') => ({
 export type Progress = ReturnType<typeof defaultProgress>;
 export function finishLevel(p: Progress): Progress {
   const l = makeLevel(p.run.level, p.campaign);
-  if (failed(l, p.run) || p.run.removed.length !== l.arrows.length) return p;
+  if (failed(l, p.run) || !isComplete(l, p.run)) return p;
   return {
     ...p,
     unlocked: Math.max(
@@ -185,19 +221,22 @@ export function restoreProgress(
       return p;
     if (
       campaign === 'challenge' &&
-      s.contentRevision != null &&
+      s.contentRevision !== undefined &&
       s.contentRevision !== 1 &&
-      s.contentRevision !== 2
+      s.contentRevision !== 2 &&
+      s.contentRevision !== 3
     )
       return p;
     p.sound = typeof s.sound === 'boolean' ? s.sound : true;
     p.reducedMotion = s.reducedMotion === true;
     p.language = s.language === 'en' ? 'en' : 'zh';
-    const migrating = campaign === 'challenge' && s.contentRevision !== 2;
+    const migrating = campaign === 'challenge' && s.contentRevision !== 3;
     p.previousBest =
-      campaign === 'challenge'
-        ? validBests(migrating ? s.best : s.previousBest, count)
-        : {};
+      campaign === 'challenge' ? validBests(s.previousBest, count) : {};
+    if (migrating) {
+      for (const [id, score] of Object.entries(validBests(s.best, count)))
+        p.previousBest[id] = Math.max(p.previousBest[id] || 0, score);
+    }
     p.best = migrating ? {} : validBests(s.best, count);
     p.showRevisionIntro =
       campaign === 'challenge' && (migrating || s.showRevisionIntro === true);
@@ -227,6 +266,8 @@ export function restoreProgress(
       if (Array.isArray(r.removed) && r.removed.length <= l.arrows.length) {
         for (const id of r.removed) {
           if (
+            failed(l, candidate) ||
+            isComplete(l, candidate) ||
             !Number.isInteger(id) ||
             !l.arrows.some((a) => a.id === id) ||
             candidate.removed.includes(id) ||
@@ -246,9 +287,11 @@ export function restoreProgress(
         if (
           candidate.hints > 0 &&
           !failed(l, candidate) &&
+          !isComplete(l, candidate) &&
           Number.isInteger(r.hint) &&
           l.arrows.some((a) => a.id === r.hint) &&
           !candidate.removed.includes(r.hint) &&
+          requiredArrowIds(l, candidate.removed).includes(r.hint) &&
           !blockers(l, candidate.removed, r.hint).length
         )
           candidate.hint = r.hint;

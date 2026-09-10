@@ -43,6 +43,7 @@ export function Board({
     const points = a.points.map(xy);
     const head = points.at(-1)!;
     const locked = isLocked(level, run.removed, a);
+    const target = level.objective?.targets.includes(a.id);
     const marker = points[0];
     const [dx, dy] = direction(a);
     const isBump = bump?.id === a.id;
@@ -68,7 +69,7 @@ export function Board({
     return (
       <g
         key={`${a.id}-${isBump ? bump?.serial : 'stable'}`}
-        className={`game-arrow ${a.key ? 'key-arrow' : ''} ${locked ? 'locked-arrow' : ''} ${outgoing ? 'escaping' : ''} ${isBump ? 'bumping' : ''} ${highlighted ? 'highlighted' : ''} ${reducedMotion ? 'quick-motion' : ''}`}
+        className={`game-arrow ${a.key ? 'key-arrow' : ''} ${locked ? 'locked-arrow' : ''} ${target ? 'target-arrow' : ''} ${outgoing ? 'escaping' : ''} ${isBump ? 'bumping' : ''} ${highlighted ? 'highlighted' : ''} ${reducedMotion ? 'quick-motion' : ''}`}
         style={style}
       >
         {highlighted && !outgoing && (
@@ -90,6 +91,17 @@ export function Board({
           />
           <path className="arrow-head" d={headPath} />
         </g>
+        {target && !outgoing && (
+          <g
+            className="target-token"
+            transform={`translate(${head[0] + dy * 19 - dx * 12} ${head[1] - dx * 19 - dy * 12})`}
+            pointerEvents="none"
+            aria-hidden="true"
+          >
+            <circle r={12} />
+            <path d="M 0 -8 L 2.4 -2.6 L 8 -2.5 L 3.8 1.4 L 5 7 L 0 4 L -5 7 L -3.8 1.4 L -8 -2.5 L -2.4 -2.6 Z" />
+          </g>
+        )}
         {!outgoing &&
           [
             { kind: 'key', letter: a.key, at: marker },
@@ -147,8 +159,8 @@ export function Board({
             role="button"
             aria-label={
               en
-                ? `Arrow ${a.id + 1}, ${directionWords[dirIndex]}${a.key ? `, key ${a.key}` : ''}${locked ? `, lock ${a.lock}` : ''}`
-                : `箭头 ${a.id + 1}，向${directionWords[dirIndex]}${a.key ? `，钥匙 ${a.key}` : ''}${locked ? `，锁 ${a.lock}` : ''}`
+                ? `Arrow ${a.id + 1}, ${directionWords[dirIndex]}${target ? ', starred target' : ''}${a.key ? `, key ${a.key}` : ''}${locked ? `, lock ${a.lock}` : ''}`
+                : `箭头 ${a.id + 1}，向${directionWords[dirIndex]}${target ? '，星标目标' : ''}${a.key ? `，钥匙 ${a.key}` : ''}${locked ? `，锁 ${a.lock}` : ''}`
             }
             onClick={() => {
               if (!disabled) onTap(a.id);

@@ -20,7 +20,7 @@ try {
     // oxlint-disable-next-line typescript/unbound-method -- Native method is invoked with its explicit receiver below.
     const original = Storage.prototype.setItem;
     Storage.prototype.setItem = function (k, v) {
-      if (k === 'arrow-escape:challenge:v2')
+      if (k === 'arrow-escape:challenge:v3')
         throw new DOMException('Test quota', 'QuotaExceededError');
       return original.call(this, k, v);
     };

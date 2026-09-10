@@ -1609,6 +1609,44 @@ button:active:not(:disabled) {
   color: #aa6615;
   background: #fff5d9;
 }
+.game-arrow.target-arrow {
+  color: #b66b0a;
+}
+.game-arrow.highlighted {
+  color: var(--primary);
+}
+.target-token circle {
+  fill: #fff8e5;
+  stroke: #c98721;
+  stroke-width: 1.5;
+}
+.target-token path {
+  fill: #b97814;
+}
+.objective-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: #95621d;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.objective-counter strong {
+  margin-left: 3px;
+  padding: 4px 7px;
+  border-radius: 6px;
+  color: #46617f;
+  background: #edf3fa;
+}
+.objective-counter.few-moves strong {
+  color: #a34250;
+  background: #fff0f2;
+}
+.goal-symbol {
+  color: #b97814;
+  background: #fff8e5;
+}
 .key-explainer {
   color: #63748e;
   line-height: 1.8;

@@ -1,10 +1,20 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { chromium } from 'playwright';
-import { blockers, defaultProgress, newRun } from '../lib/game/engine.ts';
+import {
+  blockers,
+  defaultProgress,
+  direction,
+  failed,
+  isComplete,
+  movesLeft,
+  newRun,
+  requiredArrowIds,
+  stars,
+} from '../lib/game/engine.ts';
 import { makeLevel } from '../lib/game/levels.ts';
 const origin = process.env.QA_URL || 'http://localhost:4175';
-const key = 'arrow-escape:challenge:v2';
+const key = 'arrow-escape:challenge:v3';
 const browser = await chromium.launch({
   channel: 'chrome',
   headless: true,
@@ -39,11 +49,12 @@ async function tap(id) {
 async function solve(id) {
   const l = makeLevel(id, 'challenge');
   let p = await saved();
-  while (p.run.removed.length < l.arrows.length) {
+  while (!isComplete(l, p.run)) {
+    assert(!failed(l, p.run), `level ${id} failed before completion`);
+    const required = requiredArrowIds(l, p.run.removed);
     const a = l.arrows.find(
       (a) =>
-        !p.run.removed.includes(a.id) &&
-        !blockers(l, p.run.removed, a.id).length,
+        required.includes(a.id) && !blockers(l, p.run.removed, a.id).length,
     );
     assert(a, `deadlock ${id}`);
     await page
@@ -56,7 +67,22 @@ async function solve(id) {
     p = await saved();
   }
   await page.getByRole('dialog').waitFor();
-  assert.equal(p.best[id], p.run.mistakes === 0 && p.run.hints === 0 ? 3 : 2);
+  assert.equal(p.best[id], stars(p.run));
+  assert.equal(p.unlocked, Math.min(30, id + 1));
+  if (l.objective) {
+    assert(p.run.removed.length <= l.objective.moves);
+    assert(
+      p.run.removed.length < l.arrows.length,
+      `level ${id} should leave ordinary arrows`,
+    );
+    const remaining = l.arrows.length - p.run.removed.length;
+    await page
+      .getByText(
+        `${l.objective.targets.length} 支星标全部出逃，用了 ${p.run.removed.length}/${l.objective.moves} 步。${remaining} 支普通箭头留在原地，也一样完成目标。`,
+        { exact: true },
+      )
+      .waitFor();
+  }
 }
 try {
   await fs.mkdir('work', { recursive: true });
@@ -93,7 +119,7 @@ try {
   );
   await page.getByRole('button', { name: '选关', exact: true }).click();
   await page
-    .getByRole('button', { name: '挑战 2.0 · 30 关', exact: true })
+    .getByRole('button', { name: '挑战 3.0 · 30 关', exact: true })
     .click();
   await page.getByRole('button', { name: '关闭', exact: true }).click();
   await page.getByRole('dialog').waitFor({ state: 'hidden' });
@@ -110,6 +136,22 @@ try {
   );
   const l = makeLevel(4, 'challenge');
   const blocked = l.arrows.find((a) => blockers(l, [], a.id).length);
+  assert(blocked);
+  const [dx, dy] = direction(blocked);
+  const [hx, hy] = blocked.points.at(-1);
+  const nearest = l.arrows
+    .filter((a) => blockers(l, [], blocked.id).includes(a.id))
+    .map((a) => ({
+      id: a.id,
+      distance: Math.min(
+        ...a.points
+          .filter(([x, y]) =>
+            dx ? y === hy && (x - hx) * dx > 0 : x === hx && (y - hy) * dy > 0,
+          )
+          .map(([x, y]) => (x - hx) * dx + (y - hy) * dy),
+      ),
+    }))
+    .sort((a, b) => a.distance - b.distance)[0];
   const touch = await hit(blocked.id);
   const client = await ctx.newCDPSession(page);
   // Drag beginning on a blocked arrow must not count as a tap.
@@ -136,24 +178,44 @@ try {
     if (i < 3) {
       assert.equal(
         await page.locator('.highlighted').count(),
-        0,
-        'error leaked a free hint',
+        1,
+        'a blocked tap should highlight only the nearest actual blocker',
       );
-      await page.waitForTimeout(550);
+      assert.match(
+        await page
+          .locator('.highlighted .arrow-hit')
+          .getAttribute('aria-label'),
+        new RegExp(`^箭头 ${nearest.id + 1}，`),
+      );
+      assert.equal((await saved()).run.hints, 0);
+      assert.equal(movesLeft(l, (await saved()).run), l.objective.moves);
+      await page.waitForTimeout(650);
+      assert.equal(
+        await page.locator('.highlighted').count(),
+        1,
+        'blocker feedback should outlast the bounce',
+      );
+      await page
+        .locator('.highlighted')
+        .waitFor({ state: 'detached', timeout: 2000 });
     }
   }
   await page.getByRole('button', { name: '重试本关', exact: true }).waitFor();
+  await page
+    .getByRole('heading', { name: '爱心用完，再试一次。', exact: true })
+    .waitFor();
   await page.reload();
   await page.getByRole('button', { name: '重试本关', exact: true }).waitFor();
   assert.equal((await saved()).run.mistakes, 3);
   assert.equal((await saved()).unlocked, 4);
+  assert.equal((await saved()).best[4], undefined);
   await page.getByRole('button', { name: '关闭', exact: true }).click();
   await page.getByRole('dialog').waitFor({ state: 'hidden' });
   const free = l.arrows.find((a) => !blockers(l, [], a.id).length);
   await tap(free.id);
   assert.equal((await saved()).run.removed.length, 0);
   await page
-    .getByRole('button', { name: '重试本关 · 恢复 3 颗心', exact: true })
+    .getByRole('button', { name: '重试本关 · 恢复步数与爱心', exact: true })
     .click();
   assert.equal((await saved()).run.mistakes, 0);
   for (let i = 0; i < 2; i++) {
@@ -173,7 +235,7 @@ try {
   await page.getByRole('button', { name: '提示 0/2', exact: true }).waitFor();
   assert.equal((await saved()).run.hints, 2);
   console.log(
-    'PASS touch drag, hidden blockers, third-strike lock, failure reload/retry, hint budget and undo',
+    'PASS touch drag, nearest-blocker feedback, third-strike lock, failure reload/retry, hint budget and undo',
   );
   for (let id = 4; id <= 30; id++) {
     await solve(id);
@@ -186,22 +248,17 @@ try {
   }
   assert.equal((await saved()).unlocked, 30);
   assert.equal(Object.keys((await saved()).best).length, 30);
-  assert.equal(
-    await page
-      .getByText('30 个谜题全部完成。回头看看，试着收集所有星星吧。', {
-        exact: true,
-      })
-      .count(),
-    1,
-  );
+  await page
+    .getByRole('heading', { name: '终章解开，旅程继续。', exact: true })
+    .waitFor();
   console.log(
     'PASS all thirty levels through real keyboard input, completion and unlock boundaries',
   );
   await page.getByRole('button', { name: '关闭', exact: true }).click();
   await page.getByRole('dialog').waitFor({ state: 'hidden' });
   for (const [width, height, id] of [
-    [320, 568, 6],
-    [390, 664, 18],
+    [320, 568, 4],
+    [390, 664, 13],
     [390, 844, 30],
     [430, 932, 24],
     [568, 320, 12],
@@ -220,6 +277,26 @@ try {
     );
     await page.reload();
     await page.getByRole('button', { name: '提示 2/2', exact: true }).waitFor();
+    const current = makeLevel(id, 'challenge');
+    if (current.objective) {
+      await page
+        .getByRole('button', {
+          name: `星标 0/${current.objective.targets.length}，剩余 ${current.objective.moves} 步，查看目标规则`,
+          exact: true,
+        })
+        .waitFor();
+      assert.equal(
+        await page.locator('.target-token').count(),
+        current.objective.targets.length,
+      );
+      assert.equal(
+        await page.getByRole('button', { name: /，星标目标/ }).count(),
+        current.objective.targets.length,
+      );
+      await page
+        .getByRole('progressbar', { name: '目标离场进度', exact: true })
+        .waitFor();
+    }
     const g = await page.evaluate(() => ({
       height: document.documentElement.scrollHeight,
       width: document.documentElement.scrollWidth,

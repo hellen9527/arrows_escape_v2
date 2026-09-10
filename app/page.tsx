@@ -37,6 +37,10 @@ import { HomeScreenGuide } from '@/components/game/home-screen-guide';
 import {
   act,
   failed,
+  failureReason,
+  isComplete,
+  movesLeft,
+  direction,
   lives,
   type Campaign,
   blockers,
@@ -92,6 +96,7 @@ type Panel =
   | 'fail'
   | 'revision'
   | 'keys'
+  | 'objective'
   | null;
 
 export default function Home() {
@@ -137,7 +142,12 @@ export default function Home() {
   const lost = failed(level, run);
   const hearts = lives(level, run);
   const chapter = Math.floor((run.level - 1) / perChapter);
-  const complete = run.removed.length === level.arrows.length;
+  const complete = isComplete(level, run);
+  const objective = level.objective;
+  const targetsFound =
+    objective?.targets.filter((id) => run.removed.includes(id)).length ?? 0;
+  const remainingMoves = movesLeft(level, run);
+  const failReason = failureReason(level, run);
   const remaining = level.arrows.length - run.removed.length;
   const keyArrows = level.arrows.filter((a) => a.key);
   const keysFound = keyArrows.filter((a) => run.removed.includes(a.id)).length;
@@ -162,7 +172,8 @@ export default function Home() {
         if (
           !localStorage.getItem(saveKey(campaign)) &&
           campaign === 'challenge' &&
-          !localStorage.getItem('arrow-escape:challenge:v1')
+          !localStorage.getItem('arrow-escape:challenge:v1') &&
+          !localStorage.getItem('arrow-escape:challenge:v2')
         ) {
           const previous = restoreProgress(
             localStorage.getItem(saveKey('classic')),
@@ -291,7 +302,7 @@ export default function Home() {
     if (!ready || panel || progressRef.current.run.removed.includes(id)) return;
     const p = progressRef.current;
     const l = makeLevel(p.run.level, p.campaign);
-    if (failed(l, p.run)) return;
+    if (failed(l, p.run) || isComplete(l, p.run)) return;
     const blocked = blockers(l, p.run.removed, id);
     const arrow = l.arrows.find((a) => a.id === id);
     if (!arrow) return;
@@ -310,16 +321,35 @@ export default function Home() {
         return;
       blockedTap.current = { id, at: serial };
       const teach = p.campaign === 'classic' || l.id <= 3;
-      setBump({ id, blocked: teach ? blocked : [], serial });
+      const [dx, dy] = direction(arrow);
+      const [hx, hy] = arrow.points.at(-1)!;
+      const distance = (otherId: number) =>
+        Math.min(
+          ...l.arrows
+            .find((a) => a.id === otherId)!
+            .points.filter(([x, y]) =>
+              dx
+                ? y === hy && (x - hx) * dx > 0
+                : x === hx && (y - hy) * dy > 0,
+            )
+            .map(([x, y]) => (x - hx) * dx + (y - hy) * dy),
+        );
+      const nearest = [...blocked].sort((a, b) => distance(a) - distance(b))[0];
+      setBump({ id, blocked: teach ? blocked : [nearest], serial });
       setNotice(
         t(
           teach
             ? '前方被挡住了，先解开蓝色标记的箭头。'
-            : `前方有阻挡。${p.run.mistakes >= 2 ? '本次挑战结束，重试再来。' : `还剩 ${2 - p.run.mistakes} 颗心，仔细观察再出发。`}`,
+            : `蓝色标记挡住了出口。${p.run.mistakes >= 2 ? '爱心用完，可以重试。' : `还剩 ${2 - p.run.mistakes} 颗心。`}`,
           teach
             ? 'Path blocked. Free the highlighted arrow first.'
-            : `Path blocked. ${p.run.mistakes >= 2 ? 'Attempt over. Try again.' : `${2 - p.run.mistakes} hearts left. Look before you move.`}`,
+            : `The blue arrow blocks this exit. ${p.run.mistakes >= 2 ? 'No hearts left. Try again.' : `${2 - p.run.mistakes} hearts left.`}`,
         ),
+      );
+      later(
+        () =>
+          setBump((current) => (current?.serial === serial ? null : current)),
+        1400,
       );
       later(
         () =>
@@ -390,8 +420,12 @@ export default function Home() {
     update({ ...p, run: next });
     setNotice(
       t(
-        '轻点发光的箭头，它的前方已经畅通。',
-        'Tap the glowing arrow. Its path is clear.',
+        objective
+          ? '这支发光的箭头通向星标目标，先移走它。'
+          : '轻点发光的箭头，它的前方已经畅通。',
+        objective
+          ? 'This glowing arrow leads to a star. Free it first.'
+          : 'Tap the glowing arrow. Its path is clear.',
       ),
     );
     if (p.sound) playSound('hint');
@@ -531,10 +565,10 @@ export default function Home() {
               <div className="section-eyebrow">
                 {t(
                   challenge
-                    ? `挑战 2.0 · ${info!.title[0]}`
+                    ? `挑战 3.0 · ${info!.title[0]}`
                     : `第 ${chapter + 1} 章 · ${chapters[chapter][0]}`,
                   challenge
-                    ? `CHALLENGE 2.0 · ${info!.title[1]}`
+                    ? `CHALLENGE 3.0 · ${info!.title[1]}`
                     : `CHAPTER ${chapter + 1} · ${chapters[chapter][1].toUpperCase()}`,
                 )}
               </div>
@@ -657,17 +691,37 @@ export default function Home() {
               />
             </div>
             <div className="board-bottomline">
-              <span>
-                <span className="status-dot" />
-                {complete
-                  ? t('所有方向，都已解开', 'Every path is clear')
-                  : lost
-                    ? t('本次挑战结束', 'Attempt over')
-                    : t(
-                        `还剩 ${remaining} 支箭头`,
-                        `${remaining} arrows to go`,
-                      )}
-              </span>
+              {objective ? (
+                <button
+                  className={`objective-counter ${remainingMoves !== null && remainingMoves <= 3 ? 'few-moves' : ''}`}
+                  onClick={() => setPanel('objective')}
+                  aria-label={t(
+                    `星标 ${targetsFound}/${objective.targets.length}，剩余 ${remainingMoves} 步，查看目标规则`,
+                    `Stars ${targetsFound}/${objective.targets.length}, ${remainingMoves} moves left, show goal rules`,
+                  )}
+                >
+                  <Star size={16} fill="currentColor" />
+                  <span>
+                    {t('星标', 'Stars')} {targetsFound}/
+                    {objective.targets.length}
+                  </span>
+                  <strong>
+                    {t(`剩 ${remainingMoves} 步`, `${remainingMoves} moves`)}
+                  </strong>
+                </button>
+              ) : (
+                <span>
+                  <span className="status-dot" />
+                  {complete
+                    ? t('所有方向，都已解开', 'Every path is clear')
+                    : lost
+                      ? t('本次挑战结束', 'Attempt over')
+                      : t(
+                          `还剩 ${remaining} 支箭头`,
+                          `${remaining} arrows to go`,
+                        )}
+                </span>
+              )}
               {keyArrows.length > 0 && (
                 <button
                   className="key-counter"
@@ -694,38 +748,57 @@ export default function Home() {
             </div>
             <ProgressBar
               className="board-progress"
-              value={(run.removed.length / level.arrows.length) * 100}
-              aria-label={t('本关进度', 'Level progress')}
+              value={
+                objective
+                  ? (targetsFound / objective.targets.length) * 100
+                  : (run.removed.length / level.arrows.length) * 100
+              }
+              aria-label={
+                objective
+                  ? t('目标离场进度', 'Star rescue progress')
+                  : t('本关进度', 'Level progress')
+              }
             />
           </div>
           <output
             className={`game-message ${bump ? 'blocked-message' : ''}`}
             aria-live="polite"
           >
-            {notice ||
-              (complete
-                ? t(
-                    '做得漂亮。准备好下一个谜题了吗？',
-                    'Nicely done. Ready for the next puzzle?',
-                  )
-                : keyArrows.length > 0 &&
-                    keysFound === 0 &&
-                    run.removed.length === 0
+            {lost
+              ? t(
+                  failReason === 'moves'
+                    ? '步数已用完。重试时，把动作留给星标需要的路线。'
+                    : '爱心已用完。记住刚才的阻挡关系，再试一次。',
+                  failReason === 'moves'
+                    ? 'No moves left. On your next try, follow the routes needed by the stars.'
+                    : 'No hearts left. Keep the blockers you found in mind and try again.',
+                )
+              : notice ||
+                (complete
                   ? t(
-                      '移走金色钥匙，打开同字母的锁；点锁不扣心。',
-                      'Free a gold key to open matching locks. Inspecting locks is free.',
+                      '做得漂亮。准备好下一个谜题了吗？',
+                      'Nicely done. Ready for the next puzzle?',
                     )
-                  : run.level === 1 && run.removed.length === 0
-                    ? t(
-                        '轻点箭头。前方没有阻挡，它就能自由离开。',
-                        'Tap an arrow. If the path ahead is clear, it will escape.',
-                      )
-                    : info
-                      ? info.focus[en ? 1 : 0]
-                      : t(
-                          '顺着箭头看，找到一条畅通的路。',
-                          'Follow the arrow. Find a clear way out.',
-                        ))}
+                  : objective && run.removed.length === 0
+                    ? info!.focus[en ? 1 : 0]
+                    : keyArrows.length > 0 &&
+                        keysFound === 0 &&
+                        run.removed.length === 0
+                      ? t(
+                          '移走金色钥匙，打开同字母的锁；点锁不扣心。',
+                          'Free a gold key to open matching locks. Inspecting locks is free.',
+                        )
+                      : run.level === 1 && run.removed.length === 0
+                        ? t(
+                            '轻点箭头。前方没有阻挡，它就能自由离开。',
+                            'Tap an arrow. If the path ahead is clear, it will escape.',
+                          )
+                        : info
+                          ? info.focus[en ? 1 : 0]
+                          : t(
+                              '顺着箭头看，找到一条畅通的路。',
+                              'Follow the arrow. Find a clear way out.',
+                            ))}
           </output>
           {lost ? (
             <button
@@ -733,7 +806,12 @@ export default function Home() {
               onClick={() => startLevel(run.level)}
             >
               <RotateCcw size={20} />
-              {t('重试本关 · 恢复 3 颗心', 'Retry · 3 fresh hearts')}
+              {objective
+                ? t(
+                    '重试本关 · 恢复步数与爱心',
+                    'Retry · fresh moves and hearts',
+                  )
+                : t('重试本关 · 恢复 3 颗心', 'Retry · 3 fresh hearts')}
             </button>
           ) : complete ? (
             <button
@@ -804,8 +882,12 @@ export default function Home() {
             <h3>{t('跟着方向走', 'Follow the direction')}</h3>
             <p>
               {t(
-                '点击一条箭头。前方畅通时，它会沿着自己的轨迹离开。',
-                'Tap an arrow. When its path is clear, it will follow its trail out.',
+                objective
+                  ? '在步数内送走带星标的箭头，即可过关。普通箭头可以留在棋盘上。'
+                  : '点击一条箭头。前方畅通时，它会沿尖端方向直线离开。',
+                objective
+                  ? 'Free the starred arrows within the move budget. Ordinary arrows may stay on the board.'
+                  : 'Tap an arrow. When its path is clear, it exits straight in the direction of its head.',
               )}
             </p>
             <div className="note-divider" />
@@ -888,10 +970,10 @@ export default function Home() {
               <DialogDescription>
                 {t(
                   challenge
-                    ? '新版 30 关：短关、长折线、大棋盘和钥匙解锁。'
+                    ? '30 个新谜题：有限步数救星标，穿插轻松清场、长线追踪和钥匙接力。'
                     : '已完成的关卡可以随时重玩，刷新自己的星级。',
                   challenge
-                    ? '30 remixed puzzles: short boards, long paths, large shapes and keys.'
+                    ? '30 new puzzles: rescue stars within a move budget, clear boards, trace ribbons and connect keys.'
                     : 'Replay completed levels anytime to improve your stars.',
                 )}
               </DialogDescription>
@@ -903,7 +985,7 @@ export default function Home() {
                   aria-pressed={challenge}
                   onClick={() => switchCampaign('challenge')}
                 >
-                  {t('挑战 2.0 · 30 关', 'Challenge 2.0 · 30')}
+                  {t('挑战 3.0 · 30 关', 'Challenge 3.0 · 30')}
                 </button>
                 <button
                   aria-pressed={!challenge}
@@ -1004,7 +1086,7 @@ export default function Home() {
               <span className="modal-symbol">
                 <Sparkles />
               </span>
-              <span className="section-eyebrow">CHALLENGE 2.0</span>
+              <span className="section-eyebrow">CHALLENGE 3.0</span>
               <DialogTitle>
                 {t('这次，每关都有新变化', 'A different kind of challenge')}
               </DialogTitle>
@@ -1015,9 +1097,11 @@ export default function Home() {
                 )}
               </DialogDescription>
               <div className="revision-features">
-                <span>{t('大小棋盘交替', 'Boards big and small')}</span>
                 <span>
-                  {t('长折线与多种外形', 'Long paths and new shapes')}
+                  {t('星标目标与清场交替', 'Rescue stars or clear the board')}
+                </span>
+                <span>
+                  {t('有限步数，辨认关键路线', 'Find the routes that matter')}
                 </span>
                 <span>{t('钥匙打开成组箭头', 'Keys unlock groups')}</span>
               </div>
@@ -1062,6 +1146,32 @@ export default function Home() {
               <button className="primary-button" onClick={closePanel}>
                 {t('明白了，寻找钥匙', 'Got it. Find the key')}
                 <KeyRound size={18} />
+              </button>
+            </>
+          )}
+          {panel === 'objective' && objective && (
+            <>
+              <span className="modal-symbol goal-symbol">
+                <Star fill="currentColor" />
+              </span>
+              <DialogTitle>
+                {t('把步数留给星星', 'Make your moves count')}
+              </DialogTitle>
+              <DialogDescription>
+                {t(
+                  `用 ${objective.moves} 步送走 ${objective.targets.length} 支星标箭头即可过关，普通箭头不必全部清空。沿星标的出口追踪阻挡，找出真正需要移走的箭头。`,
+                  `Free ${objective.targets.length} starred arrows in ${objective.moves} moves. Ordinary arrows may stay. Trace each star’s exit to find the arrows it needs.`,
+                )}
+              </DialogDescription>
+              <p className="key-explainer">
+                {t(
+                  '成功移走一支箭头用 1 步；撞到阻挡只扣爱心，查看锁不扣步数或爱心。结束前撤销可退回 1 步，但不退还爱心和提示。步数或爱心用完后，可立即重试同一关。',
+                  'Each freed arrow uses one move. A blocked tap costs a heart; inspecting a lock is free. Before the attempt ends, undo refunds a move, but not hearts or hints. Retry the same board when moves or hearts run out.',
+                )}
+              </p>
+              <button className="primary-button" onClick={closePanel}>
+                {t('明白了，寻找星标', 'Got it. Follow the stars')}
+                <Star size={18} />
               </button>
             </>
           )}
@@ -1148,15 +1258,15 @@ export default function Home() {
                 {t('简单开始，慢慢上手', 'SIMPLE TO START')}
               </span>
               <DialogTitle>
-                {t('让每支箭头找到出口', 'Find a way out for every arrow')}
+                {t('看清目标，找到出口', 'Read the goal. Find the exit.')}
               </DialogTitle>
               <DialogDescription>
                 {t(
                   challenge
-                    ? '清空棋盘即可过关。前 3 关练习；第 4 关起每局 3 颗心，点错 3 次需要重试。没有倒计时。'
+                    ? '清场关需要移走全部箭头；星标关只需在步数内送走星标。前 3 关练习，第 4 关起每局 3 颗心。没有倒计时。'
                     : '清空棋盘，就能进入下一关。没有倒计时，也没有生命限制。',
                   challenge
-                    ? 'Clear the board to win. Levels 1–3 are practice. From level 4, three blocked taps end your attempt. No timer.'
+                    ? 'Clear every arrow in clearing levels. In star levels, free the stars within the move budget. Levels 1–3 are practice; from level 4 you have 3 hearts. No timer.'
                     : 'Clear the board to finish the level. No timers and no lives to lose.',
                 )}
               </DialogDescription>
@@ -1180,10 +1290,10 @@ export default function Home() {
                     <p>
                       {t(
                         challenge
-                          ? '前方有其他箭头时会弹回并扣心。沿着阻挡关系观察，找出当前能离开的箭头。教学关会帮你标记。'
+                          ? '前方有其他箭头时会弹回并扣心，蓝色会短暂标记最近的阻挡。星标关中，能离开的箭头不一定都需要移走。'
                           : '前方有其他箭头时会轻轻弹回。先移开被标记的箭头，再试一次。',
                         challenge
-                          ? 'Blocked arrows bounce back and cost a heart. Follow their paths to find an opening. Tutorials highlight obstacles.'
+                          ? 'Blocked arrows bounce back and cost a heart. Blue briefly marks the nearest blocker. In star levels, not every free arrow needs to leave.'
                           : 'Blocked arrows bounce back. Remove the highlighted obstacle, then try again.',
                       )}
                     </p>
@@ -1196,10 +1306,10 @@ export default function Home() {
                     <p>
                       {t(
                         challenge
-                          ? '每局 2 次提示。撤销不退还爱心或提示。放大后可拖动棋盘；重试会恢复本关的全部爱心和提示。'
+                          ? '每局 2 次提示，星标关会提示通向目标的箭头。结束前撤销退回一步，不退还爱心或提示。放大后可拖动棋盘；重试恢复步数、爱心和提示。'
                           : '提示会点亮一支可离开的箭头；撤销可恢复上一步。小屏幕可以放大棋盘。',
                         challenge
-                          ? 'Two hints per attempt. Undo does not refund hearts or hints. Zoom to pan; retry restores your hearts and hints.'
+                          ? 'Two hints per attempt, pointing toward stars in goal levels. Undo refunds a move before the attempt ends, but not hearts or hints. Zoom to pan. Retry restores moves, hearts and hints.'
                           : 'Hints light up a clear arrow. Undo restores your last move. Zoom in for a closer look.',
                       )}
                     </p>
@@ -1259,12 +1369,18 @@ export default function Home() {
                 )}
               </span>
               <DialogTitle>
-                {t('差一点，再试一次。', 'Take a breath. Try again.')}
+                {failReason === 'moves'
+                  ? t('步数用完，换个思路。', 'Out of moves. Try a new route.')
+                  : t('爱心用完，再试一次。', 'Out of hearts. Try again.')}
               </DialogTitle>
               <DialogDescription>
                 {t(
-                  '3 颗心已用完。这次找到的线索，下一次用得上。重试会恢复同一棋盘、3 颗心和 2 次提示。',
-                  'Your 3 hearts are gone. Keep what you learned. Retry the same puzzle with 3 hearts and 2 hints.',
+                  failReason === 'moves'
+                    ? `还有 ${objective!.targets.length - targetsFound} 支星标没有离场。试着略过无关的箭头。重试恢复同一棋盘、${objective!.moves} 步、3 颗心和 2 次提示。`
+                    : `3 颗心已用完。这次找到的阻挡关系，下一次用得上。重试恢复同一棋盘、${objective ? `${objective.moves} 步、` : ''}3 颗心和 2 次提示。`,
+                  failReason === 'moves'
+                    ? `${objective!.targets.length - targetsFound} starred arrows remain. Try leaving unrelated arrows alone. Retry the same board with ${objective!.moves} moves, 3 hearts and 2 hints.`
+                    : `Your 3 hearts are gone. Keep the blockers you found in mind. Retry the same puzzle with ${objective ? `${objective.moves} moves, ` : ''}3 hearts and 2 hints.`,
                 )}
               </DialogDescription>
               <button
@@ -1299,7 +1415,7 @@ export default function Home() {
               </span>
               <DialogTitle>
                 {run.level === count
-                  ? t('每个方向，都有出口。', 'Every path found its way.')
+                  ? t('终章解开，旅程继续。', 'Finale solved. Keep exploring.')
                   : info?.tier === 'hard'
                     ? t(
                         stars(run) === 3 ? '完美攻克，漂亮！' : '挑战攻克！',
@@ -1312,15 +1428,20 @@ export default function Home() {
                       : t('解开了，做得漂亮！', 'Clear skies. Nicely done!')}
               </DialogTitle>
               <DialogDescription>
-                {run.level === count
+                {objective
                   ? t(
-                      `${count} 个谜题全部完成。回头看看，试着收集所有星星吧。`,
-                      `All ${count} puzzles complete. Revisit your favorites and collect every star.`,
+                      `${objective.targets.length} 支星标全部出逃，用了 ${run.removed.length}/${objective.moves} 步。${remaining} 支普通箭头留在原地，也一样完成目标。`,
+                      `All ${objective.targets.length} stars escaped in ${run.removed.length}/${objective.moves} moves. ${remaining} ordinary arrows stayed behind. Goal complete.`,
                     )
-                  : t(
-                      '每一条交错的线，都找到了自己的方向。',
-                      'Every tangled path found its own way out.',
-                    )}
+                  : run.level === count
+                    ? t(
+                        `${count} 个谜题全部完成。回头看看，试着收集所有星星吧。`,
+                        `All ${count} puzzles complete. Revisit your favorites and collect every star.`,
+                      )
+                    : t(
+                        '每一条交错的线，都找到了自己的方向。',
+                        'Every tangled path found its own way out.',
+                      )}
               </DialogDescription>
               <div className="win-stars">
                 {[1, 2, 3].map((n) => (
@@ -1334,7 +1455,7 @@ export default function Home() {
               </div>
               <div className="win-stats">
                 <div>
-                  <strong>{level.arrows.length}</strong>
+                  <strong>{run.removed.length}</strong>
                   <span>{t('箭头出逃', 'Arrows freed')}</span>
                 </div>
                 <div>

@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 import { defaultProgress, newRun } from '../lib/game/engine.ts';
 import { makeLevel } from '../lib/game/levels.ts';
 
-const key = 'arrow-escape:challenge:v2';
+const key = 'arrow-escape:challenge:v3';
 const browser = await chromium.launch({
   channel: 'chrome',
   headless: true,
