@@ -1,5 +1,7 @@
 import test from 'node:test';
+import { challengeBriefs } from '../lib/game/challenge-briefs.ts';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { blockers, direction, type Level } from '../lib/game/engine.ts';
 import {
   challengeLevel,
@@ -10,6 +12,24 @@ import {
 type RescueLevel = Level & {
   objective?: { type: 'rescue'; targets: number[]; moves: number };
 };
+
+void test('standalone relief authoring refuses to bypass predecessor continuity checks', () => {
+  const result = spawnSync(
+    process.execPath,
+    [
+      '--experimental-strip-types',
+      new URL('../scripts/generate-challenges.mjs', import.meta.url).pathname,
+      '27',
+      '27',
+    ],
+    { encoding: 'utf8' },
+  );
+  assert.notEqual(result.status, 0);
+  assert.match(
+    result.stderr,
+    /Include preceding level 26 to validate relief continuity/,
+  );
+});
 function closure(level: Level, targets: number[]) {
   const required = new Set<number>();
   function visit(id: number) {
@@ -164,7 +184,7 @@ void test('rescue puzzles have useful and irrelevant legal choices, attainable b
     );
   }
   assert.ok(
-    rescueCount >= 12 && rescueCount <= 20,
+    rescueCount === 22,
     'campaign must alternate objectives and clear boards',
   );
   assert.ok(
@@ -186,8 +206,7 @@ void test('campaign varies goals and path reading without treating every sixth l
     shapes.add(info.shape);
     if (info.tier === 'relief') {
       reliefs++;
-      assert.ok(!level.objective);
-      assert.ok(level.arrows.length <= 20);
+      assert.ok(level.objective, 'relief should still require relevant moves');
     }
     if (info.kind === 'long') {
       long++;
@@ -203,6 +222,77 @@ void test('campaign varies goals and path reading without treating every sixth l
   assert.ok(kinds.size >= 4 && shapes.size >= 5);
   assert.equal(challengeInfo(6).tier, 'relief');
   assert.equal(challengeInfo(9).tier, 'relief');
+});
+
+void test('relief retains learned goals and key combinations with a bounded structural drop', () => {
+  const expectedCounts = new Map([
+    [6, 22],
+    [9, 26],
+    [14, 28],
+    [21, 32],
+    [27, 36],
+  ]);
+  const targetDepth = (level: Level) => {
+    const visit = (id: number): number =>
+      1 + Math.max(0, ...blockers(level, [], id).map(visit));
+    return Math.max(...level.objective!.targets.map(visit));
+  };
+  for (const [id, count] of expectedCounts) {
+    const before = challengeLevel(id - 1),
+      level = challengeLevel(id);
+    assert.equal(level.arrows.length, count, `relief count ${id}`);
+    assert.ok(
+      level.objective && before.objective,
+      `retain goal decision ${id}`,
+    );
+    assert.equal(
+      level.objective.targets.length,
+      before.objective.targets.length,
+    );
+    assert.equal(
+      level.arrows.filter((a) => a.key).length,
+      before.arrows.filter((a) => a.key).length,
+    );
+    if (before.arrows.some((a) => a.key && a.lock))
+      assert.ok(
+        level.arrows.some((a) => a.key && a.lock),
+        `retain key relay ${id}`,
+      );
+    const required = closure(level, level.objective.targets).size;
+    const previousRequired = closure(before, before.objective.targets).size;
+    assert.ok(
+      level.arrows.length >= before.arrows.length * 0.8,
+      `board cliff ${id}`,
+    );
+    assert.ok(
+      required >= previousRequired * 0.75,
+      `required-action cliff ${id}`,
+    );
+    assert.ok(
+      targetDepth(level) >= targetDepth(before) - 2 &&
+        targetDepth(level) <= targetDepth(before),
+      `dependency cliff ${id}`,
+    );
+    assert.equal(
+      level.objective.moves - required,
+      3,
+      `forgiving but finite budget ${id}`,
+    );
+  }
+});
+
+void test('opening choices stay within the authored range without becoming single-exit chains', () => {
+  for (let id = 5; id <= 30; id++) {
+    const level = challengeLevel(id);
+    const exits = level.arrows.filter(
+      (a) => !blockers(level, [], a.id).length,
+    ).length;
+    assert.ok(
+      exits >= challengeBriefs[id - 1].exits![0] &&
+        exits <= challengeBriefs[id - 1].exits![1],
+      `level ${id}: ${exits} exits`,
+    );
+  }
 });
 
 void test('cross-gap lessons put a real far-side blocker on a starred exit', () => {

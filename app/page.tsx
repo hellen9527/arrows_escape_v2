@@ -182,6 +182,14 @@ export default function Home() {
           restored.language = previous.language;
           restored.reducedMotion = previous.reducedMotion;
         }
+        if (restored.showBalanceNotice) {
+          setNotice(
+            restored.language === 'en'
+              ? 'This board was rebalanced and restarted. Your earned stars and unlocked levels are kept.'
+              : '本关已重新平衡，棋盘从头开始；已获星级和解锁进度都已保留。',
+          );
+          restored.showBalanceNotice = false;
+        }
         update(restored);
         storageLoaded.current = true;
         if (restored.showRevisionIntro) setPanel('revision');
@@ -267,6 +275,14 @@ export default function Home() {
       setStorageFailed(true);
     }
     clearEffects();
+    if (next.showBalanceNotice) {
+      setNotice(
+        current.language === 'en'
+          ? 'This board was rebalanced and restarted. Your earned stars and unlocked levels are kept.'
+          : '本关已重新平衡，棋盘从头开始；已获星级和解锁进度都已保留。',
+      );
+      next = { ...next, showBalanceNotice: false };
+    }
     update({
       ...next,
       sound: current.sound,
@@ -565,10 +581,10 @@ export default function Home() {
               <div className="section-eyebrow">
                 {t(
                   challenge
-                    ? `挑战 3.0 · ${info!.title[0]}`
+                    ? `挑战 3.1 · ${info!.title[0]}`
                     : `第 ${chapter + 1} 章 · ${chapters[chapter][0]}`,
                   challenge
-                    ? `CHALLENGE 3.0 · ${info!.title[1]}`
+                    ? `CHALLENGE 3.1 · ${info!.title[1]}`
                     : `CHAPTER ${chapter + 1} · ${chapters[chapter][1].toUpperCase()}`,
                 )}
               </div>
@@ -625,14 +641,14 @@ export default function Home() {
                         : info!.tier === 'tutorial'
                           ? '教学关'
                           : info!.tier === 'relief'
-                            ? '轻松一刻'
+                            ? '熟练练习'
                             : '步步深入',
                       info!.tier === 'hard'
                         ? 'Hard'
                         : info!.tier === 'tutorial'
                           ? 'Tutorial'
                           : info!.tier === 'relief'
-                            ? 'Breather'
+                            ? 'Practice'
                             : 'Focus',
                     )
                   : t(
@@ -985,7 +1001,7 @@ export default function Home() {
                   aria-pressed={challenge}
                   onClick={() => switchCampaign('challenge')}
                 >
-                  {t('挑战 3.0 · 30 关', 'Challenge 3.0 · 30')}
+                  {t('挑战 3.1 · 30 关', 'Challenge 3.1 · 30')}
                 </button>
                 <button
                   aria-pressed={!challenge}
@@ -1086,7 +1102,7 @@ export default function Home() {
               <span className="modal-symbol">
                 <Sparkles />
               </span>
-              <span className="section-eyebrow">CHALLENGE 3.0</span>
+              <span className="section-eyebrow">CHALLENGE 3.1</span>
               <DialogTitle>
                 {t('这次，每关都有新变化', 'A different kind of challenge')}
               </DialogTitle>

@@ -11,6 +11,8 @@ export type ChallengeBrief = {
   targets?: number;
   slack?: number;
   crossGap?: boolean;
+  exits?: [number, number];
+  goalDepth?: [number, number];
   title: [string, string];
   focus: [string, string];
 };
@@ -78,6 +80,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 5,
+    exits: [2, 4],
     size: 13,
     target: 22,
     shape: 'cross',
@@ -94,20 +97,25 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 6,
-    size: 11,
-    target: 18,
+    goalDepth: [5, 7],
+    slack: 3,
+    targets: 1,
+    exits: [3, 4],
+    size: 13,
+    target: 22,
     shape: 'hourglass',
     kind: 'relief',
     tier: 'relief',
-    depth: 5,
+    depth: 7,
     title: ['顺势而下', 'An Easy Current'],
     focus: [
-      '这一关清空全部箭头，顺着打开的通路继续。',
-      'Clear every arrow and follow the openings as they appear.',
+      '继续追踪星标，多留了一点步数，试着顺畅解开。',
+      'Follow the star with a little more room for extra moves.',
     ],
   },
   {
     id: 7,
+    exits: [2, 4],
     size: 13,
     target: 24,
     shape: 'wings',
@@ -124,6 +132,8 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 8,
+    goalDepth: [8, 11],
+    exits: [2, 5],
     crossGap: true,
     size: 15,
     target: 30,
@@ -141,20 +151,25 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 9,
-    size: 11,
-    target: 14,
+    goalDepth: [7, 9],
+    slack: 3,
+    targets: 2,
+    exits: [3, 4],
+    size: 15,
+    target: 26,
     shape: 'diamond',
     kind: 'relief',
     tier: 'relief',
-    depth: 4,
+    depth: 8,
     title: ['轻轻一过', 'A Little Breather'],
     focus: [
-      '没有步数限制，清空这张小图。',
-      'No move limit here. Clear this small board.',
+      '两颗星仍有共同阻挡，沿熟悉的关系稳稳推进。',
+      'Two stars still share blockers. Use familiar connections with more room to explore.',
     ],
   },
   {
     id: 10,
+    exits: [2, 4],
     size: 15,
     target: 18,
     shape: 'ring',
@@ -169,6 +184,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 11,
+    exits: [2, 4],
     size: 13,
     target: 24,
     shape: 'cross',
@@ -184,6 +200,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 12,
+    exits: [2, 4],
     size: 15,
     target: 28,
     shape: 'wings',
@@ -201,6 +218,8 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 13,
+    goalDepth: [8, 11],
+    exits: [2, 3],
     size: 15,
     target: 32,
     shape: 'diamond',
@@ -218,20 +237,26 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 14,
-    size: 11,
-    target: 16,
+    goalDepth: [7, 9],
+    keyGroups: 1,
+    slack: 3,
+    targets: 2,
+    exits: [3, 4],
+    size: 15,
+    target: 28,
     shape: 'hourglass',
     kind: 'relief',
     tier: 'relief',
-    depth: 4,
+    depth: 8,
     title: ['小小歇脚', 'A Quiet Pause'],
     focus: [
-      '清空全部箭头，轻松重温已经学会的观察方法。',
-      'Clear every arrow using the patterns you already know.',
+      '继续用钥匙连接两颗星，这次有更宽松的步数。',
+      'Connect both stars through the key, with a more forgiving move budget.',
     ],
   },
   {
     id: 15,
+    exits: [2, 4],
     crossGap: true,
     size: 15,
     target: 26,
@@ -249,6 +274,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 16,
+    exits: [2, 4],
     size: 17,
     target: 20,
     shape: 'diamond',
@@ -265,6 +291,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 17,
+    exits: [2, 4],
     size: 17,
     target: 34,
     shape: 'wings',
@@ -280,6 +307,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 18,
+    exits: [2, 4],
     size: 17,
     target: 40,
     shape: 'cross',
@@ -294,6 +322,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 19,
+    exits: [2, 4],
     size: 17,
     target: 32,
     shape: 'hourglass',
@@ -311,6 +340,8 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 20,
+    goalDepth: [9, 12],
+    exits: [2, 3],
     size: 17,
     target: 36,
     shape: 'diamond',
@@ -329,20 +360,27 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 21,
-    size: 13,
-    target: 18,
+    goalDepth: [7, 10],
+    staged: true,
+    keyGroups: 2,
+    slack: 3,
+    targets: 3,
+    exits: [3, 4],
+    size: 17,
+    target: 32,
     shape: 'cross',
     kind: 'relief',
     tier: 'relief',
-    depth: 5,
+    depth: 9,
     title: ['轻装再行', 'Travel Light'],
     focus: [
-      '回到小图，清空全部箭头。',
-      'Return to a small board and clear every arrow.',
+      'A、B 钥匙和三颗星都在，沿已经学会的联系前进。',
+      'Use the key relay and familiar connections to guide all three stars.',
     ],
   },
   {
     id: 22,
+    exits: [2, 4],
     crossGap: true,
     size: 19,
     target: 24,
@@ -360,6 +398,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 23,
+    exits: [2, 4],
     size: 17,
     target: 34,
     shape: 'wings',
@@ -378,6 +417,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 24,
+    exits: [2, 4],
     size: 17,
     target: 42,
     shape: 'hourglass',
@@ -392,6 +432,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 25,
+    exits: [2, 4],
     size: 17,
     target: 36,
     shape: 'islands',
@@ -408,6 +449,8 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 26,
+    goalDepth: [9, 12],
+    exits: [2, 3],
     size: 19,
     target: 40,
     shape: 'diamond',
@@ -426,20 +469,27 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 27,
-    size: 13,
-    target: 20,
+    goalDepth: [8, 11],
+    staged: true,
+    keyGroups: 2,
+    slack: 3,
+    targets: 3,
+    exits: [3, 4],
+    size: 17,
+    target: 36,
     shape: 'diamond',
     kind: 'relief',
     tier: 'relief',
-    depth: 5,
+    depth: 10,
     title: ['星海小憩', 'A Gentle Interlude'],
     focus: [
-      '清空全部箭头，让熟悉的关系变成顺畅的动作。',
-      'Clear every arrow and turn familiar patterns into fluent moves.',
+      '三星与钥门都保留，用更宽松的步数完成这次练习。',
+      'Keep the three stars and key relay in view, with more moves to practice.',
     ],
   },
   {
     id: 28,
+    exits: [2, 4],
     size: 19,
     target: 26,
     shape: 'ring',
@@ -456,6 +506,7 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 29,
+    exits: [2, 4],
     size: 19,
     target: 42,
     shape: 'cross',
@@ -474,6 +525,8 @@ export const challengeBriefs: ChallengeBrief[] = [
   },
   {
     id: 30,
+    goalDepth: [10, 14],
+    exits: [2, 3],
     size: 19,
     target: 46,
     shape: 'wings',

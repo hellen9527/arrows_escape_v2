@@ -223,7 +223,11 @@ function construct(p, trial) {
     m = metrics(deps);
   const allowed = (x, y) => inside(p, x, y) && !occupied[y * size + x];
   const long = p.kind === 'long',
-    opening = target >= 40 ? 5 : 3;
+    opening = p.exits
+      ? Math.floor((p.exits[0] + p.exits[1]) / 2)
+      : target >= 40
+        ? 5
+        : 3;
   const attempts = long ? 750 : 450;
   for (let n = 0; n < target; n++) {
     let best = null,
@@ -427,7 +431,7 @@ function dependencyClosure(deps, targets) {
   return required;
 }
 
-function addObjective(p, result, trial) {
+function addObjective(p, result, trial, previous) {
   if (!p.targets || !result) return result;
   const n = result.paths.length,
     rng = random(p.id * 65537 + trial * 8191);
@@ -485,6 +489,23 @@ function addObjective(p, result, trial) {
     }
     const required = dependencyClosure(result.deps, targets),
       moves = required.size + (p.slack || 0);
+    const requiredDepth = Math.max(...targets.map((t) => result.m.depths[t]));
+    if (
+      p.goalDepth &&
+      (requiredDepth < p.goalDepth[0] || requiredDepth > p.goalDepth[1])
+    )
+      continue;
+    if (
+      p.tier === 'relief' &&
+      previous?.objective &&
+      (n < previous.paths.length * 0.8 ||
+        targets.length !== previous.objective.targets.length ||
+        Object.keys(result.keys).length !== Object.keys(previous.keys).length ||
+        required.size < previous.required * 0.75 ||
+        requiredDepth < previous.requiredDepth - 2 ||
+        requiredDepth > previous.requiredDepth)
+    )
+      continue;
     if (
       required.size < Math.max(p.targets * 3, n * 0.28) ||
       required.size > n * 0.8 ||
@@ -524,6 +545,7 @@ function addObjective(p, result, trial) {
           moves,
         },
         required: required.size,
+        requiredDepth,
       };
     }
   }
@@ -536,6 +558,11 @@ const start = Number(args[0] || 1),
   end = Number(args[1] || 30),
   results = [],
   report = [];
+if (profiles.find((p) => p.id === start)?.tier === 'relief')
+  throw Error(
+    `Include preceding level ${start - 1} to validate relief continuity`,
+  );
+let previous = null;
 for (let id = start; id <= end; id++) {
   if (id <= 3) {
     results.push({
@@ -551,9 +578,22 @@ for (let id = start; id <= end; id++) {
   if (!p) throw Error(`Missing authoring brief ${id}`);
   let best = null,
     bestScore = -Infinity;
-  for (let trial = 0; trial < 160; trial++) {
+  const rejected = { incomplete: 0, exits: 0, structure: 0, objective: 0 };
+  for (let trial = 0; trial < 2000; trial++) {
     const base = addKeys(p, construct(p, trial));
-    const result = acceptable(p, base) ? addObjective(p, base, trial) : null;
+    const exitsFit =
+      base &&
+      (!p.exits || (base.m.free >= p.exits[0] && base.m.free <= p.exits[1]));
+    const result =
+      exitsFit && acceptable(p, base)
+        ? addObjective(p, base, trial, previous)
+        : null;
+    if (!result) {
+      if (!base || base.paths.length !== p.target) rejected.incomplete++;
+      else if (!exitsFit) rejected.exits++;
+      else if (!acceptable(p, base)) rejected.structure++;
+      else rejected.objective++;
+    }
     if (result) {
       const score =
         -Math.abs(result.m.depth - p.depth) * 2 -
@@ -568,7 +608,7 @@ for (let id = start; id <= end; id++) {
     if (best && trial >= 3) break;
     if (trial % 20 === 19)
       console.error(
-        `search ${id}: ${trial + 1} trials, arrows ${base?.paths.length}, depth ${base?.m.depth}, objective ${Boolean(result)}`,
+        `search ${id}: ${trial + 1} trials, arrows ${base?.paths.length}, exits ${base?.m.free}, depth ${base?.m.depth}, rejects ${JSON.stringify(rejected)}`,
       );
   }
   if (!best)
@@ -586,6 +626,7 @@ for (let id = start; id <= end; id++) {
     ...(best.objective ? { objective: best.objective } : {}),
   };
   results.push(row);
+  previous = best;
   const stats = {
     id,
     size: p.size,
@@ -599,6 +640,7 @@ for (let id = start; id <= end; id++) {
       ? {
           targets: best.objective.targets,
           required: best.required,
+          requiredDepth: best.requiredDepth,
           moves: best.objective.moves,
         }
       : {}),

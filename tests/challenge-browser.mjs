@@ -119,7 +119,7 @@ try {
   );
   await page.getByRole('button', { name: '选关', exact: true }).click();
   await page
-    .getByRole('button', { name: '挑战 3.0 · 30 关', exact: true })
+    .getByRole('button', { name: '挑战 3.1 · 30 关', exact: true })
     .click();
   await page.getByRole('button', { name: '关闭', exact: true }).click();
   await page.getByRole('dialog').waitFor({ state: 'hidden' });

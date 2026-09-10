@@ -20,6 +20,7 @@ export type Run = {
   hint: number | null;
 };
 import { makeLevel, levelCount } from './levels.ts';
+import { BALANCE_REVISION, REBALANCED_LEVELS } from './challenge-balance.ts';
 
 export const lives = (level: Level, run: Run) =>
   level.campaign === 'challenge' && level.id > 3
@@ -167,8 +168,10 @@ export const defaultProgress = (campaign: Campaign = 'classic') => ({
   version: 1,
   campaign,
   contentRevision: campaign === 'challenge' ? 3 : 1,
+  balanceRevision: campaign === 'challenge' ? BALANCE_REVISION : 0,
   previousBest: {} as Record<string, number>,
   showRevisionIntro: false,
+  showBalanceNotice: false,
   unlocked: 1,
   best: {} as Record<string, number>,
   run: newRun(1),
@@ -240,6 +243,8 @@ export function restoreProgress(
     p.best = migrating ? {} : validBests(s.best, count);
     p.showRevisionIntro =
       campaign === 'challenge' && (migrating || s.showRevisionIntro === true);
+    p.showBalanceNotice =
+      campaign === 'challenge' && !migrating && s.showBalanceNotice === true;
     p.unlocked = Math.min(
       count,
       Math.max(
@@ -261,6 +266,14 @@ export function restoreProgress(
       );
       // Old arrow ids refer to a different puzzle. Carry achievements, never moves.
       if (migrating) return p;
+      if (
+        campaign === 'challenge' &&
+        s.balanceRevision !== BALANCE_REVISION &&
+        REBALANCED_LEVELS.includes(r.level)
+      ) {
+        p.showBalanceNotice = true;
+        return p;
+      }
       let candidate = newRun(r.level);
       const l = makeLevel(r.level, campaign);
       if (Array.isArray(r.removed) && r.removed.length <= l.arrows.length) {
