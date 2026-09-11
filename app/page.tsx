@@ -224,7 +224,8 @@ export default function Home() {
           campaign === 'challenge' &&
           !localStorage.getItem('arrow-escape:challenge:v1') &&
           !localStorage.getItem('arrow-escape:challenge:v2') &&
-          !localStorage.getItem('arrow-escape:challenge:v3')
+          !localStorage.getItem('arrow-escape:challenge:v3') &&
+          !localStorage.getItem('arrow-escape:challenge:v4')
         ) {
           const previous = restoreProgress(
             localStorage.getItem(saveKey('classic')),
@@ -357,7 +358,7 @@ export default function Home() {
   }
   function closePanel() {
     if (panel === 'entry' && progressRef.current.entry === 'pending') return;
-    if (panel === 'revision')
+    if (panel === 'revision' || panel === 'entry')
       update({ ...progressRef.current, showRevisionIntro: false });
     setPanel(null);
   }
@@ -665,10 +666,10 @@ export default function Home() {
               <div className="section-eyebrow">
                 {t(
                   challenge
-                    ? `挑战 4.0 · ${info!.title[0]}`
+                    ? `挑战 5.0 · ${info!.title[0]}`
                     : `第 ${chapter + 1} 章 · ${chapters[chapter][0]}`,
                   challenge
-                    ? `CHALLENGE 4.0 · ${info!.title[1]}`
+                    ? `CHALLENGE 5.0 · ${info!.title[1]}`
                     : `CHAPTER ${chapter + 1} · ${chapters[chapter][1].toUpperCase()}`,
                 )}
               </div>
@@ -839,15 +840,23 @@ export default function Home() {
               <button
                 className="zoom-button"
                 aria-label={
-                  zoom === 2
+                  zoom === 3
                     ? t('还原全盘', 'Show full board')
                     : t('放大棋盘', 'Zoom in')
                 }
                 aria-pressed={zoom > 0}
-                onClick={() => setZoom((z) => (z + 1) % 3)}
+                onClick={() => setZoom((z) => (z + 1) % 4)}
               >
-                {zoom === 2 ? <ZoomOut size={18} /> : <ZoomIn size={18} />}
-                <small>{zoom === 1 ? '2×' : zoom === 2 ? '3×' : ''}</small>
+                {zoom === 3 ? <ZoomOut size={18} /> : <ZoomIn size={18} />}
+                <small>
+                  {zoom === 1
+                    ? '2×'
+                    : zoom === 2
+                      ? '3×'
+                      : zoom === 3
+                        ? '5×'
+                        : ''}
+                </small>
               </button>
             </div>
             <ProgressBar
@@ -1130,7 +1139,7 @@ export default function Home() {
                   aria-pressed={challenge}
                   onClick={() => switchCampaign('challenge')}
                 >
-                  {t('挑战 4.0 · 300 关', 'Challenge 4.0 · 300')}
+                  {t('挑战 5.0 · 300 关', 'Challenge 5.0 · 300')}
                 </button>
                 <button
                   aria-pressed={!challenge}
@@ -1240,7 +1249,7 @@ export default function Home() {
           )}
           {(panel === 'entry' || panel === 'revision') && (
             <>
-              <span className="section-eyebrow">ARROW ESCAPE 4.0 · 300</span>
+              <span className="section-eyebrow">ARROW ESCAPE 5.0 · 300</span>
               <DialogTitle>
                 {t('选一个适合你的起点', 'Choose your starting point')}
               </DialogTitle>
@@ -1254,6 +1263,17 @@ export default function Home() {
                     : 'New to arrow puzzles, or ready for a challenge? Choose for yourself.',
                 )}
               </DialogDescription>
+              {progress.legacyAccess.length > 0 && (
+                <button
+                  className="primary-button"
+                  onClick={() => startLevel(progress.run.level)}
+                >
+                  {t(
+                    `继续第 ${progress.run.level} 关 · 新盘面`,
+                    `Continue level ${progress.run.level} · new board`,
+                  )}
+                </button>
+              )}
               <div className="entry-options">
                 <button
                   className="entry-option"
@@ -1287,8 +1307,8 @@ export default function Home() {
                     </strong>
                     <small>
                       {t(
-                        '从第 31 关开始：双星、共享阻挡与真假支路。',
-                        'Start at level 31: two stars, shared blockers and optional branches.',
+                        '第 31 关起进入百箭盘面：长折线、交织阻挡与目标取舍。',
+                        'Start at level 31: 100 arrows, long bends and connected blockers.',
                       )}
                     </small>
                   </div>
@@ -1297,8 +1317,8 @@ export default function Home() {
               </div>
               <p className="key-explainer">
                 {t(
-                  '星标全部离场就过关，普通箭头可以留下。成功移除用一步；第三次碰撞失败。字母相同的钥匙开同字母的锁。',
-                  'Free all stars to win; ordinary arrows may stay. Each removal costs a move. A third collision ends the attempt. Keys open locks with the same letter.',
+                  '有星标时，在步数内救出所有星标；清场关则移走全部箭头。第三次碰撞失败。相同字母的钥匙开同字母的锁。',
+                  'With stars, rescue every target within the move budget. Clear boards require every arrow to leave. A third collision ends the attempt. Match keys and locks by letter.',
                 )}
               </p>
               <button

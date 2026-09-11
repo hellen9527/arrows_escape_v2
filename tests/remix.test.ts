@@ -78,7 +78,7 @@ void test('old challenge progress migrates without reusing any old arrow ids or 
     language: 'en',
   };
   const p = restoreProgress(JSON.stringify(old), 'challenge');
-  assert.equal(p.contentRevision, 4);
+  assert.equal(p.contentRevision, 5);
   assert.equal(p.unlocked, 1);
   assert.deepEqual(p.previousBest, best);
   assert.deepEqual(p.best, {});
@@ -113,7 +113,7 @@ void test('revision2 migration merges historical and recent best scores and rese
     language: 'en',
   };
   const migrated = restoreProgress(JSON.stringify(old), 'challenge');
-  assert.equal(migrated.contentRevision, 4);
+  assert.equal(migrated.contentRevision, 5);
   assert.deepEqual(migrated.previousBest, { 1: 3, 2: 3, 4: 2, 7: 2 });
   assert.deepEqual(migrated.best, {});
   assert.equal(migrated.unlocked, 1);
@@ -137,11 +137,11 @@ void test('known challenge revisions migrate and unknown revisions cannot be rei
       best: { 2: 2 },
     };
     const restored = restoreProgress(JSON.stringify(old), 'challenge');
-    assert.equal(restored.contentRevision, 4);
+    assert.equal(restored.contentRevision, 5);
     assert.deepEqual(restored.previousBest, { 1: 3, 2: 2 });
     assert.equal(restored.unlocked, 1);
   }
-  for (const contentRevision of [0, 5, 999, '3', null]) {
+  for (const contentRevision of [0, 6, 999, '3', null]) {
     const unknown = {
       ...defaultProgress('challenge'),
       contentRevision,

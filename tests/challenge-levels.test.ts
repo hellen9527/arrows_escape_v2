@@ -18,7 +18,7 @@ import {
 import { tutorialLevel } from '../lib/game/tutorials.ts';
 const briefs = JSON.parse(
   readFileSync(
-    new URL('../docs/level-design-300/design-briefs.json', import.meta.url),
+    new URL('../docs/level-design-300/v5-catalog.json', import.meta.url),
     'utf8',
   ),
 ).levels;
@@ -56,7 +56,7 @@ void test('300 stable formal boards, eight separate tutorials and bilingual labe
 function inspect(l: Level) {
   const tag = `${l.tutorial ? 'T' : 'C'}${l.id}`,
     cells = new Set<string>();
-  assert.ok(l.size <= 25, tag);
+  assert.ok(l.size <= 70, tag);
   for (const a of l.arrows) {
     const [dx, dy] = direction(a),
       [hx, hy] = a.points.at(-1)!;

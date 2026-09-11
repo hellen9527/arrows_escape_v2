@@ -46,7 +46,7 @@ void test('v3 achievements migrate separately without replaying old arrows', () 
   assert.deepEqual(p.run.removed, []);
   assert.equal(canStartLevel(p, 21), false);
 });
-void test('v4 storage reads v3 only as a fallback and retains its original key', () => {
+void test('v5 storage reads v3 only as a fallback and retains its original key', () => {
   const data = new Map([
     [
       'arrow-escape:challenge:v3',
@@ -57,7 +57,7 @@ void test('v4 storage reads v3 only as a fallback and retains its original key',
       }),
     ],
   ]);
-  assert.equal(saveKey('challenge'), 'arrow-escape:challenge:v4');
+  assert.equal(saveKey('challenge'), 'arrow-escape:challenge:v5');
   assert.deepEqual(
     readProgress({ getItem: (k) => data.get(k) ?? null }, 'challenge')
       .previousBest,

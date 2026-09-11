@@ -20,10 +20,10 @@
     "test:rescue:browser": "node --experimental-strip-types tests/rescue-browser.mjs",
     "test:challenge:browser": "node --experimental-strip-types tests/challenge-browser.mjs && node --experimental-strip-types tests/challenge-input.mjs && node --experimental-strip-types tests/challenge-storage.mjs",
     "test:remix:browser": "node --experimental-strip-types tests/remix-browser.mjs && node --experimental-strip-types tests/remix-regressions.mjs",
-    "audit:levels": "node --experimental-strip-types scripts/audit-300.mjs",
-    "generate:levels": "node scripts/generate-300.mjs",
-    "assemble:levels": "node scripts/assemble-300.mjs",
-    "reproduce:levels": "node --experimental-strip-types scripts/reproduce-300.mjs"
+    "audit:levels": "node --experimental-strip-types scripts/audit-weave.mjs",
+    "generate:levels": "node --experimental-strip-types scripts/generate-weave.mjs",
+    "assemble:levels": "node --experimental-strip-types scripts/assemble-weave.mjs",
+    "reproduce:levels": "node --experimental-strip-types scripts/reproduce-weave.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

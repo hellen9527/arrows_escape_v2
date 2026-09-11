@@ -154,16 +154,13 @@ export function act(level: Level, r: Run, action: Action): Run {
     const free = level.arrows.filter(
       (a) => required.has(a.id) && !blockers(level, r.removed, a.id).length,
     );
-    // Prefer the move releasing the most other arrows.
-    free.sort(
-      (a, b) =>
-        level.arrows.filter((x) =>
-          blockers(level, r.removed, x.id).includes(b.id),
-        ).length -
-        level.arrows.filter((x) =>
-          blockers(level, r.removed, x.id).includes(a.id),
-        ).length,
-    );
+    // Compute each arrow's blockers once; dense boards otherwise repeat this
+    // entire scan for every comparison in the hint candidate sort.
+    const impact = new Map<number, number>();
+    for (const arrow of level.arrows)
+      for (const id of blockers(level, r.removed, arrow.id))
+        impact.set(id, (impact.get(id) || 0) + 1);
+    free.sort((a, b) => (impact.get(b.id) || 0) - (impact.get(a.id) || 0));
     if (!free.length) return r;
     return level.campaign === 'challenge'
       ? {
@@ -212,9 +209,10 @@ export type Training = { id: number; run: Run; sequence: boolean };
 export const defaultProgress = (campaign: Campaign = 'classic') => ({
   version: 1,
   campaign,
-  contentRevision: campaign === 'challenge' ? 4 : 1,
+  contentRevision: campaign === 'challenge' ? 5 : 1,
   balanceRevision: 0,
   previousBest: {} as Record<string, number>,
+  legacyAccess: [] as number[],
   showRevisionIntro: false,
   showBalanceNotice: false,
   entry: (campaign === 'challenge' ? 'pending' : 'experienced') as
@@ -246,7 +244,9 @@ export function canStartLevel(p: Progress, id: number): boolean {
     return false;
   return p.campaign === 'classic'
     ? id <= p.unlocked
-    : (id - 1) % 30 === 0 || Boolean(p.best[id] || p.best[id - 1]);
+    : (id - 1) % 30 === 0 ||
+        p.legacyAccess.includes(id) ||
+        Boolean(p.best[id] || p.best[id - 1]);
 }
 export function enterLevel(p: Progress, id: number): Progress {
   if (!canStartLevel(p, id)) return p;
@@ -415,21 +415,68 @@ export function restoreProgress(
     if (
       campaign === 'challenge' &&
       s.contentRevision !== undefined &&
-      ![1, 2, 3, 4].includes(s.contentRevision)
+      ![1, 2, 3, 4, 5].includes(s.contentRevision)
     )
       return p;
     p.sound = typeof s.sound === 'boolean' ? s.sound : true;
     p.reducedMotion = s.reducedMotion === true;
     p.language = s.language === 'en' ? 'en' : 'zh';
-    const migrating = campaign === 'challenge' && s.contentRevision !== 4;
+    const migrating = campaign === 'challenge' && s.contentRevision !== 5;
     p.previousBest =
-      campaign === 'challenge' ? validBests(s.previousBest, 30) : {};
+      campaign === 'challenge'
+        ? validBests(
+            s.previousBest,
+            s.contentRevision === 4 || s.contentRevision === 5 ? count : 30,
+          )
+        : {};
+    if (migrating && s.contentRevision === 4) {
+      const earned = validBests(s.best, count);
+      const access = new Set(
+        Object.keys(earned).flatMap((id) => [+id, Math.min(count, +id + 1)]),
+      );
+      const current =
+        Number.isInteger(s.run?.level) &&
+        s.run.level >= 1 &&
+        s.run.level <= count &&
+        ((s.run.level - 1) % 30 === 0 || access.has(s.run.level))
+          ? s.run.level
+          : 31;
+      access.add(current);
+      for (const [id, score] of Object.entries(earned))
+        p.previousBest[id] = Math.max(p.previousBest[id] || 0, score);
+      return restoreProgress(
+        JSON.stringify({
+          ...s,
+          contentRevision: 5,
+          previousBest: p.previousBest,
+          best: {},
+          independent: {},
+          legacyAccess: [...access].sort((a, b) => a - b),
+          run: newRun(current),
+          showRevisionIntro: true,
+        }),
+        campaign,
+      );
+    }
     if (migrating) {
       for (const [id, score] of Object.entries(validBests(s.best, 30)))
         p.previousBest[id] = Math.max(p.previousBest[id] || 0, score);
       p.showRevisionIntro = true;
       return p;
     }
+    p.legacyAccess =
+      campaign === 'challenge' && Array.isArray(s.legacyAccess)
+        ? [
+            ...new Set<number>(
+              s.legacyAccess.filter(
+                (id: unknown) =>
+                  Number.isInteger(id) &&
+                  Number(id) >= 1 &&
+                  Number(id) <= count,
+              ),
+            ),
+          ].sort((a, b) => a - b)
+        : [];
     p.best = validBests(s.best, count);
     p.unlocked = Math.min(
       count,

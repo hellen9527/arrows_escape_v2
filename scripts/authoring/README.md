@@ -1,3 +1,18 @@
+# Current 5.0 offline production
+
+- `npm run generate:levels`: generate or resume all 300 candidates. Optional arguments are explicit IDs, e.g. `-- 31 45 60`. Cache is ignored `work/authoring-v5`.
+- `npm run assemble:levels`: compare current profiles, independently rescan geometry/exit policies, pack fixed routes, and write the runtime data and v5 catalog.
+- `npm run audit:levels`: actual-engine geometry, unit paths, overlap/self-ray, full and target solutions, keys, budgets, duplicate layouts, count floors and three sampled removal policies.
+- `npm run reproduce:levels`: regenerate each recorded recipe and compare every coordinate, key, lock, target and budget with the runtime data. Run this after generator changes; matching cached profiles alone does not prove cached geometry is current.
+
+`weave-profile.mjs` holds product hypotheses, `weave.mjs` builds reverse insertion geometry, `weave-goals.mjs` assigns goal/key branches, and `weave-metrics.mjs` derives structural process measurements through the actual engine. Runtime uses lossless direction encoding, decoded only when a board is opened. No generator runs in the browser.
+
+The previous v4 scripts and contracts below remain for historical context; the npm commands now use the v5 pipeline. See docs/level-design-300/v5-design-review.md for research boundaries and actual metrics. Structural validation is not human enjoyment or difficulty validation.
+
+---
+
+## Historical 4.0 pipeline
+
 # Fixed level production
 
 The browser imports checked-in data. It never runs the generator or changes a board after a retry.

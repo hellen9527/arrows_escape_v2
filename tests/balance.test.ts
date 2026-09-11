@@ -31,7 +31,7 @@ for (const contentRevision of [undefined, 1, 2, 3]) {
         language: 'en',
       };
       const p = restoreProgress(JSON.stringify(old), 'challenge');
-      assert.equal(p.contentRevision, 4);
+      assert.equal(p.contentRevision, 5);
       assert.deepEqual(p.best, {});
       assert.deepEqual(p.previousBest, { 1: 3, 3: 2, 13: 2, 20: 1 });
       assert.deepEqual(p.run, newRun(1));
