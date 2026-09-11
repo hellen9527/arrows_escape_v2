@@ -1,0 +1,5743 @@
+{
+  "artifactType": "level_design_briefs_not_playable_level_data",
+  "designRevision": "2026-09-10-D1",
+  "mainSource": "https://play.google.com/store/apps/details?id=com.ecffri.arrows&hl=en",
+  "sourceScope": "Genre reference only; all numbered briefs and numerical candidates are original uncalibrated project designs.",
+  "formalCount": 300,
+  "optionalTutorialCount": 8,
+  "newcomerEntry": "T01",
+  "experiencedRecommendedEntry": "C031",
+  "chapterEntries": [
+    "C001",
+    "C031",
+    "C061",
+    "C091",
+    "C121",
+    "C151",
+    "C181",
+    "C211",
+    "C241",
+    "C271"
+  ],
+  "layoutSolvabilityVerified": false,
+  "humanExperienceValidated": false,
+  "levels": [
+    {
+      "id": "C001",
+      "number": 1,
+      "stage": 1,
+      "title": "中心来路",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "四区方盘",
+      "coreRelationship": "P被中心X挡住，X的出口在左下；右边有无关出口",
+      "verificationQuestion": "玩家从P追到X而非顺手清右侧",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C002",
+      "number": 2,
+      "stage": 1,
+      "title": "两处挡路",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双翼",
+      "coreRelationship": "P的射线上有X与Y，两者各有不同前置",
+      "verificationQuestion": "解除X后仍能看清Y",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C003",
+      "number": 3,
+      "stage": 1,
+      "title": "折身直出",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "折带",
+      "coreRelationship": "P线身朝右绕行，尖端朝上；上侧短链才相关",
+      "verificationQuestion": "误判来自方向而非线条混叠",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C004",
+      "number": 4,
+      "stage": 1,
+      "title": "一步展开",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "三叶",
+      "coreRelationship": "X同时挡住P的两支前置；X自身受下区阻挡",
+      "verificationQuestion": "展开确实由同一X造成",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C005",
+      "number": 5,
+      "stage": 1,
+      "title": "两片清空",
+      "objective": "clear",
+      "targetCount": 0,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双岛",
+      "coreRelationship": "两岛由一处跨区阻挡相接，解开后分区收尾",
+      "verificationQuestion": "不是两个完全独立的小题",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": null,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C006",
+      "number": 6,
+      "stage": 1,
+      "title": "出口不在边",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "菱形",
+      "coreRelationship": "内部X沿空列可出，边缘短箭头却不相关",
+      "verificationQuestion": "不需逐个试点才能辨认X",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C007",
+      "number": 7,
+      "stage": 1,
+      "title": "留下角落",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "缺角方盘",
+      "coreRelationship": "P需要中部链，四角箭头均可保留",
+      "verificationQuestion": "求解集合不含角落",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C008",
+      "number": 8,
+      "stage": 1,
+      "title": "两星共根",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "assessment",
+      "layoutOrganization": "分叉",
+      "coreRelationship": "P与Q的阻挡各自回溯到X，X先有两步前置",
+      "verificationQuestion": "玩家能指出共同前置",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C009",
+      "number": 9,
+      "stage": 1,
+      "title": "分开收尾",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "双扇",
+      "coreRelationship": "共享X后，P与Q各剩不同的短链",
+      "verificationQuestion": "两支仍需核对，余量更宽",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C010",
+      "number": 10,
+      "stage": 1,
+      "title": "近路远挡",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "长窗",
+      "coreRelationship": "P看似紧邻边界，远端同列的X仍挡出口",
+      "verificationQuestion": "远端X全程可看清",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C011",
+      "number": 11,
+      "stage": 1,
+      "title": "空隙不是出口",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "开口环",
+      "coreRelationship": "P穿过内侧留白后遇到对岸X",
+      "verificationQuestion": "留白内没有隐藏障碍",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C012",
+      "number": 12,
+      "stage": 1,
+      "title": "换个方向读",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "阶梯",
+      "coreRelationship": "前半链横向递进，末段转为向下的另一条箭头",
+      "verificationQuestion": "不是要求箭头自己拐弯离场",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C013",
+      "number": 13,
+      "stage": 1,
+      "title": "先看第二层",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "三行",
+      "coreRelationship": "P被X挡，X被Y挡，Y可从中央缝直接出去",
+      "verificationQuestion": "中央缝清晰，链可追踪",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C014",
+      "number": 14,
+      "stage": 1,
+      "title": "中桥两岸",
+      "objective": "clear",
+      "targetCount": 0,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双翼桥",
+      "coreRelationship": "两岸的入口均依赖中央桥箭头，桥先有局部阻挡",
+      "verificationQuestion": "展开后收尾不能过长",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": null,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C015",
+      "number": 15,
+      "stage": 1,
+      "title": "星旁留白",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "中空方盘",
+      "coreRelationship": "P周围留白但射线远端被两区各一箭头阻挡",
+      "verificationQuestion": "玩家检查整条射线",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C016",
+      "number": 16,
+      "stage": 1,
+      "title": "小箭大用",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "花瓣",
+      "coreRelationship": "较短X同时是两星的前置，大外环与目标无关",
+      "verificationQuestion": "作用不靠尺寸或特殊颜色提示",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C017",
+      "number": 17,
+      "stage": 1,
+      "title": "不必拆外圈",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双层环",
+      "coreRelationship": "P经内圈缺口离场，只有外圈一段参与阻挡",
+      "verificationQuestion": "无需把整圈清空",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C018",
+      "number": 18,
+      "stage": 1,
+      "title": "两线相会",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "十字",
+      "coreRelationship": "两星方向垂直，却各经不同箭头回溯到X",
+      "verificationQuestion": "共享关系不是视觉线条交点冒充",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C019",
+      "number": 19,
+      "stage": 1,
+      "title": "一处宽松",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "错位双岛",
+      "coreRelationship": "保留两星共享关系，缩短一支前置并增加预算",
+      "verificationQuestion": "仍需辨认另一支完整关系",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C020",
+      "number": 20,
+      "stage": 1,
+      "title": "从里向外",
+      "objective": "clear",
+      "targetCount": 0,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "环芯",
+      "coreRelationship": "内芯的合法箭头逐步释放外环两个区域",
+      "verificationQuestion": "不退化为整关单一明显链",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": null,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C021",
+      "number": 21,
+      "stage": 1,
+      "title": "双重检查",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "叠窗",
+      "coreRelationship": "X与Y同挡P；X离开后Y的前置才可出去",
+      "verificationQuestion": "几何产生真实串联关系",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C022",
+      "number": 22,
+      "stage": 1,
+      "title": "可走也可留",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "双轨",
+      "coreRelationship": "开局两条合法链中只有一条属于P依赖",
+      "verificationQuestion": "留下无关链仍能通关",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C023",
+      "number": 23,
+      "stage": 1,
+      "title": "线身是阻挡",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "弯钩",
+      "coreRelationship": "X的线身挡P，X的尖端位于远处",
+      "verificationQuestion": "整条X可追认，不靠猜线归属",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C024",
+      "number": 24,
+      "stage": 1,
+      "title": "分叉再汇合",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "蝴蝶",
+      "coreRelationship": "两星各有私有前置，继续回溯后共享中部链",
+      "verificationQuestion": "能区分共享段和私有段",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C025",
+      "number": 25,
+      "stage": 1,
+      "title": "顺手的两段",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "阶梯双翼",
+      "coreRelationship": "共用前置释放后，两支各有一次明确转向追踪",
+      "verificationQuestion": "宽松但仍有两个局部判断",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C026",
+      "number": 26,
+      "stage": 1,
+      "title": "不对称的星",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "偏心环",
+      "coreRelationship": "P只需共享X，Q还需对岸Y；不能照抄两边做法",
+      "verificationQuestion": "非对称来自依赖而非装饰",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C027",
+      "number": 27,
+      "stage": 1,
+      "title": "身边是假支",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "三扇",
+      "coreRelationship": "紧贴P的支路无关，真正阻挡在P箭尖延长线上",
+      "verificationQuestion": "视觉拥挤不遮挡实际关系",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C028",
+      "number": 28,
+      "stage": 1,
+      "title": "双出口一目标",
+      "objective": "rescue",
+      "targetCount": 1,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "分层窗",
+      "coreRelationship": "两个相关入口都必须完成才能送走P",
+      "verificationQuestion": "不写成两条可任选的解法",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C029",
+      "number": 29,
+      "stage": 1,
+      "title": "三瓣归拢",
+      "objective": "clear",
+      "targetCount": 0,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "三叶",
+      "coreRelationship": "先解跨瓣X，再分别识别另外两瓣各自入口",
+      "verificationQuestion": "清场全程仍有局面变化",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": null,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C030",
+      "number": 30,
+      "stage": 1,
+      "title": "起步已会",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "assessment",
+      "layoutOrganization": "双层菱形",
+      "coreRelationship": "共享前置、远端线身与一条可留支路同时出现",
+      "verificationQuestion": "无提示解释三类关系",
+      "candidateArrowRange": [
+        28,
+        40
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C031",
+      "number": 31,
+      "stage": 2,
+      "title": "两星三岔",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "三岔盘",
+      "coreRelationship": "P和Q共需X，第三岔从开局能清却不通向任何星",
+      "verificationQuestion": "熟手入场就要判断相关性",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C032",
+      "number": 32,
+      "stage": 2,
+      "title": "各有后手",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "对称双翼",
+      "coreRelationship": "两翼看似对称，P需X后直出，Q仍受横梁Y挡",
+      "verificationQuestion": "镜像外观不等于镜像解法",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C033",
+      "number": 33,
+      "stage": 2,
+      "title": "共用远端",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "长桥",
+      "coreRelationship": "左右星的私有链都被桥另一端的X卡住",
+      "verificationQuestion": "远端共享对象可完整追踪",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C034",
+      "number": 34,
+      "stage": 2,
+      "title": "一星在路上",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "交错轨",
+      "coreRelationship": "P本身挡住Q所需X；先送走P会推进Q",
+      "verificationQuestion": "标星箭头也遵守普通几何",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C035",
+      "number": 35,
+      "stage": 2,
+      "title": "双叉松开",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "双叉",
+      "coreRelationship": "两条相关前置分别可入手，之后仍共享Y",
+      "verificationQuestion": "不是两个完全独立目标",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C036",
+      "number": 36,
+      "stage": 2,
+      "title": "同列不同层",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "竖窗",
+      "coreRelationship": "P与Q同向出场，X仅挡P，远端Y同时挡两者",
+      "verificationQuestion": "核对阻挡集合包含差异",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C037",
+      "number": 37,
+      "stage": 2,
+      "title": "可留的中间",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "四角盘",
+      "coreRelationship": "两星的依赖穿越中心，但中心另一条短线无关",
+      "verificationQuestion": "中心位置不自动代表关键",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C038",
+      "number": 38,
+      "stage": 2,
+      "title": "三支取两支",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "三扇",
+      "coreRelationship": "三条合法支路中，两支分别属于P和Q，第三支可留",
+      "verificationQuestion": "预算无法无脑清三支",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C039",
+      "number": 39,
+      "stage": 2,
+      "title": "共根异长",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双层叶",
+      "coreRelationship": "两星共用根链，P私有段短、Q私有段弯折",
+      "verificationQuestion": "仍以箭尖射线判断离场",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C040",
+      "number": 40,
+      "stage": 2,
+      "title": "先后皆可",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "平行双窗",
+      "coreRelationship": "两个相关合法入口先后均可，后续在共享X汇合",
+      "verificationQuestion": "允许两种顺序，不暗示唯一解",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C041",
+      "number": 41,
+      "stage": 2,
+      "title": "解开四区",
+      "objective": "clear",
+      "targetCount": 0,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "四区桥",
+      "coreRelationship": "东西两区先解，南北两区的入口才显露",
+      "verificationQuestion": "区域展开是关系变化而非自动消除",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": null,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C042",
+      "number": 42,
+      "stage": 2,
+      "title": "一条短横梁",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "错层",
+      "coreRelationship": "短X的两段线身分别挡两星的不同前置",
+      "verificationQuestion": "共享来自同一实际箭头",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C043",
+      "number": 43,
+      "stage": 2,
+      "title": "双星背向",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "中空双环",
+      "coreRelationship": "两星背向离场，其依赖却在环芯共用X",
+      "verificationQuestion": "不根据两星朝向误判独立",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C044",
+      "number": 44,
+      "stage": 2,
+      "title": "前后两个关口",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "沙漏",
+      "coreRelationship": "X释放上半部，内部Y继续阻挡两星",
+      "verificationQuestion": "两次独立判断都实际存在",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C045",
+      "number": 45,
+      "stage": 2,
+      "title": "只松一处",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "三层窗",
+      "coreRelationship": "保留共享X与Y双关口，第一关口变得更易辨认",
+      "verificationQuestion": "不删第二关口来凑舒缓",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C046",
+      "number": 46,
+      "stage": 2,
+      "title": "四路筛选",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "assessment",
+      "layoutOrganization": "四扇",
+      "coreRelationship": "四个开局合法动作中仅两路通向目标依赖，共享段在中部",
+      "verificationQuestion": "提示前玩家能解释留下哪两路",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C047",
+      "number": 47,
+      "stage": 2,
+      "title": "目标旁的出口",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双框",
+      "coreRelationship": "P旁边的出口只清装饰区，Q旁边的出口却是共享前置",
+      "verificationQuestion": "对相似位置做不同判断",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C048",
+      "number": 48,
+      "stage": 2,
+      "title": "错层的连接",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "台阶双岛",
+      "coreRelationship": "P链末端挡Q链中段，Q的其余前置不反向挡P",
+      "verificationQuestion": "不产生依赖闭环",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C049",
+      "number": 49,
+      "stage": 2,
+      "title": "留住外翼",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "三翼",
+      "coreRelationship": "内两翼各藏一星，外翼只有一根横梁需要移除",
+      "verificationQuestion": "外翼剩余元素确实可留",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C050",
+      "number": 50,
+      "stage": 2,
+      "title": "半盘已通",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "对角盘",
+      "coreRelationship": "先释放P后仍需辨认Q的私有入口，目标数不减少",
+      "verificationQuestion": "完成一星后不会全程机械点空",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C051",
+      "number": 51,
+      "stage": 2,
+      "title": "一个目标两把关",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "双门廊",
+      "coreRelationship": "P受X与Y阻挡，Q只依赖Y；Y前置又分两路",
+      "verificationQuestion": "能分清双前置与单前置",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C052",
+      "number": 52,
+      "stage": 2,
+      "title": "长线短依赖",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "折带双岛",
+      "coreRelationship": "视觉很长的P线只受X挡；短Q反而有较长前置",
+      "verificationQuestion": "长度与任务深度不强行绑定",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C053",
+      "number": 53,
+      "stage": 2,
+      "title": "中间不能略过",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "环中柱",
+      "coreRelationship": "中柱X属两星共同依赖，旁边相似Y却与两星无关",
+      "verificationQuestion": "X和Y均可辨认，不靠记位置",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C054",
+      "number": 54,
+      "stage": 2,
+      "title": "双星开花",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "五瓣",
+      "coreRelationship": "一根共享箭头释放两瓣，另两瓣可留，最后一瓣含P前置",
+      "verificationQuestion": "玩家能说明为何不是整花清空",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C055",
+      "number": 55,
+      "stage": 2,
+      "title": "独立后再共享",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双阶梯",
+      "coreRelationship": "开局两个入口各行数步后共同释放中心X",
+      "verificationQuestion": "两入口都必要，无虚假二选一",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C056",
+      "number": 56,
+      "stage": 2,
+      "title": "星挡星",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "交错双钩",
+      "coreRelationship": "P阻挡Q，但送走P还需穿过Q线身之外的通路",
+      "verificationQuestion": "排除P与Q互相锁死",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C057",
+      "number": 57,
+      "stage": 2,
+      "title": "横向借道",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "纵横窗",
+      "coreRelationship": "P的纵向前置被Q所属横向链挡，Q不需要P",
+      "verificationQuestion": "目标共享有方向但无循环",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C058",
+      "number": 58,
+      "stage": 2,
+      "title": "留下两角",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "折角方盘",
+      "coreRelationship": "两目标仍共享双前置，四角中只有两角参与",
+      "verificationQuestion": "保留相关筛选，缩短收尾",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C059",
+      "number": 59,
+      "stage": 2,
+      "title": "双关口回看",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "嵌套方环",
+      "coreRelationship": "外X打开后发现内Y；Y仍受另一星私有支路影响",
+      "verificationQuestion": "第二关口不被自动提示揭底",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C060",
+      "number": 60,
+      "stage": 2,
+      "title": "双星独立解",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "assessment",
+      "layoutOrganization": "六区盘",
+      "coreRelationship": "共同根、目标互挡、无关合法出口组合在同一棋盘",
+      "verificationQuestion": "玩家能分解整盘而非逐项试点",
+      "candidateArrowRange": [
+        34,
+        46
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C061",
+      "number": 61,
+      "stage": 3,
+      "title": "对岸挡路",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双岛留白",
+      "coreRelationship": "P射线跨空隙遇X，X的前置与Q共享",
+      "verificationQuestion": "全局视图能看见两岸",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C062",
+      "number": 62,
+      "stage": 3,
+      "title": "连续两道空隙",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "三岛",
+      "coreRelationship": "P射线穿过两处留白，在第二与第三岛各遇阻挡",
+      "verificationQuestion": "两处阻挡都必须解除",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C063",
+      "number": 63,
+      "stage": 3,
+      "title": "环外才通",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "环加尾翼",
+      "coreRelationship": "内环星的真正前置在尾翼，另一星依赖环内链",
+      "verificationQuestion": "区分轮廓边缘与棋盘边界",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C064",
+      "number": 64,
+      "stage": 3,
+      "title": "沿线找尖",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双回钩",
+      "coreRelationship": "挡住P的X绕到下区才露尖端，Q受X尾段阻挡",
+      "verificationQuestion": "能准确追认同一线条",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C065",
+      "number": 65,
+      "stage": 3,
+      "title": "远近相接",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "长窗双区",
+      "coreRelationship": "一星远端阻挡、另一星局部前置，在X处汇合",
+      "verificationQuestion": "保留跨区，局部链更顺畅",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C066",
+      "number": 66,
+      "stage": 3,
+      "title": "空列也有下文",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "断层阶梯",
+      "coreRelationship": "上半列为空，下半列仍有X；Q先释放X的出口",
+      "verificationQuestion": "不用隐藏或出屏元素加难",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C067",
+      "number": 67,
+      "stage": 3,
+      "title": "隔岸共梁",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "assessment",
+      "layoutOrganization": "四岛",
+      "coreRelationship": "P和Q分别隔岸指向X的不同线身，X又被第三岛Y挡",
+      "verificationQuestion": "共同梁与二级远端均被识别",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C068",
+      "number": 68,
+      "stage": 3,
+      "title": "两种空窗",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双框",
+      "coreRelationship": "一个空窗通边界，另一个空窗后还有对岸箭头",
+      "verificationQuestion": "不能把所有空窗同样处理",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C069",
+      "number": 69,
+      "stage": 3,
+      "title": "长尾不相关",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "风筝",
+      "coreRelationship": "大尾带无关，细横梁才同时挡两星",
+      "verificationQuestion": "长路径不能作为关键性的暗示",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C070",
+      "number": 70,
+      "stage": 3,
+      "title": "两岸松动",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "双岛桥",
+      "coreRelationship": "保留跨岸X与两目标，X自身的阻挡缩成清晰双支",
+      "verificationQuestion": "宽松仍需核对两支",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C071",
+      "number": 71,
+      "stage": 3,
+      "title": "外圈回到内圈",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "双环",
+      "coreRelationship": "P依赖外X，X又受内Y挡，Y有独立空列可离开",
+      "verificationQuestion": "依赖向内回转但不成环",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C072",
+      "number": 72,
+      "stage": 3,
+      "title": "缺口偏一格",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "错位门廊",
+      "coreRelationship": "两个相邻空列只有一列对准X尖端，Q依赖另一方向",
+      "verificationQuestion": "格线与箭尖方向清晰",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C073",
+      "number": 73,
+      "stage": 3,
+      "title": "三岸共根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "三岛",
+      "coreRelationship": "三星各一条短私有链，全部回溯到跨岸X",
+      "verificationQuestion": "第三星只增加同规则目标，目标UI明确",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C074",
+      "number": 74,
+      "stage": 3,
+      "title": "星在长线末",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "交错长带",
+      "coreRelationship": "P线身跨多区，离场只看末端向上射线；Q依赖其线身",
+      "verificationQuestion": "不把线身长度误算成步数",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C075",
+      "number": 75,
+      "stage": 3,
+      "title": "空心也相连",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "三瓣环",
+      "coreRelationship": "三星仍共用X，私有链分区明显，增加余量",
+      "verificationQuestion": "目标数与跨区任务保持",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C076",
+      "number": 76,
+      "stage": 3,
+      "title": "两岸两关口",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "双框桥",
+      "coreRelationship": "先拆左X让右Y可出，Y再释放左侧两星前置",
+      "verificationQuestion": "局面变化横跨来回两岸",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C077",
+      "number": 77,
+      "stage": 3,
+      "title": "空隙后的分叉",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "U形",
+      "coreRelationship": "P的远端阻挡有两支前置，一支同时服务Q",
+      "verificationQuestion": "只共用其中一支，不误算全共享",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C078",
+      "number": 78,
+      "stage": 3,
+      "title": "中央长梁",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层岛",
+      "coreRelationship": "X的一根折线身分别挡三层目标，X出口在最下层",
+      "verificationQuestion": "长梁只计一次动作",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C079",
+      "number": 79,
+      "stage": 3,
+      "title": "短线跨全盘",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "散点区",
+      "coreRelationship": "短P的射线跨整盘，Q长线射线却仅穿局部",
+      "verificationQuestion": "考整条射线，非路径长度",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C080",
+      "number": 80,
+      "stage": 3,
+      "title": "三岸顺行",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "三岛阶梯",
+      "coreRelationship": "保留跨两次留白的链，三目标私有段均简短",
+      "verificationQuestion": "有跨区发现且收尾紧凑",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C081",
+      "number": 81,
+      "stage": 3,
+      "title": "留白交会",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "十字留白",
+      "coreRelationship": "两星射线在留白交叉，但真正阻挡是不同远端箭头",
+      "verificationQuestion": "空交点不制造不存在的共享",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C082",
+      "number": 82,
+      "stage": 3,
+      "title": "同岸不同线",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双岛双窗",
+      "coreRelationship": "两星看向同一岛，一条被X挡、另一条从X旁过",
+      "verificationQuestion": "精确行列可辨，不要求像素猜测",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C083",
+      "number": 83,
+      "stage": 3,
+      "title": "外翼的根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "三翼尾带",
+      "coreRelationship": "三星中两星共享尾部X，第三星只依赖内侧Y",
+      "verificationQuestion": "不因目标数多就假设全共享",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C084",
+      "number": 84,
+      "stage": 3,
+      "title": "回钩后的通道",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "双回钩窗",
+      "coreRelationship": "两条回钩视觉相似，但一个尖端朝空列，一个被远端挡",
+      "verificationQuestion": "起点终点标识足够清晰",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C085",
+      "number": 85,
+      "stage": 3,
+      "title": "远端仍要看",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "relief",
+      "layoutOrganization": "三窗",
+      "coreRelationship": "各窗一星，保留一个跨窗共同前置，省去长私有链",
+      "verificationQuestion": "舒缓不取消远端核对",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C086",
+      "number": 86,
+      "stage": 3,
+      "title": "两个共享中心",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "challenge",
+      "layoutOrganization": "三岛双桥",
+      "coreRelationship": "P/Q共用X，Q/R共用Y；X与Y位于不同岛",
+      "verificationQuestion": "识别两种交叠集合",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C087",
+      "number": 87,
+      "stage": 3,
+      "title": "星先过桥",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "桥环",
+      "coreRelationship": "P先离开才打开Q的远端X，P本身不依赖Q",
+      "verificationQuestion": "验证星作为前置的因果",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C088",
+      "number": 88,
+      "stage": 3,
+      "title": "一岸可以留",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "四岛",
+      "coreRelationship": "三星分布三岛，第四岛仅一根X相关，其余可保留",
+      "verificationQuestion": "不诱导完整清掉第四岛",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C089",
+      "number": 89,
+      "stage": 3,
+      "title": "连续回溯",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "assessment",
+      "layoutOrganization": "嵌套断环",
+      "coreRelationship": "两次跨留白、两组共享前置、一个星挡星关系并存",
+      "verificationQuestion": "没有新增规则也需重新梳理",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C090",
+      "number": 90,
+      "stage": 3,
+      "title": "看懂全盘",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 0,
+      "designIntent": "normal",
+      "layoutOrganization": "六窗",
+      "coreRelationship": "三星依赖分布六窗，两窗只含无关可走箭头",
+      "verificationQuestion": "用完整关系收束阶段",
+      "candidateArrowRange": [
+        40,
+        52
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C091",
+      "number": 91,
+      "stage": 4,
+      "title": "开锁之后",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "双门廊",
+      "coreRelationship": "A可取得，锁在P上；P解锁后仍被远端X挡，X亦挡Q",
+      "verificationQuestion": "明确权限和几何两种条件",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C092",
+      "number": 92,
+      "stage": 4,
+      "title": "钥匙在对岸",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "双岛",
+      "coreRelationship": "A被左岸链阻挡，右岸两星各自带A锁",
+      "verificationQuestion": "先追钥匙也要追几何",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C093",
+      "number": 93,
+      "stage": 4,
+      "title": "锁住的横梁",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "十字框",
+      "coreRelationship": "A锁在共同横梁X上，P与Q本身都无锁",
+      "verificationQuestion": "玩家识别锁对间接目标的影响",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C094",
+      "number": 94,
+      "stage": 4,
+      "title": "同字不同路",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "双窗",
+      "coreRelationship": "两把A锁同时打开，一条射线已通，另一条仍受Y挡",
+      "verificationQuestion": "同字母不等于同出口状态",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C095",
+      "number": 95,
+      "stage": 4,
+      "title": "一锁两翼",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "relief",
+      "layoutOrganization": "双翼",
+      "coreRelationship": "保留带锁共同X，A的前置清楚，两翼仍各有私有阻挡",
+      "verificationQuestion": "舒缓没有去掉锁关系",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C096",
+      "number": 96,
+      "stage": 4,
+      "title": "星也是钥匙",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "assessment",
+      "layoutOrganization": "三岛",
+      "coreRelationship": "P携A钥匙，P离场后打开挡Q的X；先解P的跨区前置",
+      "verificationQuestion": "引擎与图标支持星和钥匙同体",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C097",
+      "number": 97,
+      "stage": 4,
+      "title": "钥匙不在锁旁",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "长窗",
+      "coreRelationship": "A处在远端，锁旁短支无关；A还被Q的私有链挡",
+      "verificationQuestion": "不用距离判断钥匙关联",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C098",
+      "number": 98,
+      "stage": 4,
+      "title": "一个锁两条件",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "环芯",
+      "coreRelationship": "X同时受A锁与外圈Y阻挡，两条件分别推进两星",
+      "verificationQuestion": "去掉任一条件仍不能误判可走",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C099",
+      "number": 99,
+      "stage": 4,
+      "title": "自由支路有用",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "三扇",
+      "coreRelationship": "看似不带锁的侧支挡住A，是两星的间接必需集合",
+      "verificationQuestion": "追踪到钥匙前置而不漏算",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C100",
+      "number": 100,
+      "stage": 4,
+      "title": "开门见两星",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "双门",
+      "coreRelationship": "A打开两区入口，两区各保留一个几何关口",
+      "verificationQuestion": "反馈显示开锁，不自动移除",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C101",
+      "number": 101,
+      "stage": 4,
+      "title": "无锁星先走",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "错位双岛",
+      "coreRelationship": "无锁P挡A的出口，A再打开Q的锁",
+      "verificationQuestion": "无锁目标也参与钥匙依赖",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C102",
+      "number": 102,
+      "stage": 4,
+      "title": "长身带锁",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "折带桥",
+      "coreRelationship": "带锁X的长线身横跨两星射线，A的出口在下区",
+      "verificationQuestion": "锁标记不会遮住长线归属",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C103",
+      "number": 103,
+      "stage": 4,
+      "title": "两扇门一把钥匙",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "relief",
+      "layoutOrganization": "三叶门",
+      "coreRelationship": "P与Q带A锁，R不带锁却受A锁横梁X挡",
+      "verificationQuestion": "三目标对A的依赖方式不同",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C104",
+      "number": 104,
+      "stage": 4,
+      "title": "有门也可留",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "双环外翼",
+      "coreRelationship": "一个A锁箭头与目标无关；两星仅需另一带锁X",
+      "verificationQuestion": "开锁后不要求清所有同字箭头",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C105",
+      "number": 105,
+      "stage": 4,
+      "title": "共同钥路",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "三阶梯",
+      "coreRelationship": "三星共享A前置，开锁后保留各自短几何核对",
+      "verificationQuestion": "保留三目标与锁条件",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C106",
+      "number": 106,
+      "stage": 4,
+      "title": "解锁还差一岸",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "四岛",
+      "coreRelationship": "A打开P，P射线仍被Q对岸的前置X挡",
+      "verificationQuestion": "解锁反馈不能误导立即可走",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C107",
+      "number": 107,
+      "stage": 4,
+      "title": "钥匙前的共根",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "双叉窗",
+      "coreRelationship": "X同时挡A与P私有链，Q需A解锁",
+      "verificationQuestion": "共根同时推进权限和几何",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C108",
+      "number": 108,
+      "stage": 4,
+      "title": "锁在第二层",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "嵌套框",
+      "coreRelationship": "P直接阻挡X无锁，X的前置Y带A锁；Q共享Y",
+      "verificationQuestion": "识别非最近层的锁依赖",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C109",
+      "number": 109,
+      "stage": 4,
+      "title": "两条路先准备",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "三岛环",
+      "coreRelationship": "A线与几何线分别准备，最终共同释放三目标前置X",
+      "verificationQuestion": "两路都必需，不伪造替代路线",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C110",
+      "number": 110,
+      "stage": 4,
+      "title": "开锁顺势解",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "relief",
+      "layoutOrganization": "扇形窗",
+      "coreRelationship": "保留A与几何双条件，缩短A取得后的私人收尾",
+      "verificationQuestion": "明确掌握后劳动更少",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C111",
+      "number": 111,
+      "stage": 4,
+      "title": "钥匙尾巴挡路",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "回钩",
+      "coreRelationship": "A线身本身挡P，A的权限又打开Q",
+      "verificationQuestion": "同一动作有两种真实收益",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C112",
+      "number": 112,
+      "stage": 4,
+      "title": "锁外的外圈",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层环",
+      "coreRelationship": "内层A锁挡两星，外圈仅一根箭头挡A，其余可留",
+      "verificationQuestion": "不把复杂轮廓变成全盘清场",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C113",
+      "number": 113,
+      "stage": 4,
+      "title": "双锁单阻挡",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "三窗",
+      "coreRelationship": "三目标中两个带锁，三个又被无锁X共同阻挡",
+      "verificationQuestion": "区分共享几何与部分共享权限",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C114",
+      "number": 114,
+      "stage": 4,
+      "title": "锁前换区",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "双岛折桥",
+      "coreRelationship": "A位于右区，前置从左区绕到中部，再回到A",
+      "verificationQuestion": "折返依赖仍无闭环",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C115",
+      "number": 115,
+      "stage": 4,
+      "title": "字母相同仍核对",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "三门廊",
+      "coreRelationship": "同字三锁开后，只有两星直接可出，R仍有可读短链",
+      "verificationQuestion": "不缩成开锁后一键点三次",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C116",
+      "number": 116,
+      "stage": 4,
+      "title": "钥匙与星共根",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "蝴蝶窗",
+      "coreRelationship": "A与无锁P共享X，锁住的Q另有外区Y阻挡",
+      "verificationQuestion": "共享关系不等于全部相关",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C117",
+      "number": 117,
+      "stage": 4,
+      "title": "空路有锁",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 1,
+      "designIntent": "challenge",
+      "layoutOrganization": "中空十字",
+      "coreRelationship": "P射线完全为空但带锁，Q无锁却受远端X挡",
+      "verificationQuestion": "玩家区别空路与合法动作",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C118",
+      "number": 118,
+      "stage": 4,
+      "title": "开锁释放桥",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "relief",
+      "layoutOrganization": "四岛桥",
+      "coreRelationship": "A解锁桥X，桥同时释放P/Q，R仍需单独Y",
+      "verificationQuestion": "能指出桥动作实际影响范围",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C119",
+      "number": 119,
+      "stage": 4,
+      "title": "权限与路线",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "assessment",
+      "layoutOrganization": "六窗",
+      "coreRelationship": "星携钥匙、锁在中层、无关带锁支路同时组合",
+      "verificationQuestion": "必需集合与图标语义都正确",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C120",
+      "number": 120,
+      "stage": 4,
+      "title": "一把钥匙的全局",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 1,
+      "designIntent": "normal",
+      "layoutOrganization": "双环三叶",
+      "coreRelationship": "A服务三个不同层级的锁，其中两路共享无锁前置",
+      "verificationQuestion": "新布局中独立迁移单钥匙规则",
+      "candidateArrowRange": [
+        44,
+        56
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C121",
+      "number": 121,
+      "stage": 5,
+      "title": "两个字母",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双门桥",
+      "coreRelationship": "P需A、Q需B，两条钥匙前置共用X",
+      "verificationQuestion": "对字母理解后仍有共享判断",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C122",
+      "number": 122,
+      "stage": 5,
+      "title": "A先开B",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "阶梯门",
+      "coreRelationship": "B钥匙带A锁，B打开挡P/Q的横梁",
+      "verificationQuestion": "A不依赖B，排除闭环",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C123",
+      "number": 123,
+      "stage": 5,
+      "title": "字母交错",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "对角双岛",
+      "coreRelationship": "左星需右区A，右星需左区B，位置不决定匹配",
+      "verificationQuestion": "标签能辨，非只靠颜色",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C124",
+      "number": 124,
+      "stage": 5,
+      "title": "钥匙都在外",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "环加双翼",
+      "coreRelationship": "A和B来自不同外翼；P需A，Q需B，R间接需二者",
+      "verificationQuestion": "三个权限集合明确不同",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C125",
+      "number": 125,
+      "stage": 5,
+      "title": "双门顺行",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三窗",
+      "coreRelationship": "保留两字母及共同X，钥匙前置分区显示更清楚",
+      "verificationQuestion": "不取消第二组钥匙",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C126",
+      "number": 126,
+      "stage": 5,
+      "title": "B先开A",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "反向阶梯",
+      "coreRelationship": "A钥匙带B锁，打破先前遇到A先B的惯性",
+      "verificationQuestion": "箭头依赖证明本关顺序",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C127",
+      "number": 127,
+      "stage": 5,
+      "title": "一星持A",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三岛",
+      "coreRelationship": "P携A，A解锁Q前置；B独立解锁R，Q与R共享几何Y",
+      "verificationQuestion": "分清两组权限的影响边界",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C128",
+      "number": 128,
+      "stage": 5,
+      "title": "一道门两层",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双框",
+      "coreRelationship": "P前置X带A锁，X又被带B锁Y挡；Q共享Y",
+      "verificationQuestion": "单箭头不需要虚构双锁类型",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C129",
+      "number": 129,
+      "stage": 5,
+      "title": "无锁的共根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三岔",
+      "coreRelationship": "两把钥匙都受X阻挡，X还直接挡R",
+      "verificationQuestion": "一个普通箭头推动三种任务",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C130",
+      "number": 130,
+      "stage": 5,
+      "title": "双钥短收尾",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双门三叶",
+      "coreRelationship": "保留A后B依赖和三目标，缩短解锁后的私有链",
+      "verificationQuestion": "核心没有退回单钥匙",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C131",
+      "number": 131,
+      "stage": 5,
+      "title": "开A不等于开B",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "错位门廊",
+      "coreRelationship": "A锁与B锁交错排布，A开后仍有B锁横梁挡P/Q",
+      "verificationQuestion": "不把成片亮起当全开",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C132",
+      "number": 132,
+      "stage": 5,
+      "title": "钥匙线身相接",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "双回钩",
+      "coreRelationship": "B线身挡A出口，A权限不反过来约束B；两者服务不同星",
+      "verificationQuestion": "几何决定先后而非字母顺序",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C133",
+      "number": 133,
+      "stage": 5,
+      "title": "两星接力",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "三岛桥",
+      "coreRelationship": "P携A，A打开携B的Q，Q离场再解锁R前置",
+      "verificationQuestion": "星、钥匙、锁同体语义清楚",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C134",
+      "number": 134,
+      "stage": 5,
+      "title": "门外另有横梁",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层框",
+      "coreRelationship": "A/B都解开后，三目标仍共享无锁Y的双前置",
+      "verificationQuestion": "末段有新几何判断而非清空",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C135",
+      "number": 135,
+      "stage": 5,
+      "title": "两字母各归位",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "分色三窗",
+      "coreRelationship": "保留交错权限及共同阻挡，以字母排布降低搜索",
+      "verificationQuestion": "不用颜色替代字母信息",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C136",
+      "number": 136,
+      "stage": 5,
+      "title": "第三片可留",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三岛",
+      "coreRelationship": "A和B分别服务两星，第三岛带锁箭头均与星无关",
+      "verificationQuestion": "不以是否带锁判断相关性",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C137",
+      "number": 137,
+      "stage": 5,
+      "title": "无锁星开局",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四扇",
+      "coreRelationship": "无锁P挡B出口，B再打开A，A服务Q/R",
+      "verificationQuestion": "找到P入口不依赖锁区乱点",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C138",
+      "number": 138,
+      "stage": 5,
+      "title": "交叠的两条链",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双阶梯",
+      "coreRelationship": "A链与B链共享X但不共享Y，P/Q/R各取不同组合",
+      "verificationQuestion": "能区分部分共享集合",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C139",
+      "number": 139,
+      "stage": 5,
+      "title": "开锁看对岸",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双环",
+      "coreRelationship": "P带A锁、Q带B锁，彼此对岸的普通前置都要解除",
+      "verificationQuestion": "不让两星本身相互阻挡闭环",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C140",
+      "number": 140,
+      "stage": 5,
+      "title": "先解共同段",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三叶桥",
+      "coreRelationship": "三星和两钥匙都依赖共同X，再各自核对字母",
+      "verificationQuestion": "共享段不是整关唯一判断",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C141",
+      "number": 141,
+      "stage": 5,
+      "title": "锁住关键支点",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "五区",
+      "coreRelationship": "A锁X服务P/Q，B锁Y服务Q/R；X/Y无直接依赖",
+      "verificationQuestion": "两个共享支点职责不同",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C142",
+      "number": 142,
+      "stage": 5,
+      "title": "一钥两用途",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "长窗双门",
+      "coreRelationship": "A的移除既打开B钥匙，又直接清P射线；B服务Q",
+      "verificationQuestion": "动画和反馈分别反映两种收益",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C143",
+      "number": 143,
+      "stage": 5,
+      "title": "钥匙都能先取",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双扇三窗",
+      "coreRelationship": "A与B均合法可取，之后还要追三目标的交错几何",
+      "verificationQuestion": "合法钥匙次序可互换",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C144",
+      "number": 144,
+      "stage": 5,
+      "title": "两道锁不相邻",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四岛断桥",
+      "coreRelationship": "P链深处有A锁，Q链远端有B锁，R共享两锁前置",
+      "verificationQuestion": "远离目标的权限不可漏算",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C145",
+      "number": 145,
+      "stage": 5,
+      "title": "双锁仍有余地",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三框",
+      "coreRelationship": "保留A前B及跨区前置，用宽预算允许一次无关探索",
+      "verificationQuestion": "不靠取消依赖降低难度",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C146",
+      "number": 146,
+      "stage": 5,
+      "title": "普通星连两钥",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三环",
+      "coreRelationship": "P无锁却挡两钥匙共同X，Q/R分别需要A/B",
+      "verificationQuestion": "无锁不等于不重要",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C147",
+      "number": 147,
+      "stage": 5,
+      "title": "门里有外路",
+      "objective": "rescue",
+      "targetCount": 2,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "嵌套窗",
+      "coreRelationship": "A锁X在内区，B钥匙在外区；外区仅部分箭头参与",
+      "verificationQuestion": "区域归属不代替目标关联",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C148",
+      "number": 148,
+      "stage": 5,
+      "title": "字母与方向分开",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "对角门廊",
+      "coreRelationship": "相邻同向箭头分别带A/B锁，射线阻挡也不同",
+      "verificationQuestion": "两套信息都足够可读",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C149",
+      "number": 149,
+      "stage": 5,
+      "title": "逆向钥路",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "三岛双环",
+      "coreRelationship": "B开A、P携B、Q与R共享远端横梁组合",
+      "verificationQuestion": "从目标回溯能解释完整顺序",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C150",
+      "number": 150,
+      "stage": 5,
+      "title": "双钥已掌握",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "六窗桥",
+      "coreRelationship": "两组权限以新位置组合，目标分别需A、B和二者前置",
+      "verificationQuestion": "不新增规则完成迁移",
+      "candidateArrowRange": [
+        48,
+        60
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C151",
+      "number": 151,
+      "stage": 6,
+      "title": "两对共同段",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三叶",
+      "coreRelationship": "P/Q共X，Q/R共Y，A开X、B开Y",
+      "verificationQuestion": "中间目标Q同时关联两组",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C152",
+      "number": 152,
+      "stage": 6,
+      "title": "三星一个根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三扇双门",
+      "coreRelationship": "三星共X，X需要A；B只服务P私有前置",
+      "verificationQuestion": "不能把B误当三目标共有",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C153",
+      "number": 153,
+      "stage": 6,
+      "title": "共用但不同层",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层窗",
+      "coreRelationship": "X直接挡P、隔一层挡Q、隔两层挡R",
+      "verificationQuestion": "共享不要求距离和层数相同",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C154",
+      "number": 154,
+      "stage": 6,
+      "title": "先星再双门",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三岛双桥",
+      "coreRelationship": "P无锁且挡A，A开B；Q/R还各有私有几何链",
+      "verificationQuestion": "接力之外仍需比较两条支路",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C155",
+      "number": 155,
+      "stage": 6,
+      "title": "三路归一",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三门廊",
+      "coreRelationship": "保留双钥与三路共根，三段私有链各缩一处弯折",
+      "verificationQuestion": "缩的是劳动，不是目标集合",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C156",
+      "number": 156,
+      "stage": 6,
+      "title": "三对交叠",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三角窗",
+      "coreRelationship": "P/Q共X、Q/R共Y、P/R共Z；X/Y分别受A/B约束",
+      "verificationQuestion": "三个共享对象确为不同箭头",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C157",
+      "number": 157,
+      "stage": 6,
+      "title": "孤立的第三星",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双翼加岛",
+      "coreRelationship": "P/Q共享A锁X，R单独需B与远端Y",
+      "verificationQuestion": "不把所有目标硬编成共根",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C158",
+      "number": 158,
+      "stage": 6,
+      "title": "共根藏在钥前",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "四岛",
+      "coreRelationship": "目标表面分三区，A与B的前置却共用普通X",
+      "verificationQuestion": "在权限之前识别共同工作",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C159",
+      "number": 159,
+      "stage": 6,
+      "title": "一星挡两星",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双叉回钩",
+      "coreRelationship": "P线身挡Q/R不同支路，P需A，B只挡R后段",
+      "verificationQuestion": "移走P确实同步改变两区",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C160",
+      "number": 160,
+      "stage": 6,
+      "title": "三星舒展",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三花瓣",
+      "coreRelationship": "保留P/Q与Q/R两组共享，突出两支点的视觉分区",
+      "verificationQuestion": "舒缓仍有不同共享集合",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C161",
+      "number": 161,
+      "stage": 6,
+      "title": "全共享与半共享",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层环",
+      "coreRelationship": "X服务三星，Y只服务P/R，A开X、B开Y",
+      "verificationQuestion": "全体与子集同时核对",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C162",
+      "number": 162,
+      "stage": 6,
+      "title": "私有链穿中间",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "六区",
+      "coreRelationship": "Q的私有链穿过P/R所在区域但不阻挡它们",
+      "verificationQuestion": "空间经过不等于依赖共享",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C163",
+      "number": 163,
+      "stage": 6,
+      "title": "两星先后相接",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "阶梯三岛",
+      "coreRelationship": "P挡Q前置，Q携B解锁R；A约束P的共同入口",
+      "verificationQuestion": "有向接力无互锁",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C164",
+      "number": 164,
+      "stage": 6,
+      "title": "无关区含钥锁",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "四门",
+      "coreRelationship": "第四区有A/B锁但不在三星必需集合，钥匙仍必需",
+      "verificationQuestion": "锁标签不自动成为通关目标",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C165",
+      "number": 165,
+      "stage": 6,
+      "title": "先开共同窗",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三窗叠框",
+      "coreRelationship": "保留三星共X与单独Y，A/B均有短而明确前置",
+      "verificationQuestion": "不是开两钥后直接三连点",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C166",
+      "number": 166,
+      "stage": 6,
+      "title": "两层交集",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双三角",
+      "coreRelationship": "X是P/Q共用，X的前置Z又和R共享",
+      "verificationQuestion": "能识别共享对象的共享前置",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C167",
+      "number": 167,
+      "stage": 6,
+      "title": "三条不同出口",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三向扇",
+      "coreRelationship": "三星朝三个方向，相关链都在背后另一半盘",
+      "verificationQuestion": "玩家不沿外轮廓盲扫",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C168",
+      "number": 168,
+      "stage": 6,
+      "title": "一处同时解两锁路",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "十字双框",
+      "coreRelationship": "普通X阻挡A和B各自的前置，使三个目标停住",
+      "verificationQuestion": "X带来收益由实际关系产生",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C169",
+      "number": 169,
+      "stage": 6,
+      "title": "同一星两边看",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双翼中柱",
+      "coreRelationship": "Q射线上X/Y分处两翼，P共享X、R共享Y",
+      "verificationQuestion": "两处都要完成，无二选一",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C170",
+      "number": 170,
+      "stage": 6,
+      "title": "交叠但不拥挤",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三岛宽桥",
+      "coreRelationship": "保留三对共享，以岛间留白降低线条识别负担",
+      "verificationQuestion": "留白后射线仍连到同一对象",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C171",
+      "number": 171,
+      "stage": 6,
+      "title": "一条可留长链",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四扇长尾",
+      "coreRelationship": "三星需短而交叠的前置，最长第四扇整体无关",
+      "verificationQuestion": "不以链长诱导额外劳动",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C172",
+      "number": 172,
+      "stage": 6,
+      "title": "先解外层共根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三环",
+      "coreRelationship": "A/B都位于外层共根后，三目标的私有链留在内层",
+      "verificationQuestion": "两个层次各有明确任务",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C173",
+      "number": 173,
+      "stage": 6,
+      "title": "共根不在最先",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "多叉",
+      "coreRelationship": "三条可走前置都要先处理，之后X才成为合法共享支点",
+      "verificationQuestion": "不能开局就靠提示点X",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C174",
+      "number": 174,
+      "stage": 6,
+      "title": "两个目标携钥匙",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三桥",
+      "coreRelationship": "P携A、Q携B，两星独立可解，R间接需要二者",
+      "verificationQuestion": "P/Q合法顺序不强行指定",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C175",
+      "number": 175,
+      "stage": 6,
+      "title": "分清再顺行",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三阶窗",
+      "coreRelationship": "P/Q共享、R独立的结构保留，相关支路更紧凑",
+      "verificationQuestion": "保留独立目标不是降成双星",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C176",
+      "number": 176,
+      "stage": 6,
+      "title": "目标间的普通桥",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三岛折桥",
+      "coreRelationship": "普通X连起P与Q，另一Y连Q与R；钥匙藏在不同前置层",
+      "verificationQuestion": "区分普通桥与钥匙功能",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C177",
+      "number": 177,
+      "stage": 6,
+      "title": "三星不同权限",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三门环",
+      "coreRelationship": "P带A锁，Q带B锁，R无锁却需两个带锁前置",
+      "verificationQuestion": "无锁R可能仍需两钥匙",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C178",
+      "number": 178,
+      "stage": 6,
+      "title": "一处完成两种工作",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双环三叉",
+      "coreRelationship": "A钥匙线身挡P/Q，权限解锁R的X；B仍挡A前置",
+      "verificationQuestion": "同一动作的双收益可解释",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C179",
+      "number": 179,
+      "stage": 6,
+      "title": "三星集合题",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "六区三桥",
+      "coreRelationship": "全共享、两两共享、私有支路与无关锁区共同出现",
+      "verificationQuestion": "玩家能说明各目标所需子集",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C180",
+      "number": 180,
+      "stage": 6,
+      "title": "三路都看懂",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三层花",
+      "coreRelationship": "用新朝向复用两层共享，收尾按三目标结束",
+      "verificationQuestion": "不把只换皮当未见新机制",
+      "candidateArrowRange": [
+        52,
+        64
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C181",
+      "number": 181,
+      "stage": 7,
+      "title": "看起来相交",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "编织窗",
+      "coreRelationship": "两条线在不同格错开，只有X真挡P/Q，Y只挡R",
+      "verificationQuestion": "视觉接近不算实际相交",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C182",
+      "number": 182,
+      "stage": 7,
+      "title": "相邻不同任务",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "密集三列",
+      "coreRelationship": "相邻三箭头分别服务A、B、P的私有链",
+      "verificationQuestion": "触控能可靠区分相邻线",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C183",
+      "number": 183,
+      "stage": 7,
+      "title": "长短相互挡",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双折带",
+      "coreRelationship": "短X挡长A出口，长B尾段又挡Q/R共用Y",
+      "verificationQuestion": "长短互换仍需按规则追踪",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C184",
+      "number": 184,
+      "stage": 7,
+      "title": "双层错位锁",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "错层四窗",
+      "coreRelationship": "前层A锁和后层B锁错列，P/Q/R的射线只经过其中部分",
+      "verificationQuestion": "每条射线能单独核对",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C185",
+      "number": 185,
+      "stage": 7,
+      "title": "环芯不是共根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三环偏心",
+      "coreRelationship": "醒目内芯只属R，P/Q共同根反在偏置外翼",
+      "verificationQuestion": "显著程度不替代相关性",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C186",
+      "number": 186,
+      "stage": 7,
+      "title": "三个局部入口",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "六区编织",
+      "coreRelationship": "三个相关入口均需操作，之后汇成两钥匙共用X",
+      "verificationQuestion": "开局不能只追一条明显链到底",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C187",
+      "number": 187,
+      "stage": 7,
+      "title": "分区看同一根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "留白四窗",
+      "coreRelationship": "保留双层共享与双钥，增加分区留白便于追认X",
+      "verificationQuestion": "共享仍跨区，线身不出屏",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C188",
+      "number": 188,
+      "stage": 7,
+      "title": "锁在长线中段",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "折线三门",
+      "coreRelationship": "X带A锁且中段挡P/R，B开Q私有前置",
+      "verificationQuestion": "锁标记明确附着整个X",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C189",
+      "number": 189,
+      "stage": 7,
+      "title": "相似枝不同终点",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三扇编织",
+      "coreRelationship": "三条相似短链分别通向A、R和无关区，B另有前置",
+      "verificationQuestion": "不能靠形状记忆猜相关性",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C190",
+      "number": 190,
+      "stage": 7,
+      "title": "目标之间穿行",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "交错三钩",
+      "coreRelationship": "X经过三目标邻近，但只挡P/Q射线，R需Y",
+      "verificationQuestion": "精确依赖不同于肉眼靠近",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C191",
+      "number": 191,
+      "stage": 7,
+      "title": "反向的外圈",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "内外齿环",
+      "coreRelationship": "外圈两段朝内且相关，其他朝外段可留；内圈含双钥链",
+      "verificationQuestion": "环形外观不决定清除次序",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C192",
+      "number": 192,
+      "stage": 7,
+      "title": "一段线两种阻挡",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "网格长桥",
+      "coreRelationship": "X同时横挡P射线、竖挡A的前置Y，B控制R",
+      "verificationQuestion": "一条折线承担不同方向关系",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C193",
+      "number": 193,
+      "stage": 7,
+      "title": "拆开交织",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "六窗网",
+      "coreRelationship": "两对共享、钥匙前置与长线归属交织，留一个无关合法区",
+      "verificationQuestion": "口述能分解，手机点选不拖累",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C194",
+      "number": 194,
+      "stage": 7,
+      "title": "同结构更清楚",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "分离六窗",
+      "coreRelationship": "将上一类交叠关系分布到窗口，保留双钥和两对共享",
+      "verificationQuestion": "降的是辨认负担，不删核心任务",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C195",
+      "number": 195,
+      "stage": 7,
+      "title": "尖端在另一侧",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "对折翼",
+      "coreRelationship": "挡P的X尖端在右翼，挡Q的Y尖端在左翼，二者共用A链",
+      "verificationQuestion": "双向追认不靠线条颜色猜",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C196",
+      "number": 196,
+      "stage": 7,
+      "title": "内层的可走箭头",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "嵌套三框",
+      "coreRelationship": "内层X经长空列可走，释放A；外围可走链大多无关",
+      "verificationQuestion": "关键入口可被推理发现",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C197",
+      "number": 197,
+      "stage": 7,
+      "title": "同字锁分三层",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "竖向叠窗",
+      "coreRelationship": "A锁分三层各影响不同星，B只约束A钥匙前置",
+      "verificationQuestion": "层级区别不是新字母规则",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C198",
+      "number": 198,
+      "stage": 7,
+      "title": "长线绕过目标",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三回钩",
+      "coreRelationship": "大线绕P但不挡P，短X跨尖端射线才相关；Q/R需大线另一端",
+      "verificationQuestion": "同一线对不同星相关性不同",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C199",
+      "number": 199,
+      "stage": 7,
+      "title": "共根在下方",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "倒树",
+      "coreRelationship": "P/Q位于上方，共根X在下区；R私有链反向跨到上区",
+      "verificationQuestion": "不是整体镜像前题当新任务",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C200",
+      "number": 200,
+      "stage": 7,
+      "title": "双门错着开",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四门廊",
+      "coreRelationship": "B开A钥匙，A锁分布左右两区；第三目标需无锁中桥",
+      "verificationQuestion": "字母先后和区域顺序分开",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C201",
+      "number": 201,
+      "stage": 7,
+      "title": "留下内圈一半",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "半环双翼",
+      "coreRelationship": "三目标的依赖仅涉及内圈半段与双翼钥匙，另半段可留",
+      "verificationQuestion": "必需集合准确覆盖半圈",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C202",
+      "number": 202,
+      "stage": 7,
+      "title": "给关系留空隙",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三岛宽窗",
+      "coreRelationship": "双钥跨岛、P/Q共X、R与X前置共享Y，线路拉开",
+      "verificationQuestion": "每一关系仍须独立识别",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C203",
+      "number": 203,
+      "stage": 7,
+      "title": "两根梁三片区",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层编织",
+      "coreRelationship": "X连接上中，Y连接中下；A控制X，B通过X前置才能取得",
+      "verificationQuestion": "局部连接叠成全局依赖",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C204",
+      "number": 204,
+      "stage": 7,
+      "title": "锁开后的错列",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双钥三列",
+      "coreRelationship": "三个锁开后两列可走，中列仍被偏置X线身挡",
+      "verificationQuestion": "解锁后仍检查几何条件",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C205",
+      "number": 205,
+      "stage": 7,
+      "title": "星体也是桥",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "星形三岛",
+      "coreRelationship": "P的长身串联Q/R前置，P携A，而B先打开P的锁",
+      "verificationQuestion": "星锁钥同体不遮蔽方向",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C206",
+      "number": 206,
+      "stage": 7,
+      "title": "路过但不需要",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "四窗长带",
+      "coreRelationship": "A所在长带路过R区域，却只对P/Q必要；R需B与Y",
+      "verificationQuestion": "共享范围有可解释差异",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C207",
+      "number": 207,
+      "stage": 7,
+      "title": "中间有空列",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "紧凑错位盘",
+      "coreRelationship": "X从密集盘内部空列退出，解除两把钥匙的共同阻挡",
+      "verificationQuestion": "空列有足够像素与格线可见",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C208",
+      "number": 208,
+      "stage": 7,
+      "title": "交织后的舒展",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "交错双窗",
+      "coreRelationship": "保留内外两层关系，将最难辨认长线改为短但同作用线",
+      "verificationQuestion": "不能靠删目标简化",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C209",
+      "number": 209,
+      "stage": 7,
+      "title": "重新认出关系",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "非对称六区",
+      "coreRelationship": "已学三对共享改成非对称布局，钥匙共根单独落在外翼",
+      "verificationQuestion": "测迁移而非背对称模式",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C210",
+      "number": 210,
+      "stage": 7,
+      "title": "大盘有条理",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "六区阶梯",
+      "coreRelationship": "三种权限需求分区，跨区共享只发生在两个明确关口",
+      "verificationQuestion": "结尾仍需分区判断而非点空",
+      "candidateArrowRange": [
+        56,
+        68
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C211",
+      "number": 211,
+      "stage": 8,
+      "title": "先钥后共根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双门六窗",
+      "coreRelationship": "第一段取A/B，第二段在三星阻挡中识别共享X",
+      "verificationQuestion": "第二段不是剩余箭头全部都点",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C212",
+      "number": 212,
+      "stage": 8,
+      "title": "先星后两钥",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三岛双桥",
+      "coreRelationship": "先解P，再取两钥匙，Q/R仍分别有远端前置",
+      "verificationQuestion": "三段均有不同观察任务",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C213",
+      "number": 213,
+      "stage": 8,
+      "title": "两次区域展开",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双环阶梯",
+      "coreRelationship": "X释放外环钥匙区，Y再释放内环目标区，R仍需Z",
+      "verificationQuestion": "每次展开的因果可追认",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C214",
+      "number": 214,
+      "stage": 8,
+      "title": "中段换目标",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三叉",
+      "coreRelationship": "开局追P的共享链，中段发现必须先解Q才能取得B",
+      "verificationQuestion": "依赖开局可见，无规则突变",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C215",
+      "number": 215,
+      "stage": 8,
+      "title": "多段但不拖长",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三窗桥",
+      "coreRelationship": "保留取钥、共根、私有目标三段，压短各段无变化链",
+      "verificationQuestion": "舒缓来自紧凑操作量",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C216",
+      "number": 216,
+      "stage": 8,
+      "title": "解锁后的第二根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双层树",
+      "coreRelationship": "A开X后第一共享段结束，B后的Y成为Q/R新共根",
+      "verificationQuestion": "两次共根不同且均必要",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C217",
+      "number": 217,
+      "stage": 8,
+      "title": "第一星打开全局",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四岛",
+      "coreRelationship": "P离场同时让A可出、让Q前置可走，R仍需B链",
+      "verificationQuestion": "前半突破不使后半毫无判断",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C218",
+      "number": 218,
+      "stage": 8,
+      "title": "两岸轮流推进",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "左右双框",
+      "coreRelationship": "左岸取A，右岸取B，回左岸解除共享X，再回右岸结束R",
+      "verificationQuestion": "往返有依赖依据，不纯拖动画",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C219",
+      "number": 219,
+      "stage": 8,
+      "title": "外层不必全清",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三环",
+      "coreRelationship": "外层只为钥匙清局部，中层筛共有X，内层解三星",
+      "verificationQuestion": "各层均留可忽略部分",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C220",
+      "number": 220,
+      "stage": 8,
+      "title": "两次星作桥",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三阶岛",
+      "coreRelationship": "P先释放A，Q后来释放B，R跨区前置贯穿两阶段",
+      "verificationQuestion": "目标接力不退化成单条明显链",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C221",
+      "number": 221,
+      "stage": 8,
+      "title": "中段仍有假支",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "五扇",
+      "coreRelationship": "X展开后出现三条合法支路，只有两条属于Q/R",
+      "verificationQuestion": "检查中局相关出口而非只查开局",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C222",
+      "number": 222,
+      "stage": 8,
+      "title": "展开后仍选择",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "四窗",
+      "coreRelationship": "保留中段两条相关与一条无关支路，用宽预算缓冲",
+      "verificationQuestion": "不把无关支路自动隐藏",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C223",
+      "number": 223,
+      "stage": 8,
+      "title": "三段独立判断",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "六区三桥",
+      "coreRelationship": "起手辨A前置，中段识别Q/R共Y，末段核对R远端Z",
+      "verificationQuestion": "玩家能指出至少两个不同判断时刻",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C224",
+      "number": 224,
+      "stage": 8,
+      "title": "先普通后带锁",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双门内岛",
+      "coreRelationship": "第一关口无锁X，第二关口A锁Y，第三段B服务R",
+      "verificationQuestion": "难点并非越后面锁越多",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C225",
+      "number": 225,
+      "stage": 8,
+      "title": "同钥不同时间受益",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三门叠窗",
+      "coreRelationship": "A同时开三锁，但几何条件分三阶段满足",
+      "verificationQuestion": "同时开锁与同时可走区分明确",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C226",
+      "number": 226,
+      "stage": 8,
+      "title": "钥匙在中段会合",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双树桥",
+      "coreRelationship": "A/B各有独立开局，之后共需Y，再各自进入不同星链",
+      "verificationQuestion": "双路会合后又分开的关系落地",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C227",
+      "number": 227,
+      "stage": 8,
+      "title": "第一目标是短支",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "长带三岛",
+      "coreRelationship": "较短P先完成，长链任务仍需A/B及Q/R共享段",
+      "verificationQuestion": "早拿一星不意味着后面全是劳动",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C228",
+      "number": 228,
+      "stage": 8,
+      "title": "出口方向切换",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "四向窗",
+      "coreRelationship": "上向箭头阶段解开后，下一关键箭头朝左，末段朝下",
+      "verificationQuestion": "是不同箭头方向，非可旋转机制",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C229",
+      "number": 229,
+      "stage": 8,
+      "title": "近端远端再近端",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双岛中桥",
+      "coreRelationship": "P近端链依赖远端A，回中桥解B，再回近端处理Q/R",
+      "verificationQuestion": "全部射线可在整体视图追踪",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C230",
+      "number": 230,
+      "stage": 8,
+      "title": "两颗星后再判断",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三叶双框",
+      "coreRelationship": "P/Q可共享完成，R仍有与B关联的两条必需前置",
+      "verificationQuestion": "最后一星保留有内容的任务",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C231",
+      "number": 231,
+      "stage": 8,
+      "title": "顺畅的三段",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三门长窗",
+      "coreRelationship": "保留一星开钥、共根与末段双前置，减少每段私有长度",
+      "verificationQuestion": "不把末段删成直接点击目标",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C232",
+      "number": 232,
+      "stage": 8,
+      "title": "合法出口会变多",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "六扇",
+      "coreRelationship": "解除X后合法出口大增，其中多条仍与目标无关",
+      "verificationQuestion": "开局难度不能代替中局筛选",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C233",
+      "number": 233,
+      "stage": 8,
+      "title": "钥匙最后才需要",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "外翼双门",
+      "coreRelationship": "前半P与Q部分前置不需B，R最终必须取B",
+      "verificationQuestion": "早取B和晚取B合法时均允许",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C234",
+      "number": 234,
+      "stage": 8,
+      "title": "从共享到私有",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层花",
+      "coreRelationship": "两层共有段后，P/Q/R分别需要不同方向的私有入口",
+      "verificationQuestion": "收尾仍有三处短核对",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C235",
+      "number": 235,
+      "stage": 8,
+      "title": "从私有到共享",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三阶树",
+      "coreRelationship": "三条私有入口都解开后，才可移除三星共同X",
+      "verificationQuestion": "与前关关键关系方向不同",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C236",
+      "number": 236,
+      "stage": 8,
+      "title": "两种展开同场",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双环四岛",
+      "coreRelationship": "A产生权限展开，普通X产生几何展开，B再服务第三目标",
+      "verificationQuestion": "区分动画类似但机制不同的变化",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C237",
+      "number": 237,
+      "stage": 8,
+      "title": "展开后快收束",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "四区桥",
+      "coreRelationship": "保留双展开与三目标，最后只留相关短分支，预算宽松",
+      "verificationQuestion": "结束由目标达成触发",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C238",
+      "number": 238,
+      "stage": 8,
+      "title": "一直留着的外翼",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "六区外翼",
+      "coreRelationship": "外翼从开局到结尾都有合法箭头，始终不属目标集合",
+      "verificationQuestion": "不通过晚期强制清场收尾",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C239",
+      "number": 239,
+      "stage": 8,
+      "title": "多段整理解",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "双树三桥",
+      "coreRelationship": "两钥共根、目标接力、中局无关分支与末段远端检查组合",
+      "verificationQuestion": "失败后应能改进判断而非赌运气",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C240",
+      "number": 240,
+      "stage": 8,
+      "title": "完整地解开",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三环六窗",
+      "coreRelationship": "前段取两钥，中段比较两组共享，末段每星一处私有核对",
+      "verificationQuestion": "以完整掌握收束而非再加规则",
+      "candidateArrowRange": [
+        60,
+        72
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C241",
+      "number": 241,
+      "stage": 9,
+      "title": "每支都问为什么",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "六扇",
+      "coreRelationship": "五个可走入口中三支相关，分别服务A、B、共享X",
+      "verificationQuestion": "预算建立在真实必需集合上",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C242",
+      "number": 242,
+      "stage": 9,
+      "title": "带锁不必清",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四门环",
+      "coreRelationship": "同字锁既有目标前置也有无关外枝，取钥后仍需筛选",
+      "verificationQuestion": "开锁数量不当作目标进度",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C243",
+      "number": 243,
+      "stage": 9,
+      "title": "清爽的假入口",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双树侧岛",
+      "coreRelationship": "最好辨认的合法链完全无关，必要入口在两钥共根处",
+      "verificationQuestion": "无关不是暗藏新惩罚",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C244",
+      "number": 244,
+      "stage": 9,
+      "title": "只借一根梁",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三岛大桥",
+      "coreRelationship": "大桥区只需X与Y两段，其余箭头不会挡三星",
+      "verificationQuestion": "目标达成后大量余图合理保留",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C245",
+      "number": 245,
+      "stage": 9,
+      "title": "两星完成别顺手",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三叶长尾",
+      "coreRelationship": "P/Q完成后出现顺畅清场链，但R真正依赖对岸B支",
+      "verificationQuestion": "中局惯性点击会浪费明确预算",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C246",
+      "number": 246,
+      "stage": 9,
+      "title": "留一点探索空间",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "四窗双桥",
+      "coreRelationship": "保留真假合法分支和双钥两层共享，增加余量",
+      "verificationQuestion": "宽容几步也不能全图乱清",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C247",
+      "number": 247,
+      "stage": 9,
+      "title": "私有支有边界",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三阶扇",
+      "coreRelationship": "每条目标私有链旁接可清余枝，余枝不在依赖内",
+      "verificationQuestion": "不能把整片区域都当必需",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C248",
+      "number": 248,
+      "stage": 9,
+      "title": "共享不用做两次",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双三角",
+      "coreRelationship": "三星的依赖在X/Y重合，预算只按唯一箭头计数",
+      "verificationQuestion": "界面与求解均不重复扣共用动作",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C249",
+      "number": 249,
+      "stage": 9,
+      "title": "同方向不同价值",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "平行六列",
+      "coreRelationship": "多个朝同方向的合法箭头中，只有部分解除目标前置",
+      "verificationQuestion": "价值来自关系而非朝向类别",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C250",
+      "number": 250,
+      "stage": 9,
+      "title": "第一根留着也行",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "环外入口",
+      "coreRelationship": "显眼开局X无关且可留，A/B前置从内侧空列入手",
+      "verificationQuestion": "不设计成必须先点最显眼箭头",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C251",
+      "number": 251,
+      "stage": 9,
+      "title": "有星也先看链",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三门长窗",
+      "coreRelationship": "三星均不可直接出，预算允许全部必要前置但不允许清外围",
+      "verificationQuestion": "目标可达证明覆盖双钥条件",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C252",
+      "number": 252,
+      "stage": 9,
+      "title": "宽预算同题意",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三岛六窗",
+      "coreRelationship": "保留复杂相关集合与跨区双钥，压缩私人长链",
+      "verificationQuestion": "与紧预算关保持能力下限",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C253",
+      "number": 253,
+      "stage": 9,
+      "title": "前半少花也没捷径",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双根树",
+      "coreRelationship": "A线和B线都必需，不能选较短一支代替另一支",
+      "verificationQuestion": "不将AND前置误说成选最短路",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C254",
+      "number": 254,
+      "stage": 9,
+      "title": "钥匙可走仍等价",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双扇三框",
+      "coreRelationship": "A/B都合法且必需，任一先取；预算差异来自旁边无关Y",
+      "verificationQuestion": "不因钥匙顺序任意罚玩家",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C255",
+      "number": 255,
+      "stage": 9,
+      "title": "只留相关收尾",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四岛",
+      "coreRelationship": "解锁后只需几根远端线身，其他合法箭头均可留",
+      "verificationQuestion": "高合法率不等于高相关率",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C256",
+      "number": 256,
+      "stage": 9,
+      "title": "全共享旁的假根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三叉双根",
+      "coreRelationship": "真X服务三星与A，形似根部Y只服务无关外圈",
+      "verificationQuestion": "真假来自实际连接不是隐规则",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C257",
+      "number": 257,
+      "stage": 9,
+      "title": "两颗星共一路半",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层双窗",
+      "coreRelationship": "P/Q共用X前段，后段分开；R共享其中Q后段",
+      "verificationQuestion": "必需集合不误取整片分支",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C258",
+      "number": 258,
+      "stage": 9,
+      "title": "留下半盘",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "六区",
+      "coreRelationship": "三星、双钥与两层共享集中在跨区骨架，多块无关区全程可走",
+      "verificationQuestion": "能说清为何剩下箭头仍算完成",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C259",
+      "number": 259,
+      "stage": 9,
+      "title": "长而必要短而无关",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "长带侧翼",
+      "coreRelationship": "必要链跨全盘，数条短出口无关；B位于长链中层",
+      "verificationQuestion": "避免形成短线总更好的套路",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C260",
+      "number": 260,
+      "stage": 9,
+      "title": "三次重新筛选",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三框连桥",
+      "coreRelationship": "取A、取B、解共享X后，分别出现新的无关合法支路",
+      "verificationQuestion": "关键筛选分布在三个阶段",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C261",
+      "number": 261,
+      "stage": 9,
+      "title": "三次筛选更宽松",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三窗留白",
+      "coreRelationship": "保留三次分支核对，留白提升读线且预算加宽",
+      "verificationQuestion": "不取消中后段判断",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C262",
+      "number": 262,
+      "stage": 9,
+      "title": "字母外的相关性",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "五门",
+      "coreRelationship": "一些A/B锁箭头无关，几个无锁箭头却是双钥共根",
+      "verificationQuestion": "标签无法替代完整依赖追踪",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C263",
+      "number": 263,
+      "stage": 9,
+      "title": "星邻近也可留",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三叶密边",
+      "coreRelationship": "贴近三星的边缘短线不阻挡射线，远端横梁才相关",
+      "verificationQuestion": "接近星标不成为错误线索规则",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C264",
+      "number": 264,
+      "stage": 9,
+      "title": "对岸只需两根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双大岛",
+      "coreRelationship": "三星在左岛，右岛仅两根带锁横梁参与，钥匙在左侧",
+      "verificationQuestion": "依赖可跨区但不必清整岛",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C265",
+      "number": 265,
+      "stage": 9,
+      "title": "开门不是任务结束",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三环双门",
+      "coreRelationship": "A/B取完仍需识别Q/R部分共享，预算不能清尽内环",
+      "verificationQuestion": "权限任务与目标任务区分",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C266",
+      "number": 266,
+      "stage": 9,
+      "title": "先完成哪颗都可",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三翼",
+      "coreRelationship": "P/Q可独立先完成，R需两者共有前置；只约束无关移除",
+      "verificationQuestion": "两种目标完成顺序均有效",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C267",
+      "number": 267,
+      "stage": 9,
+      "title": "精解后的从容",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "四区三门",
+      "coreRelationship": "保留部分共享、锁外私有段与无关锁区，给予四步余量",
+      "verificationQuestion": "容错提高，核心关系未变少",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C268",
+      "number": 268,
+      "stage": 9,
+      "title": "少一步都不行",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双树三窗",
+      "coreRelationship": "两支普通前置外观相近但都必要，另有相似余枝可留",
+      "verificationQuestion": "预算不设低于真实最小值",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C269",
+      "number": 269,
+      "stage": 9,
+      "title": "目标集合总检查",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "六区双环",
+      "coreRelationship": "多段筛选、两两共享、星携钥匙与远端线身共同出现",
+      "verificationQuestion": "可输出完整必需集合与理由",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C270",
+      "number": 270,
+      "stage": 9,
+      "title": "清楚地选择",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "六窗有序盘",
+      "coreRelationship": "用清楚分区重组紧预算题型，保留三目标各自判断",
+      "verificationQuestion": "顺畅完成仍体现相关性掌握",
+      "candidateArrowRange": [
+        64,
+        76
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C271",
+      "number": 271,
+      "stage": 10,
+      "title": "大盘双根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "六扇双门",
+      "coreRelationship": "两钥共根X与三星共根Y分离，Y又需X分出的两支",
+      "verificationQuestion": "局面大但可拆成两类任务",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C272",
+      "number": 272,
+      "stage": 10,
+      "title": "三岸交叠权限",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三岛双环",
+      "coreRelationship": "A锁X服务P/Q，B锁Y服务Q/R，第三岸Z是两钥前置",
+      "verificationQuestion": "权限与共享层次同时成立",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C273",
+      "number": 273,
+      "stage": 10,
+      "title": "一星展开两阶段",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四桥",
+      "coreRelationship": "P携A并清B射线，B开Q，Q线身再释放R远端X",
+      "verificationQuestion": "两段推进有真实不同因果",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C274",
+      "number": 274,
+      "stage": 10,
+      "title": "大盘也能顺畅",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "六区宽窗",
+      "coreRelationship": "保留三星双钥与两层共享，分区降低搜索并缩短尾段",
+      "verificationQuestion": "大小不退回前期，劳动可下降",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C275",
+      "number": 275,
+      "stage": 10,
+      "title": "两个偏心关口",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "非对称双环",
+      "coreRelationship": "X/Y偏在不同外翼，分别控制权限和跨区几何展开",
+      "verificationQuestion": "不能根据盘面中心找答案",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C276",
+      "number": 276,
+      "stage": 10,
+      "title": "先回溯第三星",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三叉叠窗",
+      "coreRelationship": "R前置同时涉及P/Q共享根及B，追R能发现全局关联",
+      "verificationQuestion": "从P或Q开始也可合法解开",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C277",
+      "number": 277,
+      "stage": 10,
+      "title": "相似入口不同职责",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "六列门廊",
+      "coreRelationship": "两入口通向钥匙、一入口通向目标私有段，其余可留",
+      "verificationQuestion": "比较职责而不是背入口位置",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C278",
+      "number": 278,
+      "stage": 10,
+      "title": "双钥分段再会合",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双树三桥",
+      "coreRelationship": "A和B独立取到后，两个解锁区都要完成才释放三星X",
+      "verificationQuestion": "全部前置均为AND关系",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C279",
+      "number": 279,
+      "stage": 10,
+      "title": "长线里的三种角色",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三回钩六窗",
+      "coreRelationship": "三根长线分别是星、钥匙、普通共享阻挡，作用互相连接",
+      "verificationQuestion": "多标记仍能分清尖端与线身",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C280",
+      "number": 280,
+      "stage": 10,
+      "title": "四区只借两区",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四大岛",
+      "coreRelationship": "两岛含三星，两岛提供少量双钥前置，大部分边翼可留",
+      "verificationQuestion": "相关工作量不随外形同比增长",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C281",
+      "number": 281,
+      "stage": 10,
+      "title": "共享的共享",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三层双树",
+      "coreRelationship": "P/Q共X，Q/R共Y，X/Y再共享Z；A/B位于不同层",
+      "verificationQuestion": "三层关系无循环且可读",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C282",
+      "number": 282,
+      "stage": 10,
+      "title": "层次清楚地展开",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "分层三窗",
+      "coreRelationship": "保留三层共享，以留白与短私有段减少读线疲劳",
+      "verificationQuestion": "不能改成单根链替代多层关系",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C283",
+      "number": 283,
+      "stage": 10,
+      "title": "无锁星与双锁前置",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "双门三岛",
+      "coreRelationship": "三星自身均无锁，全部权限约束落在不同层的普通前置",
+      "verificationQuestion": "玩家不因无锁目标忽略钥匙",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C284",
+      "number": 284,
+      "stage": 10,
+      "title": "不沿外圈走",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "多层缺口环",
+      "coreRelationship": "关键入口在内侧长空列，外圈多个明显出口全无关",
+      "verificationQuestion": "能在手机整体视图看见空列",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C285",
+      "number": 285,
+      "stage": 10,
+      "title": "先星后门再星",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三段桥",
+      "coreRelationship": "P先释放A，A开B前置，Q解出后R仍需跨区私有链",
+      "verificationQuestion": "末星不是机械点掉即结束",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C286",
+      "number": 286,
+      "stage": 10,
+      "title": "全共享与三对共享",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三角六窗",
+      "coreRelationship": "三星共同X之外又各有两两共享Y/Z及一处私有前置",
+      "verificationQuestion": "不重复计算共用动作成本",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C287",
+      "number": 287,
+      "stage": 10,
+      "title": "两条合法计划",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "对角双根",
+      "coreRelationship": "A/B入口均可先走，分别推进不同星，最终汇合于R前置",
+      "verificationQuestion": "明确接受多种合法解法",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C288",
+      "number": 288,
+      "stage": 10,
+      "title": "第二阶段的假根",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双环六扇",
+      "coreRelationship": "第一共享X解开后，真Y与形似无关Z同时变合法",
+      "verificationQuestion": "重新判断发生在中局",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C289",
+      "number": 289,
+      "stage": 10,
+      "title": "两钥相继在远端",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "三岛折桥",
+      "coreRelationship": "B开A，A再释放跨两岛的共同横梁X，三星还有短私有核对",
+      "verificationQuestion": "无出屏暗藏条件",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C290",
+      "number": 290,
+      "stage": 10,
+      "title": "熟练地读大盘",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "六窗对照",
+      "coreRelationship": "保留B前A、跨岛共梁和三目标，用清楚区域安排展现掌握",
+      "verificationQuestion": "宽松不削掉钥匙先后依赖",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C291",
+      "number": 291,
+      "stage": 10,
+      "title": "三个突破点",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "六区双树",
+      "coreRelationship": "先识别内侧入口，再理清两钥共根，最后筛出三星交叠集合",
+      "verificationQuestion": "每段都能指出判断与进展",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C292",
+      "number": 292,
+      "stage": 10,
+      "title": "三星互为前置",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "阶梯三环",
+      "coreRelationship": "P先参与Q前置，Q再参与R前置；双钥另有共用X",
+      "verificationQuestion": "单向递进，不能形成三目标环",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C293",
+      "number": 293,
+      "stage": 10,
+      "title": "大片可留的终局",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三岛外翼",
+      "coreRelationship": "目标骨架跨整盘，大片外翼从开局可走却始终无关",
+      "verificationQuestion": "玩家完成时理解为何无需清场",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C294",
+      "number": 294,
+      "stage": 10,
+      "title": "权限几何双核对",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "四门六窗",
+      "coreRelationship": "A/B各开多个锁，只有部分几何通畅；三星取不同权限组合",
+      "verificationQuestion": "开锁音画不掩盖第二条件",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C295",
+      "number": 295,
+      "stage": 10,
+      "title": "最后一星还要想",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "双树中桥",
+      "coreRelationship": "P/Q可先完成，R需比较两个不同共享前置并留下侧链",
+      "verificationQuestion": "后半仍有理解任务而非填时长",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C296",
+      "number": 296,
+      "stage": 10,
+      "title": "最后一段从容",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "relief",
+      "layoutOrganization": "三层宽窗",
+      "coreRelationship": "保留三目标双钥及末星双前置，缩短无变化中间链",
+      "verificationQuestion": "舒缓仍达到本阶段关系下限",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 4,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C297",
+      "number": 297,
+      "stage": 10,
+      "title": "看穿非对称",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "challenge",
+      "layoutOrganization": "偏心六区",
+      "coreRelationship": "全共享、私有链与无关锁区全部非对称布置，双钥反向依赖",
+      "verificationQuestion": "迁移成功不能依赖已记轮廓",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 2,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C298",
+      "number": 298,
+      "stage": 10,
+      "title": "自己分解全局",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "六区交织",
+      "coreRelationship": "两组权限、三种共享范围、远端线身分散且交织",
+      "verificationQuestion": "能把全局解释成若干任务",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C299",
+      "number": 299,
+      "stage": 10,
+      "title": "连贯的完成",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "normal",
+      "layoutOrganization": "三岛三桥",
+      "coreRelationship": "复用已学多段结构，让每颗星完成都明确释放下一相关区域",
+      "verificationQuestion": "过程流畅且每段有贡献感",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 3,
+      "status": "brief_complete_layout_and_playtest_pending"
+    },
+    {
+      "id": "C300",
+      "number": 300,
+      "stage": 10,
+      "title": "三百关的答案",
+      "objective": "rescue",
+      "targetCount": 3,
+      "keyGroups": 2,
+      "designIntent": "assessment",
+      "layoutOrganization": "双环六窗",
+      "coreRelationship": "双钥共根、两两共享、目标接力、跨空隙检查组合；三星离场即终止",
+      "verificationQuestion": "综合证明已学能力，不增加临时新规则",
+      "candidateArrowRange": [
+        68,
+        80
+      ],
+      "candidateMoveSlack": 1,
+      "status": "brief_complete_layout_and_playtest_pending"
+    }
+  ],
+  "newcomerRoute": {
+    "initialTutorials": [
+      "T01",
+      "T02",
+      "T03",
+      "T04",
+      "T05",
+      "T06"
+    ],
+    "formalEntry": "C001",
+    "contextualTutorials": {
+      "firstSingleKeyEncounter": "T07",
+      "firstDoubleKeyEncounter": "T08"
+    }
+  },
+  "designContract": "/Users/leerainli/programs/games/docs/superpowers/specs/2026-09-10-arrow-300-design.md",
+  "briefsRequireSharedContract": true
+}
