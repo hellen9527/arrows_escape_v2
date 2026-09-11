@@ -1282,7 +1282,7 @@ button:active:not(:disabled) {
 
 /* Constrain the play surface to the available viewport; only dialogs and the
    enlarged board scroll. Keep browser text zoom and safe-area insets intact. */
-@media (max-width: 740px), (pointer: coarse) and (max-height: 540px) {
+@media (max-width: 740px), (max-width: 960px) and (max-height: 540px) {
   html,
   body {
     height: 100%;
@@ -1426,7 +1426,7 @@ button:active:not(:disabled) {
   }
 }
 @media (max-width: 740px) and (max-height: 560px),
-  (pointer: coarse) and (max-height: 540px) {
+  (max-width: 960px) and (max-height: 540px) {
   .site-header {
     height: 46px;
     flex-basis: 46px;
@@ -1452,7 +1452,7 @@ button:active:not(:disabled) {
   }
 }
 /* On short landscape screens, put the controls beside a full-height board. */
-@media (orientation: landscape) and (max-height: 540px) and (pointer: coarse) {
+@media (orientation: landscape) and (max-height: 540px) and (max-width: 960px) {
   .game-layout {
     max-width: 960px;
     padding: 8px 12px;
@@ -1460,12 +1460,12 @@ button:active:not(:disabled) {
   .play-column {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 180px;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr auto auto;
     gap: 8px 14px;
   }
   .board-shell {
     grid-column: 1;
-    grid-row: 1 / 4;
+    grid-row: 1 / 5;
   }
   .level-heading {
     grid-column: 2;
@@ -1478,6 +1478,7 @@ button:active:not(:disabled) {
     align-self: center;
   }
   .game-controls,
+  .failure-controls,
   .next-level-button {
     grid-column: 2;
     grid-row: 3;
@@ -1716,7 +1717,7 @@ button:active:not(:disabled) {
 .reduce-motion .release-feedback {
   animation: none;
 }
-@media (max-width: 740px), (pointer: coarse) and (max-height: 540px) {
+@media (max-width: 740px), (max-width: 960px) and (max-height: 540px) {
   .large-board.zoomed .puzzle-board {
     width: max(200cqw, 125cqh);
   }
@@ -1724,4 +1725,166 @@ button:active:not(:disabled) {
 
 .has-breakthrough .difficulty {
   visibility: hidden;
+}
+
+/* 4.0: chapter access and practice are separate from earned progress. */
+.entry-options {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0;
+}
+.entry-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--background);
+  padding: 18px;
+  border-radius: 14px;
+}
+.entry-option:hover {
+  background: #eff7f4;
+  border-color: #7bb5a4;
+}
+.entry-option > span {
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: 600;
+}
+.entry-option strong,
+.entry-option small {
+  display: block;
+}
+.entry-option small {
+  margin-top: 7px;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+.entry-option > svg {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.route-actions,
+.training-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  margin: 12px 0;
+}
+.route-actions button,
+.training-bar button {
+  display: flex;
+  align-items: center;
+  color: var(--primary);
+  min-height: 36px;
+}
+.tutorial-list {
+  display: grid;
+  gap: 5px;
+  margin-top: 16px;
+}
+.tutorial-list button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.tutorial-list button > svg {
+  margin-left: auto;
+}
+.tutorial-list span {
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+.completion-record {
+  font-size: 13px;
+  color: var(--primary);
+  margin: 16px 0 0;
+}
+.chapter-tabs {
+  flex-wrap: wrap;
+}
+.chapter-tabs button {
+  min-width: 38px;
+  min-height: 38px;
+}
+.levels-dialog .level-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  max-height: 46dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 3px;
+}
+.levels-dialog .level-tile {
+  min-height: 65px;
+}
+.chapter-list {
+  max-height: 54dvh;
+  overflow: auto;
+}
+.board-viewport[data-zoom='1'] .puzzle-board {
+  width: 200%;
+  max-width: none;
+}
+.board-viewport[data-zoom='2'] .puzzle-board {
+  width: 300%;
+  max-width: none;
+}
+.zoom-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.zoom-button small {
+  font-size: 10px;
+}
+@media (max-width: 740px), (max-width: 960px) and (max-height: 540px) {
+  .board-viewport[data-zoom='1'] .puzzle-board {
+    width: min(200cqw, 200cqh);
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .board-viewport[data-zoom='2'] .puzzle-board {
+    width: min(300cqw, 300cqh);
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .entry-option {
+    padding: 14px;
+    gap: 10px;
+  }
+  .entry-option strong {
+    font-size: 15px;
+  }
+  .level-tile strong {
+    font-size: 18px;
+  }
+  .training-bar {
+    margin: 2px 0;
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+  .training-bar + .mobile-chapter {
+    display: none;
+  }
+}
+
+.failure-controls {
+  display: grid;
+  gap: 8px;
+}
+@media (orientation: landscape) and (max-height: 540px) and (max-width: 960px) {
+  .training-bar {
+    grid-column: 2;
+    grid-row: 4;
+  }
+  .failure-controls > .next-level-button {
+    grid-column: auto;
+    grid-row: auto;
+  }
 }

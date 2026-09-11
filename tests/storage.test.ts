@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { defaultProgress } from '../lib/game/engine.ts';
-void test('revision3 storage takes precedence and migrating never writes the original save', async () => {
+void test('revision4 storage takes precedence and migrating never writes the original save', async () => {
   const api = await import('../lib/game/storage.ts').catch(() => null);
   assert.ok(api, 'versioned storage adapter must exist');
-  assert.equal(api.saveKey('challenge'), 'arrow-escape:challenge:v3');
+  assert.equal(api.saveKey('challenge'), 'arrow-escape:challenge:v4');
   const old = {
     version: 1,
     campaign: 'challenge',
@@ -16,7 +16,7 @@ void test('revision3 storage takes precedence and migrating never writes the ori
   };
   const storage = { getItem: (key: string) => values[key] ?? null };
   const migrated = api.readProgress(storage, 'challenge');
-  assert.equal(migrated.unlocked, 3);
+  assert.equal(migrated.unlocked, 1);
   assert.deepEqual(migrated.previousBest, old.best);
   assert.equal(Object.keys(values).length, 1);
   const current = defaultProgress('challenge');
@@ -59,6 +59,7 @@ void test('challenge storage falls back through v2 then v1 only when newer keys 
   };
   assert.deepEqual(readProgress(storage, 'challenge').previousBest, { 2: 2 });
   assert.deepEqual(reads, [
+    'arrow-escape:challenge:v4',
     'arrow-escape:challenge:v3',
     'arrow-escape:challenge:v2',
   ]);
@@ -72,17 +73,17 @@ void test('challenge storage falls back through v2 then v1 only when newer keys 
   for (const raw of [
     '',
     '{broken',
-    JSON.stringify({ ...defaultProgress('challenge'), contentRevision: 4 }),
+    JSON.stringify({ ...defaultProgress('challenge'), contentRevision: 5 }),
   ]) {
-    values['arrow-escape:challenge:v3'] = raw;
+    values['arrow-escape:challenge:v4'] = raw;
     reads.length = 0;
     assert.deepEqual(
       readProgress(storage, 'challenge'),
       defaultProgress('challenge'),
     );
-    assert.deepEqual(reads, ['arrow-escape:challenge:v3']);
+    assert.deepEqual(reads, ['arrow-escape:challenge:v4']);
   }
-  delete values['arrow-escape:challenge:v3'];
+  delete values['arrow-escape:challenge:v4'];
   values['arrow-escape:challenge:v2'] = '{broken';
   assert.deepEqual(
     readProgress(storage, 'challenge'),
@@ -92,6 +93,7 @@ void test('challenge storage falls back through v2 then v1 only when newer keys 
   reads.length = 0;
   assert.deepEqual(readProgress(storage, 'challenge').previousBest, { 1: 3 });
   assert.deepEqual(reads, [
+    'arrow-escape:challenge:v4',
     'arrow-escape:challenge:v3',
     'arrow-escape:challenge:v2',
     'arrow-escape:challenge:v1',
@@ -117,6 +119,7 @@ void test('storage failures at a legacy key propagate and classic never reads ch
     /legacy blocked/,
   );
   assert.deepEqual(reads, [
+    'arrow-escape:challenge:v4',
     'arrow-escape:challenge:v3',
     'arrow-escape:challenge:v2',
   ]);

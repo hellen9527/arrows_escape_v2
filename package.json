@@ -14,12 +14,16 @@
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "typecheck": "tsc --noEmit",
     "deploy": "wrangler deploy --config dist/server/wrangler.json",
-    "check": "npm test && npm run typecheck && npm run lint",
+    "check": "npm test && npm run audit:levels && npm run typecheck && npm run lint",
     "test:browser": "node tests/mobile-browser.mjs",
     "test:balance:browser": "node --experimental-strip-types tests/balance-browser.mjs",
     "test:rescue:browser": "node --experimental-strip-types tests/rescue-browser.mjs",
     "test:challenge:browser": "node --experimental-strip-types tests/challenge-browser.mjs && node --experimental-strip-types tests/challenge-input.mjs && node --experimental-strip-types tests/challenge-storage.mjs",
-    "test:remix:browser": "node --experimental-strip-types tests/remix-browser.mjs && node --experimental-strip-types tests/remix-regressions.mjs"
+    "test:remix:browser": "node --experimental-strip-types tests/remix-browser.mjs && node --experimental-strip-types tests/remix-regressions.mjs",
+    "audit:levels": "node --experimental-strip-types scripts/audit-300.mjs",
+    "generate:levels": "node scripts/generate-300.mjs",
+    "assemble:levels": "node scripts/assemble-300.mjs",
+    "reproduce:levels": "node --experimental-strip-types scripts/reproduce-300.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

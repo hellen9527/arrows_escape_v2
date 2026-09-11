@@ -4,6 +4,7 @@
  */
 import fs from 'node:fs';
 import { challengeBriefs } from '../lib/game/challenge-briefs.ts';
+if (challengeBriefs.length !== 30) throw new Error('Legacy v3 authoring is retired. Use npm run generate:levels, assemble:levels and audit:levels for v4.');
 const dirs = [
   [1, 0],
   [0, 1],

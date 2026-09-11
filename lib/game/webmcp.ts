@@ -2,12 +2,13 @@
 import { useEffect, useRef } from 'react';
 import {
   failed,
+  activeLevel,
+  activeRun,
   isComplete,
   movesLeft,
   blockers,
   type Progress,
 } from './engine';
-import { makeLevel } from './levels';
 
 type Tool = {
   name: string;
@@ -42,23 +43,25 @@ export function useGameTools(bindings: Bindings) {
     const read = () => {
       const { ready, progress, panelOpen } = latest.current;
       if (!ready) throw new Error('The game is loading.');
-      const level = makeLevel(progress.run.level, progress.campaign);
+      const level = activeLevel(progress),
+        run = activeRun(progress);
       return {
         level: level.id,
         campaign: progress.campaign,
-        failed: failed(level, progress.run),
-        complete: isComplete(level, progress.run),
+        tutorial: Boolean(level.tutorial),
+        failed: failed(level, run),
+        complete: isComplete(level, run),
         objective: level.objective ?? { type: 'clear' },
-        movesLeft: movesLeft(level, progress.run),
+        movesLeft: movesLeft(level, run),
         size: level.size,
         unlocked: progress.unlocked,
         panelOpen,
-        removed: progress.run.removed,
+        removed: run.removed,
         arrows: level.arrows
-          .filter((a) => !progress.run.removed.includes(a.id))
+          .filter((a) => !run.removed.includes(a.id))
           .map((a) => ({
             ...a,
-            blockedBy: blockers(level, progress.run.removed, a.id),
+            blockedBy: blockers(level, run.removed, a.id),
           })),
       };
     };

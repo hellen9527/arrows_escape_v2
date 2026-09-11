@@ -36,6 +36,15 @@ import { Board } from '@/components/game/board';
 import { HomeScreenGuide } from '@/components/game/home-screen-guide';
 import {
   act,
+  activeRun,
+  activeLevel,
+  withActiveRun,
+  canStartLevel,
+  enterLevel,
+  chooseEntry,
+  startTutorial,
+  continueTutorial,
+  pauseTutorial,
   failed,
   failureReason,
   isComplete,
@@ -54,9 +63,11 @@ import {
 } from '@/lib/game/engine';
 import { saveKey, readProgress } from '@/lib/game/storage';
 import { levelCount, makeLevel } from '@/lib/game/levels';
+import { tutorialInfo, tutorialLevel } from '@/lib/game/tutorials';
 import { challengeInfo } from '@/lib/game/challenge-levels';
 import { useGameTools } from '@/lib/game/webmcp';
 import { playSound } from '@/lib/game/sound';
+import { hintCopy } from '@/lib/game/hint-copy';
 
 const MODE_KEY = 'arrow-escape:campaign';
 const classicChapters = [
@@ -74,20 +85,45 @@ const classicNotes = [
   ['相信直觉，也享受思考。', 'Trust your eye. Enjoy the challenge.'],
 ];
 const challengeChapters = [
-  ['寻找突破', 'Find the opening'],
-  ['追踪线索', 'Trace the paths'],
-  ['层层解锁', 'Peel the layers'],
-  ['交织之境', 'Woven together'],
-  ['最后的突破', 'The final escape'],
+  ['目标与共根', 'Goals and common roots'],
+  ['真假支路', 'Branches that matter'],
+  ['跨区追踪', 'Across the gaps'],
+  ['权限与出口', 'Keys and exits'],
+  ['双钥接力', 'Two-key connections'],
+  ['三颗星的交集', 'Three-star overlaps'],
+  ['分区交织', 'Woven regions'],
+  ['多次展开', 'Several breakthroughs'],
+  ['步数与选择', 'Moves that matter'],
+  ['全局解题', 'Bring it together'],
 ];
 const challengeNotes = [
-  ['看清方向，再出发。', 'Look before you move.'],
-  ['顺着阻挡，追到源头。', 'Trace a block back to its source.'],
-  ['解开关键，豁然开朗。', 'One key move opens new paths.'],
-  ['耐心观察，连接线索。', 'Take your time. Connect the clues.'],
-  ['用学会的技巧，完成最后挑战。', 'Bring it all together.'],
+  ['从目标回溯，找到共同阻挡。', 'Trace the targets to their shared blockers.'],
+  ['能走的箭头，不一定需要走。', 'A free arrow is not always a needed arrow.'],
+  ['留白之后，射线仍会向前延伸。', 'An exit ray continues across every gap.'],
+  [
+    '开锁和出口畅通，是两个条件。',
+    'Unlocking and clearing the exit are separate conditions.',
+  ],
+  [
+    '认字母，也要追踪钥匙的前置。',
+    'Match the letters and trace the keys’ prerequisites.',
+  ],
+  [
+    '分清哪些关系共享，哪些只属一星。',
+    'Distinguish shared and private prerequisites.',
+  ],
+  ['沿连续的线，理清不同区域。', 'Follow each line across the regions.'],
+  ['每次展开后，重新看看目标。', 'Revisit the goals after each opening.'],
+  ['把动作留给确实需要的路线。', 'Spend moves on routes the targets need.'],
+  [
+    '拆分全局，组合已学过的关系。',
+    'Break down the board using what you have learned.',
+  ],
 ];
 type Panel =
+  | 'entry'
+  | 'training'
+  | 'context'
   | 'levels'
   | 'settings'
   | 'help'
@@ -114,7 +150,7 @@ export default function Home() {
     serial: number;
   } | null>(null);
   const [notice, setNotice] = useState('');
-  const [zoom, setZoom] = useState(false);
+  const [zoom, setZoom] = useState(0);
   const [release, setRelease] = useState<{
     serial: number;
     count: number;
@@ -130,18 +166,32 @@ export default function Home() {
   const t = (zh: string, english: string) => (en ? english : zh);
   const challenge = progress.campaign === 'challenge';
   const count = levelCount(progress.campaign);
-  const perChapter = challenge ? 6 : 12;
+  const perChapter = challenge ? 30 : 12;
   const chapters = challenge ? challengeChapters : classicChapters;
   const chapterNotes = challenge ? challengeNotes : classicNotes;
-  const run = progress.run;
-  const info = challenge ? challengeInfo(run.level) : null;
+  const run = activeRun(progress);
+  const training = progress.training;
+  const info = challenge
+    ? training
+      ? {
+          ...tutorialInfo[training.id - 1],
+          kind: 'tutorial',
+          shape: 'square',
+          tier: 'tutorial',
+        }
+      : challengeInfo(run.level)
+    : null;
+  const trainingId = training?.id;
   const level = useMemo(
-    () => makeLevel(run.level, progress.campaign),
-    [run.level, progress.campaign],
+    () =>
+      trainingId
+        ? tutorialLevel(trainingId)
+        : makeLevel(run.level, progress.campaign),
+    [run.level, progress.campaign, trainingId],
   );
   const lost = failed(level, run);
   const hearts = lives(level, run);
-  const chapter = Math.floor((run.level - 1) / perChapter);
+  const chapter = Math.floor((progress.run.level - 1) / perChapter);
   const complete = isComplete(level, run);
   const objective = level.objective;
   const targetsFound =
@@ -173,7 +223,8 @@ export default function Home() {
           !localStorage.getItem(saveKey(campaign)) &&
           campaign === 'challenge' &&
           !localStorage.getItem('arrow-escape:challenge:v1') &&
-          !localStorage.getItem('arrow-escape:challenge:v2')
+          !localStorage.getItem('arrow-escape:challenge:v2') &&
+          !localStorage.getItem('arrow-escape:challenge:v3')
         ) {
           const previous = restoreProgress(
             localStorage.getItem(saveKey('classic')),
@@ -192,7 +243,11 @@ export default function Home() {
         }
         update(restored);
         storageLoaded.current = true;
-        if (restored.showRevisionIntro) setPanel('revision');
+        if (
+          campaign === 'challenge' &&
+          (restored.entry === 'pending' || restored.showRevisionIntro)
+        )
+          setPanel('entry');
       } catch {
         setStorageFailed(true);
       }
@@ -221,7 +276,7 @@ export default function Home() {
   }, [progress, ready, en]);
   useEffect(() => {
     if (!ready || !complete || flying.length || panel !== null) return;
-    const key = `${progress.campaign}:${run.level}:${run.mistakes}:${run.hints}`;
+    const key = `${progress.campaign}:${training?.id ? 'T' : 'C'}:${run.level}:${run.mistakes}:${run.hints}`;
     if (winShown.current === key) return;
     const timer = setTimeout(() => {
       winShown.current = key;
@@ -237,6 +292,7 @@ export default function Home() {
     run.level,
     run.mistakes,
     run.hints,
+    training?.id,
     panel,
   ]);
   useEffect(() => {
@@ -251,7 +307,7 @@ export default function Home() {
     setBump(null);
     setRelease(null);
     setNotice('');
-    setZoom(false);
+    setZoom(0);
     winShown.current = '';
     blockedTap.current = { id: -1, at: 0 };
   }
@@ -290,39 +346,75 @@ export default function Home() {
       reducedMotion: current.reducedMotion,
     });
     setChapterPage(
-      Math.floor((next.run.level - 1) / (campaign === 'challenge' ? 6 : 12)),
+      Math.floor((next.run.level - 1) / (campaign === 'challenge' ? 30 : 12)),
     );
-    setPanel(next.showRevisionIntro ? 'revision' : 'levels');
+    setPanel(
+      campaign === 'challenge' &&
+        (next.entry === 'pending' || next.showRevisionIntro)
+        ? 'entry'
+        : 'levels',
+    );
   }
   function closePanel() {
+    if (panel === 'entry' && progressRef.current.entry === 'pending') return;
     if (panel === 'revision')
       update({ ...progressRef.current, showRevisionIntro: false });
     setPanel(null);
   }
-  function startRevision(id: number) {
-    update({ ...progressRef.current, showRevisionIntro: false });
-    startLevel(id);
-  }
   function startLevel(id: number) {
-    if (
-      id > progressRef.current.unlocked ||
-      id < 1 ||
-      id > levelCount(progressRef.current.campaign)
-    )
-      return;
+    const p = progressRef.current;
+    if (!canStartLevel(p, id)) return;
     clearEffects();
-    update({ ...progressRef.current, run: newRun(id) });
+    const next = enterLevel(
+      { ...p, entry: p.entry === 'pending' ? 'experienced' : p.entry },
+      id,
+    );
+    update(next);
+    const lesson =
+      p.campaign === 'challenge' ? (id >= 121 ? 8 : id >= 91 ? 7 : 0) : 0;
+    setPanel(
+      lesson && !p.seenRules.includes(lesson) && !p.tutorialBest[lesson]
+        ? 'context'
+        : null,
+    );
+  }
+  function retryCurrent() {
+    clearEffects();
+    const p = progressRef.current;
+    update(withActiveRun(p, newRun(activeRun(p).level)));
+    setPanel(null);
+  }
+  function nextStep() {
+    const p = progressRef.current;
+    if (p.training) {
+      clearEffects();
+      update(continueTutorial(p));
+      setPanel(null);
+    } else if (p.run.level < levelCount(p.campaign))
+      startLevel(p.run.level + 1);
+    else openLevels();
+  }
+  function practice(id: number, sequence = false) {
+    clearEffects();
+    update(startTutorial(progressRef.current, id, sequence));
+    setPanel(null);
+  }
+  function selectEntry(entry: 'new' | 'experienced') {
+    clearEffects();
+    update(chooseEntry(progressRef.current, entry));
     setPanel(null);
   }
   function tap(id: number) {
-    if (!ready || panel || progressRef.current.run.removed.includes(id)) return;
+    if (!ready || panel || activeRun(progressRef.current).removed.includes(id))
+      return;
     const p = progressRef.current;
-    const l = makeLevel(p.run.level, p.campaign);
-    if (failed(l, p.run) || isComplete(l, p.run)) return;
-    const blocked = blockers(l, p.run.removed, id);
+    const l = activeLevel(p),
+      r = activeRun(p);
+    if (failed(l, r) || isComplete(l, r)) return;
+    const blocked = blockers(l, r.removed, id);
     const arrow = l.arrows.find((a) => a.id === id);
     if (!arrow) return;
-    if (isLocked(l, p.run.removed, arrow)) {
+    if (isLocked(l, r.removed, arrow)) {
       setNotice(
         t(
           `先移走 ${arrow.lock} 钥匙箭头，解开同字母的锁。查看锁不会扣心。`,
@@ -336,7 +428,7 @@ export default function Home() {
       if (blockedTap.current.id === id && serial - blockedTap.current.at < 520)
         return;
       blockedTap.current = { id, at: serial };
-      const teach = p.campaign === 'classic' || l.id <= 3;
+      const teach = p.campaign === 'classic' || l.tutorial;
       const [dx, dy] = direction(arrow);
       const [hx, hy] = arrow.points.at(-1)!;
       const distance = (otherId: number) =>
@@ -356,10 +448,10 @@ export default function Home() {
         t(
           teach
             ? '前方被挡住了，先解开蓝色标记的箭头。'
-            : `蓝色标记挡住了出口。${p.run.mistakes >= 2 ? '爱心用完，可以重试。' : `还剩 ${2 - p.run.mistakes} 颗心。`}`,
+            : `蓝色标记挡住了出口。${r.mistakes >= 2 ? '爱心用完，可以重试。' : `还剩 ${2 - r.mistakes} 颗心。`}`,
           teach
             ? 'Path blocked. Free the highlighted arrow first.'
-            : `The blue arrow blocks this exit. ${p.run.mistakes >= 2 ? 'No hearts left. Try again.' : `${2 - p.run.mistakes} hearts left.`}`,
+            : `The blue arrow blocks this exit. ${r.mistakes >= 2 ? 'No hearts left. Try again.' : `${2 - r.mistakes} hearts left.`}`,
         ),
       );
       later(
@@ -378,14 +470,14 @@ export default function Home() {
     } else {
       const newlyFree = l.arrows.filter(
         (a) =>
-          !p.run.removed.includes(a.id) &&
+          !r.removed.includes(a.id) &&
           a.id !== id &&
-          blockers(l, p.run.removed, a.id).length > 0 &&
-          blockers(l, [...p.run.removed, id], a.id).length === 0,
+          blockers(l, r.removed, a.id).length > 0 &&
+          blockers(l, [...r.removed, id], a.id).length === 0,
       ).length;
       const openedLocks = arrow.key
         ? l.arrows.filter(
-            (a) => a.lock === arrow.key && !p.run.removed.includes(a.id),
+            (a) => a.lock === arrow.key && !r.removed.includes(a.id),
           ).length
         : 0;
       setNotice(
@@ -416,43 +508,35 @@ export default function Home() {
         if (p.sound && openedLocks) playSound('hint');
       }
       setBump(null);
-      if (p.sound) playSound('escape', p.run.removed.length);
+      if (p.sound) playSound('escape', r.removed.length);
       setFlying((old) => [...old, id]);
       later(
         () => setFlying((old) => old.filter((x) => x !== id)),
         p.reducedMotion ? 100 : 640,
       );
     }
-    update(finishLevel({ ...p, run: act(l, p.run, { type: 'tap', id }) }));
+    update(finishLevel(withActiveRun(p, act(l, r, { type: 'tap', id }))));
   }
   function hint() {
     if (!ready || panel) return;
     setBump(null);
-    const p = progressRef.current;
-    const next = act(makeLevel(p.run.level, p.campaign), p.run, {
-      type: 'hint',
-    });
-    if (next === p.run) return;
-    update({ ...p, run: next });
-    setNotice(
-      t(
-        objective
-          ? '这支发光的箭头通向星标目标，先移走它。'
-          : '轻点发光的箭头，它的前方已经畅通。',
-        objective
-          ? 'This glowing arrow leads to a star. Free it first.'
-          : 'Tap the glowing arrow. Its path is clear.',
-      ),
-    );
+    const p = progressRef.current,
+      l = activeLevel(p),
+      r = activeRun(p);
+    const next = act(l, r, { type: 'hint' });
+    if (next === r) return;
+    update(withActiveRun(p, next));
+    setNotice('');
     if (p.sound) playSound('hint');
   }
   function undo() {
-    if (!ready || panel || flying.length) return;
+    if (!ready || (panel && !(training && panel === 'fail')) || flying.length)
+      return;
     const p = progressRef.current;
-    update({
-      ...p,
-      run: act(makeLevel(p.run.level, p.campaign), p.run, { type: 'undo' }),
-    });
+    update(
+      withActiveRun(p, act(activeLevel(p), activeRun(p), { type: 'undo' })),
+    );
+    setPanel(null);
     setNotice('');
     setBump(null);
     winShown.current = '';
@@ -543,7 +627,7 @@ export default function Home() {
                   </span>
                   {done === perChapter ? (
                     <Check size={16} />
-                  ) : i * perChapter + 1 > progress.unlocked ? (
+                  ) : !canStartLevel(progress, i * perChapter + 1) ? (
                     <LockKeyhole size={14} />
                   ) : (
                     <ChevronRight size={16} />
@@ -581,15 +665,15 @@ export default function Home() {
               <div className="section-eyebrow">
                 {t(
                   challenge
-                    ? `挑战 3.1 · ${info!.title[0]}`
+                    ? `挑战 4.0 · ${info!.title[0]}`
                     : `第 ${chapter + 1} 章 · ${chapters[chapter][0]}`,
                   challenge
-                    ? `CHALLENGE 3.1 · ${info!.title[1]}`
+                    ? `CHALLENGE 4.0 · ${info!.title[1]}`
                     : `CHAPTER ${chapter + 1} · ${chapters[chapter][1].toUpperCase()}`,
                 )}
               </div>
               <h1>
-                {t('第', 'Level')}{' '}
+                {training ? t('引导', 'Practice') : t('第', 'Level')}{' '}
                 <span>{String(run.level).padStart(2, '0')}</span>
                 {!en && ' 关'}
               </h1>
@@ -689,6 +773,7 @@ export default function Home() {
             </div>
             <div
               className={`board-viewport ${zoom ? 'zoomed' : ''} ${level.size >= 18 ? 'large-board' : ''}`}
+              data-zoom={zoom}
             >
               <Board
                 disabled={!ready || lost || complete || panel !== null}
@@ -754,12 +839,15 @@ export default function Home() {
               <button
                 className="zoom-button"
                 aria-label={
-                  zoom ? t('缩小棋盘', 'Zoom out') : t('放大棋盘', 'Zoom in')
+                  zoom === 2
+                    ? t('还原全盘', 'Show full board')
+                    : t('放大棋盘', 'Zoom in')
                 }
-                aria-pressed={zoom}
-                onClick={() => setZoom(!zoom)}
+                aria-pressed={zoom > 0}
+                onClick={() => setZoom((z) => (z + 1) % 3)}
               >
-                {zoom ? <ZoomOut size={18} /> : <ZoomIn size={18} />}
+                {zoom === 2 ? <ZoomOut size={18} /> : <ZoomIn size={18} />}
+                <small>{zoom === 1 ? '2×' : zoom === 2 ? '3×' : ''}</small>
               </button>
             </div>
             <ProgressBar
@@ -790,6 +878,7 @@ export default function Home() {
                     : 'No hearts left. Keep the blockers you found in mind and try again.',
                 )
               : notice ||
+                hintCopy(level, run, progress.language) ||
                 (complete
                   ? t(
                       '做得漂亮。准备好下一个谜题了吗？',
@@ -817,28 +906,36 @@ export default function Home() {
                             ))}
           </output>
           {lost ? (
-            <button
-              className="next-level-button retry-button"
-              onClick={() => startLevel(run.level)}
-            >
-              <RotateCcw size={20} />
-              {objective
-                ? t(
-                    '重试本关 · 恢复步数与爱心',
-                    'Retry · fresh moves and hearts',
-                  )
-                : t('重试本关 · 恢复 3 颗心', 'Retry · 3 fresh hearts')}
-            </button>
+            <div className="failure-controls">
+              {training && (
+                <button className="secondary-button" onClick={undo}>
+                  {t('撤销一步，继续练习', 'Undo one move and continue')}
+                </button>
+              )}
+              <button
+                className="next-level-button retry-button"
+                onClick={retryCurrent}
+              >
+                <RotateCcw size={20} />
+                {training
+                  ? t('重新练习 · 恢复步数', 'Retry practice · fresh moves')
+                  : objective
+                    ? t(
+                        '重试本关 · 恢复步数与爱心',
+                        'Retry · fresh moves and hearts',
+                      )
+                    : t('重试本关 · 恢复 3 颗心', 'Retry · 3 fresh hearts')}
+              </button>
+            </div>
           ) : complete ? (
-            <button
-              className="next-level-button"
-              onClick={() =>
-                run.level < count ? startLevel(run.level + 1) : openLevels()
-              }
-            >
-              {run.level < count
-                ? t('下一关', 'Next level')
-                : t('重温旅程', 'Explore again')}
+            <button className="next-level-button" onClick={nextStep}>
+              {training
+                ? training.sequence && training.id < 6
+                  ? t('下一项引导', 'Next practice board')
+                  : t('返回正式关', 'Return to formal level')
+                : run.level < count
+                  ? t('下一关', 'Next level')
+                  : t('重温旅程', 'Explore again')}
               <ArrowUpRight size={22} />
             </button>
           ) : (
@@ -862,17 +959,47 @@ export default function Home() {
                 className="tool-button hint-button"
                 onClick={hint}
                 disabled={
-                  !ready || (challenge && (run.hints >= 2 || run.hint !== null))
+                  !ready ||
+                  (challenge &&
+                    (run.hint !== null ||
+                      (!training &&
+                        run.hints >= 2 &&
+                        run.hintCandidate == null)))
                 }
               >
                 <Lightbulb />
                 <span>
-                  {t('提示', 'Hint')}
-                  {challenge && ` ${Math.max(0, 2 - run.hints)}/2`}
+                  {run.hintStage && run.hintStage < 3
+                    ? t('再具体一点', 'More detail')
+                    : t('提示', 'Hint')}
+                  {challenge &&
+                    !training &&
+                    !run.hintStage &&
+                    ` ${Math.max(0, 2 - run.hints)}/2`}
                 </span>
                 <span className="hint-spark">
                   <Sparkles size={14} />
                 </span>
+              </button>
+            </div>
+          )}
+          {training && (
+            <div className="training-bar">
+              <span>
+                T{String(training.id).padStart(2, '0')} ·{' '}
+                {training.sequence
+                  ? `${training.id}/6`
+                  : t('单项练习', 'Practice')}
+              </span>
+              <button
+                onClick={() => {
+                  clearEffects();
+                  update(pauseTutorial(progressRef.current));
+                  setPanel(null);
+                }}
+              >
+                {t('跳过，进入正式关', 'Skip to formal level')}{' '}
+                <ChevronRight size={14} />
               </button>
             </div>
           )}
@@ -915,10 +1042,10 @@ export default function Home() {
             <p>
               {t(
                 challenge
-                  ? '第 4 关起每局 3 颗心。点错会扣心，耗尽后可以立即重试。拖动放大的棋盘不会扣心。'
+                  ? '正式关每局 3 颗心。点错会扣心，耗尽后可以立即重试。拖动放大的棋盘不会扣心。'
                   : '先移走挡路的箭头，再回来试试。每一步，都会打开新的出口。',
                 challenge
-                  ? 'From level 4, each attempt has 3 hearts. Blocked taps cost a heart. Retry immediately when you run out.'
+                  ? 'Each formal attempt has 3 hearts. Blocked taps cost a heart. Retry immediately when you run out.'
                   : 'Clear the arrow in its way, then try again. Every move opens a new possibility.',
               )}
             </p>
@@ -968,13 +1095,15 @@ export default function Home() {
           className={`game-dialog ${panel === 'levels' ? 'levels-dialog' : ''} ${panel === 'win' ? 'win-dialog' : ''}`}
           showCloseButton={false}
         >
-          <button
-            className="dialog-close icon-button"
-            aria-label={t('关闭', 'Close')}
-            onClick={closePanel}
-          >
-            <X size={20} />
-          </button>
+          {!(panel === 'entry' && progress.entry === 'pending') && (
+            <button
+              className="dialog-close icon-button"
+              aria-label={t('关闭', 'Close')}
+              onClick={closePanel}
+            >
+              <X size={20} />
+            </button>
+          )}
           {panel === 'levels' && (
             <>
               <span className="section-eyebrow">
@@ -986,10 +1115,10 @@ export default function Home() {
               <DialogDescription>
                 {t(
                   challenge
-                    ? '30 个新谜题：有限步数救星标，穿插轻松清场、长线追踪和钥匙接力。'
+                    ? '300 个正式谜题，另有 8 关引导。每个阶段都可直接进入，之后按顺序挑战；跳关不会赠送成绩。'
                     : '已完成的关卡可以随时重玩，刷新自己的星级。',
                   challenge
-                    ? '30 new puzzles: rescue stars within a move budget, clear boards, trace ribbons and connect keys.'
+                    ? '300 formal puzzles and 8 practice boards. Enter any chapter, then progress in order. Skipping never awards clears.'
                     : 'Replay completed levels anytime to improve your stars.',
                 )}
               </DialogDescription>
@@ -1001,7 +1130,7 @@ export default function Home() {
                   aria-pressed={challenge}
                   onClick={() => switchCampaign('challenge')}
                 >
-                  {t('挑战 3.1 · 30 关', 'Challenge 3.1 · 30')}
+                  {t('挑战 4.0 · 300 关', 'Challenge 4.0 · 300')}
                 </button>
                 <button
                   aria-pressed={!challenge}
@@ -1013,10 +1142,20 @@ export default function Home() {
               {challenge && previousCount > 0 && (
                 <p className="revision-history">
                   {t(
-                    `旧版已过 ${previousCount} 关，解锁范围已保留；新版星级单独记录。`,
-                    `${previousCount} original clears kept. Unlocks carry over; new stars start fresh.`,
+                    `旧版已过 ${previousCount} 关，成绩已归档；本次 300 关成绩单独记录。`,
+                    `${previousCount} original clears archived. The 300 new boards have separate achievements.`,
                   )}
                 </p>
+              )}
+              {challenge && (
+                <div className="route-actions">
+                  <button onClick={() => setPanel('training')}>
+                    {t('查看 8 关引导', '8 practice boards')}
+                  </button>
+                  <button onClick={() => setPanel('entry')}>
+                    {t('重新选择起点', 'Choose a starting point')}
+                  </button>
+                </div>
               )}
               <div className="chapter-tabs">
                 {chapters.map((_, i) => (
@@ -1042,9 +1181,9 @@ export default function Home() {
                   <button
                     className={`level-tile ${challenge && challengeInfo(id).tier === 'hard' ? 'hard-tile' : ''} ${id === run.level ? 'current' : ''} ${progress.best[id] ? 'done' : ''}`}
                     key={id}
-                    disabled={id > progress.unlocked}
+                    disabled={!canStartLevel(progress, id)}
                     onClick={() =>
-                      id === run.level && !complete
+                      id === progress.run.level && !training && !complete
                         ? setPanel(null)
                         : startLevel(id)
                     }
@@ -1053,7 +1192,7 @@ export default function Home() {
                       `Level ${id}, ${progress.best[id] || 0} stars`,
                     )}
                   >
-                    {id > progress.unlocked ? (
+                    {!canStartLevel(progress, id) ? (
                       <LockKeyhole size={20} />
                     ) : (
                       <strong>{String(id).padStart(2, '0')}</strong>
@@ -1066,7 +1205,7 @@ export default function Home() {
                       />
                     )}
                     <span>
-                      {id > progress.unlocked
+                      {!canStartLevel(progress, id)
                         ? ''
                         : progress.best[id]
                           ? [1, 2, 3].map((n) => (
@@ -1080,62 +1219,177 @@ export default function Home() {
                                 }
                               />
                             ))
-                          : progress.previousBest[id]
-                            ? t('旧版已过', 'PREVIOUS CLEAR')
-                            : id === run.level
-                              ? t('进行中', 'PLAYING')
-                              : t('开始', 'PLAY')}
+                          : id === run.level
+                            ? t('进行中', 'PLAYING')
+                            : t('开始', 'PLAY')}
                     </span>
                   </button>
                 ))}
               </div>
               <p className="dialog-footnote">
                 {t(
-                  '完成当前关卡，即可解锁下一关。',
-                  'Finish a level to unlock the next one.',
+                  challenge
+                    ? '每章第 1 关可以直接进入；完成后解锁本章下一关。'
+                    : '完成当前关卡，即可解锁下一关。',
+                  challenge
+                    ? 'Every chapter entry is open. Earn later levels by completing the previous one.'
+                    : 'Finish a level to unlock the next one.',
                 )}
               </p>
             </>
           )}
-          {panel === 'revision' && (
+          {(panel === 'entry' || panel === 'revision') && (
             <>
-              <span className="modal-symbol">
-                <Sparkles />
-              </span>
-              <span className="section-eyebrow">CHALLENGE 3.1</span>
+              <span className="section-eyebrow">ARROW ESCAPE 4.0 · 300</span>
               <DialogTitle>
-                {t('这次，每关都有新变化', 'A different kind of challenge')}
+                {t('选一个适合你的起点', 'Choose your starting point')}
               </DialogTitle>
               <DialogDescription>
                 {t(
-                  `旧版已过 ${previousCount} 关的记录已保留，解锁范围不变。新棋盘会重新开始，新版星级单独记录。`,
-                  `Your ${previousCount} original clears and unlocked levels are kept. New layouts start fresh, with their own stars.`,
+                  previousCount
+                    ? `旧版 ${previousCount} 关成绩已保留。新题库从不同关卡开始，成绩单独记录。`
+                    : '第一次接触，或已经玩过很多类似谜题？你可以自己选择。',
+                  previousCount
+                    ? `${previousCount} previous clears are archived. This new collection has separate achievements.`
+                    : 'New to arrow puzzles, or ready for a challenge? Choose for yourself.',
                 )}
               </DialogDescription>
-              <div className="revision-features">
-                <span>
-                  {t('星标目标与清场交替', 'Rescue stars or clear the board')}
-                </span>
-                <span>
-                  {t('有限步数，辨认关键路线', 'Find the routes that matter')}
-                </span>
-                <span>{t('钥匙打开成组箭头', 'Keys unlock groups')}</span>
+              <div className="entry-options">
+                <button
+                  className="entry-option"
+                  onClick={() => selectEntry('new')}
+                >
+                  <span>01</span>
+                  <div>
+                    <strong>
+                      {t('第一次玩，先学会', 'I’m new — show me how')}
+                    </strong>
+                    <small>
+                      {t(
+                        '6 关基础引导 → 正式第 1 关；随时可跳过。',
+                        '6 practice boards → level 1. Skip whenever you want.',
+                      )}
+                    </small>
+                  </div>
+                  <ChevronRight />
+                </button>
+                <button
+                  className="entry-option"
+                  onClick={() => selectEntry('experienced')}
+                >
+                  <span>31</span>
+                  <div>
+                    <strong>
+                      {t(
+                        '玩过类似的，直接挑战',
+                        'I’ve played — take me to the challenge',
+                      )}
+                    </strong>
+                    <small>
+                      {t(
+                        '从第 31 关开始：双星、共享阻挡与真假支路。',
+                        'Start at level 31: two stars, shared blockers and optional branches.',
+                      )}
+                    </small>
+                  </div>
+                  <ChevronRight />
+                </button>
               </div>
+              <p className="key-explainer">
+                {t(
+                  '星标全部离场就过关，普通箭头可以留下。成功移除用一步；第三次碰撞失败。字母相同的钥匙开同字母的锁。',
+                  'Free all stars to win; ordinary arrows may stay. Each removal costs a move. A third collision ends the attempt. Keys open locks with the same letter.',
+                )}
+              </p>
               <button
-                className="primary-button"
-                onClick={() => startRevision(Math.min(4, progress.unlocked))}
+                className="secondary-button"
+                onClick={() => {
+                  update({
+                    ...progressRef.current,
+                    entry: 'experienced',
+                    showRevisionIntro: false,
+                  });
+                  openLevels(0);
+                }}
               >
                 {t(
-                  `体验新版 · 从第 ${Math.min(4, progress.unlocked)} 关开始`,
-                  `Try the remix · level ${Math.min(4, progress.unlocked)}`,
+                  '自己选阶段 / 从第 1 关开始',
+                  'Choose a chapter / start at level 1',
                 )}
-                <ArrowUpRight size={18} />
+              </button>
+            </>
+          )}
+          {panel === 'training' && (
+            <>
+              <DialogTitle>{t('随时练习', 'Practice anytime')}</DialogTitle>
+              <DialogDescription>
+                {t(
+                  '练习进度单独保存，不影响正式关断点。',
+                  'Practice saves separately and keeps your formal checkpoint.',
+                )}
+              </DialogDescription>
+              <div className="tutorial-list">
+                {tutorialInfo.map((lesson, i) => (
+                  <button key={i} onClick={() => practice(i + 1)}>
+                    <span>T{String(i + 1).padStart(2, '0')}</span>
+                    {lesson.title[en ? 1 : 0]}
+                    {progress.tutorialBest[i + 1] ? (
+                      <Check size={16} />
+                    ) : (
+                      <ChevronRight size={16} />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+          {panel === 'context' && (
+            <>
+              <DialogTitle>
+                {t(
+                  progress.run.level >= 121
+                    ? '这一阶段有两组钥匙'
+                    : '这一阶段开始使用钥匙',
+                  progress.run.level >= 121
+                    ? 'This chapter uses two keys'
+                    : 'This chapter introduces keys',
+                )}
+              </DialogTitle>
+              <DialogDescription>
+                {t(
+                  '金色钥匙和紫色锁按字母配对。锁打开后，仍要确认尖端前方没有线身；查看锁不会扣心。',
+                  'Gold keys and violet locks match by letter. An unlocked arrow still needs a clear exit. Inspecting a lock costs no heart.',
+                )}
+              </DialogDescription>
+              <button
+                className="primary-button"
+                onClick={() => {
+                  const id = progress.run.level >= 121 ? 8 : 7;
+                  update({
+                    ...progressRef.current,
+                    seenRules: [
+                      ...new Set([...progressRef.current.seenRules, id]),
+                    ],
+                  });
+                  practice(id);
+                }}
+              >
+                {t('先练习一次，再回来', 'Practice once, then return')}
               </button>
               <button
                 className="secondary-button"
-                onClick={() => startRevision(run.level)}
+                onClick={() => {
+                  const id = progress.run.level >= 121 ? 8 : 7;
+                  update({
+                    ...progressRef.current,
+                    seenRules: [
+                      ...new Set([...progressRef.current.seenRules, id]),
+                    ],
+                  });
+                  setPanel(null);
+                }}
               >
-                {t(`继续第 ${run.level} 关`, `Continue level ${run.level}`)}
+                {t('已了解，直接开始', 'I understand — start the level')}
               </button>
             </>
           )}
@@ -1279,10 +1533,10 @@ export default function Home() {
               <DialogDescription>
                 {t(
                   challenge
-                    ? '清场关需要移走全部箭头；星标关只需在步数内送走星标。前 3 关练习，第 4 关起每局 3 颗心。没有倒计时。'
+                    ? '清场关需要移走全部箭头；星标关只需在步数内送走星标。正式关每局 3 颗心；引导关不限制爱心。没有倒计时。'
                     : '清空棋盘，就能进入下一关。没有倒计时，也没有生命限制。',
                   challenge
-                    ? 'Clear every arrow in clearing levels. In star levels, free the stars within the move budget. Levels 1–3 are practice; from level 4 you have 3 hearts. No timer.'
+                    ? 'Clear every arrow in clearing levels. In star levels, free the stars within the move budget. Formal levels have 3 hearts; practice has no heart limit. No timer.'
                     : 'Clear the board to finish the level. No timers and no lives to lose.',
                 )}
               </DialogDescription>
@@ -1361,10 +1615,7 @@ export default function Home() {
                   'This level will reset. Your best stars and unlocked levels will stay safe.',
                 )}
               </DialogDescription>
-              <button
-                className="primary-button"
-                onClick={() => startLevel(run.level)}
-              >
+              <button className="primary-button" onClick={retryCurrent}>
                 {t('重新开始', 'Restart level')}
                 <RotateCcw size={18} />
               </button>
@@ -1375,6 +1626,11 @@ export default function Home() {
           )}
           {panel === 'fail' && (
             <>
+              {training && (
+                <button className="secondary-button" onClick={undo}>
+                  {t('撤销一步，继续练习', 'Undo one move and continue')}
+                </button>
+              )}
               <span className="modal-symbol fail-symbol">
                 <Heart />
               </span>
@@ -1390,19 +1646,21 @@ export default function Home() {
                   : t('爱心用完，再试一次。', 'Out of hearts. Try again.')}
               </DialogTitle>
               <DialogDescription>
-                {t(
-                  failReason === 'moves'
-                    ? `还有 ${objective!.targets.length - targetsFound} 支星标没有离场。试着略过无关的箭头。重试恢复同一棋盘、${objective!.moves} 步、3 颗心和 2 次提示。`
-                    : `3 颗心已用完。这次找到的阻挡关系，下一次用得上。重试恢复同一棋盘、${objective ? `${objective.moves} 步、` : ''}3 颗心和 2 次提示。`,
-                  failReason === 'moves'
-                    ? `${objective!.targets.length - targetsFound} starred arrows remain. Try leaving unrelated arrows alone. Retry the same board with ${objective!.moves} moves, 3 hearts and 2 hints.`
-                    : `Your 3 hearts are gone. Keep the blockers you found in mind. Retry the same puzzle with ${objective ? `${objective.moves} moves, ` : ''}3 hearts and 2 hints.`,
-                )}
+                {training
+                  ? t(
+                      '可以撤销一步，换一条路线继续练习；也可以重新开始。教学不扣生命。',
+                      'Undo one move to try another route, or restart this practice board. Practice has no heart limit.',
+                    )
+                  : t(
+                      failReason === 'moves'
+                        ? `还有 ${objective!.targets.length - targetsFound} 支星标没有离场。试着略过无关的箭头。重试恢复同一棋盘、${objective!.moves} 步、3 颗心和 2 次提示。`
+                        : `3 颗心已用完。这次找到的阻挡关系，下一次用得上。重试恢复同一棋盘、${objective ? `${objective.moves} 步、` : ''}3 颗心和 2 次提示。`,
+                      failReason === 'moves'
+                        ? `${objective!.targets.length - targetsFound} starred arrows remain. Try leaving unrelated arrows alone. Retry the same board with ${objective!.moves} moves, 3 hearts and 2 hints.`
+                        : `Your 3 hearts are gone. Keep the blockers you found in mind. Retry the same puzzle with ${objective ? `${objective.moves} moves, ` : ''}3 hearts and 2 hints.`,
+                    )}
               </DialogDescription>
-              <button
-                className="primary-button"
-                onClick={() => startLevel(run.level)}
-              >
+              <button className="primary-button" onClick={retryCurrent}>
                 <RotateCcw size={18} />
                 {t('重试本关', 'Retry level')}
               </button>
@@ -1451,14 +1709,25 @@ export default function Home() {
                     )
                   : run.level === count
                     ? t(
-                        `${count} 个谜题全部完成。回头看看，试着收集所有星星吧。`,
-                        `All ${count} puzzles complete. Revisit your favorites and collect every star.`,
+                        `本关完成，已实际解开 ${Object.keys(progress.best).length}/${count} 关。还可以回到其他阶段继续探索。`,
+                        `This level is complete. You have solved ${Object.keys(progress.best).length}/${count} puzzles. Explore other chapters whenever you like.`,
                       )
                     : t(
                         '每一条交错的线，都找到了自己的方向。',
                         'Every tangled path found its own way out.',
                       )}
               </DialogDescription>
+              <p className="completion-record">
+                {training
+                  ? t(
+                      '引导完成 · 不计入正式通关数',
+                      'Practice complete · separate from formal clears',
+                    )
+                  : t(
+                      `${run.hints === 0 ? '独立完成' : '使用提示完成'} · 正式已过 ${Object.keys(progress.best).length}/${count} 关`,
+                      `${run.hints === 0 ? 'Completed independently' : 'Completed with hints'} · ${Object.keys(progress.best).length}/${count} formal clears`,
+                    )}
+              </p>
               <div className="win-stars">
                 {[1, 2, 3].map((n) => (
                   <Star
@@ -1483,21 +1752,17 @@ export default function Home() {
                   <span>{t('使用提示', 'Hints used')}</span>
                 </div>
               </div>
-              <button
-                className="primary-button"
-                onClick={() =>
-                  run.level < count ? startLevel(run.level + 1) : openLevels()
-                }
-              >
-                {run.level < count
-                  ? t('继续 · 下一关', 'On to the next level')
-                  : t('重温旅程', 'Explore again')}
+              <button className="primary-button" onClick={nextStep}>
+                {training
+                  ? training.sequence && training.id < 6
+                    ? t('继续下一项引导', 'Next practice board')
+                    : t('返回正式关', 'Return to the formal level')
+                  : run.level < count
+                    ? t('继续 · 下一关', 'On to the next level')
+                    : t('重温旅程', 'Explore again')}
                 <ArrowUpRight size={21} />
               </button>
-              <button
-                className="secondary-button"
-                onClick={() => startLevel(run.level)}
-              >
+              <button className="secondary-button" onClick={retryCurrent}>
                 {t('再玩一次', 'Play this level again')}
               </button>
             </>

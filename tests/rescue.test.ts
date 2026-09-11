@@ -34,6 +34,10 @@ const rescue = {
     },
   ],
 };
+function reveal(level: typeof rescue, run: ReturnType<typeof newRun>) {
+  for (let i = 0; i < 3; i++) run = act(level, run, { type: 'hint' });
+  return run;
+}
 const play = (level: typeof rescue, ids: number[]) =>
   ids.reduce(
     (run, id) => act(level, run, { type: 'tap', id }),
@@ -65,7 +69,7 @@ void test('spending the budget on irrelevant arrows fails and freezes all action
 
 void test('exhausting the move budget clears a pending hint consistently with restore', () => {
   let run = play(rescue, [1]);
-  run = act(rescue, run, { type: 'hint' });
+  run = reveal(rescue, run);
   assert.equal(run.hint, 0);
   run = act(rescue, run, { type: 'tap', id: 2 });
   assert.equal(engine.failureReason(rescue, run), 'moves');
@@ -79,7 +83,7 @@ void test('blocked taps cost hearts only; undo refunds a move while preserving m
   assert.equal(run.mistakes, 1);
   assert.equal(typeof engine.movesLeft, 'function');
   assert.equal(engine.movesLeft(level, run), 3);
-  run = act(level, run, { type: 'hint' });
+  run = reveal(level, run);
   assert.equal(run.hint, 1);
   assert.equal(act(level, run, { type: 'hint' }), run);
   run = act(level, run, { type: 'tap', id: 1 });
@@ -143,7 +147,7 @@ void test('required arrows include transitive geometric and key blockers, skippi
   );
   assert.deepEqual(engine.requiredArrowIds(level, [2, 1]), [0]);
   assert.deepEqual(engine.requiredArrowIds(level, [2, 1, 0]), []);
-  assert.equal(act(level, newRun(4), { type: 'hint' }).hint, 2);
+  assert.equal(reveal(level, newRun(4)).hint, 2);
 });
 
 void test('hints suggest a free required arrow even when an irrelevant move releases more arrows', () => {
@@ -189,7 +193,7 @@ void test('hints suggest a free required arrow even when an irrelevant move rele
       },
     ],
   };
-  const hinted = act(level, newRun(4), { type: 'hint' });
+  const hinted = reveal(level, newRun(4));
   assert.equal(hinted.hint, 1);
   assert.equal(hinted.hints, 1);
   assert.equal(act(level, hinted, { type: 'hint' }), hinted);

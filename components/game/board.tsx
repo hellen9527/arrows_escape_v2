@@ -36,6 +36,14 @@ export function Board({
   const unit = 40,
     pad = 42,
     extent = (level.size - 1) * unit + pad * 2;
+  const allPoints = level.arrows.flatMap((a) => a.points);
+  const minX = Math.min(...allPoints.map((p) => p[0])),
+    maxX = Math.max(...allPoints.map((p) => p[0]));
+  const minY = Math.min(...allPoints.map((p) => p[1])),
+    maxY = Math.max(...allPoints.map((p) => p[1]));
+  const span = Math.max(maxX - minX, maxY - minY) * unit + pad * 2;
+  const originX = ((minX + maxX) * unit) / 2 + pad - span / 2,
+    originY = ((minY + maxY) * unit) / 2 + pad - span / 2;
   const xy = ([x, y]: number[]) => [x * unit + pad, y * unit + pad];
   function draw(a: Arrow) {
     const outgoing = flying.includes(a.id);
@@ -179,7 +187,7 @@ export function Board({
   return (
     <svg
       className="puzzle-board"
-      viewBox={`0 0 ${extent} ${extent}`}
+      viewBox={`${originX} ${originY} ${span} ${span}`}
       aria-label={label}
       role="group"
       onPointerDownCapture={(e) => {

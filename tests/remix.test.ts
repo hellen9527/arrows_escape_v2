@@ -58,7 +58,9 @@ void test('a visible lock blocks a geometrically clear arrow until its key leave
 });
 void test('hints respect locks and prefer the key opening a group', () => {
   const r = act(level, newRun(5), { type: 'hint' });
-  assert.equal(r.hint, 1);
+  assert.equal(r.hintCandidate, 1);
+  assert.equal(r.hintStage, 1);
+  assert.equal(r.hint, null);
   assert.equal(r.hints, 1);
 });
 void test('old challenge progress migrates without reusing any old arrow ids or awarding new stars', () => {
@@ -76,11 +78,11 @@ void test('old challenge progress migrates without reusing any old arrow ids or 
     language: 'en',
   };
   const p = restoreProgress(JSON.stringify(old), 'challenge');
-  assert.equal(p.contentRevision, 3);
-  assert.equal(p.unlocked, 21);
+  assert.equal(p.contentRevision, 4);
+  assert.equal(p.unlocked, 1);
   assert.deepEqual(p.previousBest, best);
   assert.deepEqual(p.best, {});
-  assert.deepEqual(p.run, newRun(21));
+  assert.deepEqual(p.run, newRun(1));
   assert.equal(p.showRevisionIntro, true);
   assert.equal(p.language, 'en');
   assert.equal(p.sound, false);
@@ -111,11 +113,11 @@ void test('revision2 migration merges historical and recent best scores and rese
     language: 'en',
   };
   const migrated = restoreProgress(JSON.stringify(old), 'challenge');
-  assert.equal(migrated.contentRevision, 3);
+  assert.equal(migrated.contentRevision, 4);
   assert.deepEqual(migrated.previousBest, { 1: 3, 2: 3, 4: 2, 7: 2 });
   assert.deepEqual(migrated.best, {});
-  assert.equal(migrated.unlocked, 8);
-  assert.deepEqual(migrated.run, newRun(8));
+  assert.equal(migrated.unlocked, 1);
+  assert.deepEqual(migrated.run, newRun(1));
   assert.equal(migrated.showRevisionIntro, true);
   assert.equal(migrated.sound, false);
   assert.equal(migrated.reducedMotion, true);
@@ -127,7 +129,7 @@ void test('revision2 migration merges historical and recent best scores and rese
 });
 
 void test('known challenge revisions migrate and unknown revisions cannot be reinterpreted', () => {
-  for (const contentRevision of [undefined, 1, 2]) {
+  for (const contentRevision of [undefined, 1, 2, 3]) {
     const old = {
       ...defaultProgress('challenge'),
       contentRevision,
@@ -135,11 +137,11 @@ void test('known challenge revisions migrate and unknown revisions cannot be rei
       best: { 2: 2 },
     };
     const restored = restoreProgress(JSON.stringify(old), 'challenge');
-    assert.equal(restored.contentRevision, 3);
+    assert.equal(restored.contentRevision, 4);
     assert.deepEqual(restored.previousBest, { 1: 3, 2: 2 });
-    assert.equal(restored.unlocked, 3);
+    assert.equal(restored.unlocked, 1);
   }
-  for (const contentRevision of [0, 4, 999, '3', null]) {
+  for (const contentRevision of [0, 5, 999, '3', null]) {
     const unknown = {
       ...defaultProgress('challenge'),
       contentRevision,

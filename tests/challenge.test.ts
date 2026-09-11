@@ -56,7 +56,7 @@ void test('third error ends a challenge attempt and cannot be bypassed by undo, 
 });
 void test('tutorials and classic keep unlimited errors', () => {
   for (const l of [
-    { ...puzzle, id: 3 },
+    { ...puzzle, id: 3, tutorial: true },
     { ...puzzle, campaign: 'classic' as const },
   ]) {
     let r = newRun(l.id);
@@ -70,6 +70,13 @@ void test('challenge grants two hints per attempt; undo does not replenish hints
     r = act(puzzle, r, { type: 'hint' });
     assert.equal(r.hints, i + 1);
     assert.equal(act(puzzle, r, { type: 'hint' }).hints, i + 1);
+    assert.equal(r.hintStage, 1);
+    r = act(puzzle, r, { type: 'hint' });
+    assert.equal(r.hintStage, 2);
+    assert.equal(r.hint, null);
+    r = act(puzzle, r, { type: 'hint' });
+    assert.equal(r.hintStage, 3);
+    assert.notEqual(r.hint, null);
     r = act(puzzle, r, { type: 'tap', id: r.hint! });
     r = act(puzzle, r, { type: 'undo' });
   }
