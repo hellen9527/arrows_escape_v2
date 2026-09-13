@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 export const metadata: Metadata = {
-  title: '箭头出逃 · Arrow Escape',
+  title: '箭头集集 · 配对玩法实验',
   description:
-    '点击箭头，解开交错的方向。60 个原创谜题，没有倒计时，慢慢找到每一个出口。',
+    '箭头出逃与三件配对的独立玩法实验。6张谜题，七格收集槽，没有倒计时。',
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
