@@ -1,4 +1,5 @@
 'use client';
+import { GardenSwitch, Botanical } from '@/components/experiments/garden';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowUpRight,
@@ -69,6 +70,12 @@ import { useGameTools } from '@/lib/game/webmcp';
 import { playSound } from '@/lib/game/sound';
 import { hintCopy } from '@/lib/game/hint-copy';
 
+const gardenStorage = {
+  getItem: (key: string) =>
+    localStorage.getItem('arrow-escape:experiment:garden:' + key),
+  setItem: (key: string, value: string) =>
+    localStorage.setItem('arrow-escape:experiment:garden:' + key, value),
+};
 const MODE_KEY = 'arrow-escape:campaign';
 const classicChapters = [
   ['初见方向', 'First directions'],
@@ -215,20 +222,20 @@ export default function Home() {
     const timer = setTimeout(() => {
       try {
         const campaign =
-          localStorage.getItem(MODE_KEY) === 'classic'
+          gardenStorage.getItem(MODE_KEY) === 'classic'
             ? 'classic'
             : 'challenge';
-        const restored = readProgress(localStorage, campaign);
+        const restored = readProgress(gardenStorage, campaign);
         if (
-          !localStorage.getItem(saveKey(campaign)) &&
+          !gardenStorage.getItem(saveKey(campaign)) &&
           campaign === 'challenge' &&
-          !localStorage.getItem('arrow-escape:challenge:v1') &&
-          !localStorage.getItem('arrow-escape:challenge:v2') &&
-          !localStorage.getItem('arrow-escape:challenge:v3') &&
-          !localStorage.getItem('arrow-escape:challenge:v4')
+          !gardenStorage.getItem('arrow-escape:challenge:v1') &&
+          !gardenStorage.getItem('arrow-escape:challenge:v2') &&
+          !gardenStorage.getItem('arrow-escape:challenge:v3') &&
+          !gardenStorage.getItem('arrow-escape:challenge:v4')
         ) {
           const previous = restoreProgress(
-            localStorage.getItem(saveKey('classic')),
+            gardenStorage.getItem(saveKey('classic')),
           );
           restored.sound = previous.sound;
           restored.language = previous.language;
@@ -266,11 +273,11 @@ export default function Home() {
     if (!storageLoaded.current) return;
     try {
       savedModes.current[progress.campaign] = progress;
-      localStorage.setItem(
+      gardenStorage.setItem(
         saveKey(progress.campaign),
         JSON.stringify(progress),
       );
-      localStorage.setItem(MODE_KEY, progress.campaign);
+      gardenStorage.setItem(MODE_KEY, progress.campaign);
     } catch {
       queueMicrotask(() => setStorageFailed(true));
     }
@@ -319,7 +326,7 @@ export default function Home() {
     savedModes.current[current.campaign] = current;
     let next = savedModes.current[campaign];
     try {
-      next ??= readProgress(localStorage, campaign);
+      next ??= readProgress(gardenStorage, campaign);
     } catch {
       setStorageFailed(true);
       // Keep the current campaign when the destination cannot be read.
@@ -327,7 +334,7 @@ export default function Home() {
       return;
     }
     try {
-      localStorage.setItem(saveKey(current.campaign), JSON.stringify(current));
+      gardenStorage.setItem(saveKey(current.campaign), JSON.stringify(current));
     } catch {
       setStorageFailed(true);
     }
@@ -561,10 +568,11 @@ export default function Home() {
           </span>
           <span>
             {t('箭头出逃', 'Arrow Escape')}
-            <small>FIND YOUR WAY OUT</small>
+            <small>THE QUIET GARDEN · 外观实验</small>
           </span>
         </div>
         <div className="header-right">
+          <GardenSwitch en={en} />
           <span className="header-star">
             <Star size={17} fill="currentColor" />
             {totalStars}
@@ -1027,6 +1035,7 @@ export default function Home() {
           </div>
         </section>
         <aside className="notes-sidebar">
+          <Botanical />
           <div className="note-card">
             <span className="note-icon">
               <ArrowUpRight size={24} />

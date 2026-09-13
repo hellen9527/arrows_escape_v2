@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import './garden.css';
 export const metadata: Metadata = {
-  title: '箭头出逃 · Arrow Escape',
+  title: '箭头出逃 · 林间外观实验',
   description:
-    '点击箭头，解开交错的方向。60 个原创谜题，没有倒计时，慢慢找到每一个出口。',
+    '林间手账风格的独立外观实验，保留300关和原版规则，可切换外观对比。',
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
@@ -24,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" data-garden="true" suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );
