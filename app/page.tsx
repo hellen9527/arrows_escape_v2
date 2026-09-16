@@ -32,7 +32,14 @@ import {
 } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Progress as ProgressBar } from '@/components/ui/progress';
+import {
+  SpecialInvitation,
+  SpecialLink,
+  SkinSwitch,
+  markInvitation,
+} from '@/components/specials/shared';
 import { Board } from '@/components/game/board';
+import { FeedbackButton } from '@/components/feedback/feedback';
 import { HomeScreenGuide } from '@/components/game/home-screen-guide';
 import {
   act,
@@ -158,6 +165,7 @@ export default function Home() {
   } | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const winShown = useRef('');
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
   const blockedTap = useRef({ id: -1, at: 0 });
   const savedModes = useRef<Partial<Record<Campaign, Progress>>>({});
   const storageLoaded = useRef(false);
@@ -212,6 +220,14 @@ export default function Home() {
     timers.current.push(timer);
   };
   useEffect(() => {
+    try {
+      document.documentElement.dataset.arrowSkin =
+        localStorage.getItem('arrow-escape:arrow-skin:v1') === 'line'
+          ? 'line'
+          : 'kite';
+    } catch {
+      /* Default kite skin. */
+    }
     const timer = setTimeout(() => {
       try {
         const campaign =
@@ -276,7 +292,8 @@ export default function Home() {
     }
   }, [progress, ready, en]);
   useEffect(() => {
-    if (!ready || !complete || flying.length || panel !== null) return;
+    if (!ready || !complete || flying.length || panel !== null || feedbackOpen)
+      return;
     const key = `${progress.campaign}:${training?.id ? 'T' : 'C'}:${run.level}:${run.mistakes}:${run.hints}`;
     if (winShown.current === key) return;
     const timer = setTimeout(() => {
@@ -294,13 +311,14 @@ export default function Home() {
     run.mistakes,
     run.hints,
     training?.id,
+    feedbackOpen,
     panel,
   ]);
   useEffect(() => {
-    if (!ready || !lost) return;
+    if (!ready || !lost || feedbackOpen) return;
     const timer = setTimeout(() => setPanel('fail'), 180);
     return () => clearTimeout(timer);
-  }, [ready, lost, progress.campaign, run.level]);
+  }, [ready, lost, progress.campaign, run.level, feedbackOpen]);
   function clearEffects() {
     timers.current.forEach(clearTimeout);
     timers.current = [];
@@ -386,6 +404,7 @@ export default function Home() {
     setPanel(null);
   }
   function nextStep() {
+    if (challenge && !training) markInvitation(run.level);
     const p = progressRef.current;
     if (p.training) {
       clearEffects();
@@ -406,7 +425,12 @@ export default function Home() {
     setPanel(null);
   }
   function tap(id: number) {
-    if (!ready || panel || activeRun(progressRef.current).removed.includes(id))
+    if (
+      !ready ||
+      panel ||
+      feedbackOpen ||
+      activeRun(progressRef.current).removed.includes(id)
+    )
       return;
     const p = progressRef.current;
     const l = activeLevel(p),
@@ -546,7 +570,12 @@ export default function Home() {
     setChapterPage(c);
     setPanel('levels');
   }
-  useGameTools({ ready, progress, onTap: tap, panelOpen: panel !== null });
+  useGameTools({
+    ready,
+    progress,
+    onTap: tap,
+    panelOpen: panel !== null || feedbackOpen,
+  });
   const directionWords = en
     ? ['right', 'down', 'left', 'up']
     : ['右', '下', '左', '上'];
@@ -582,6 +611,18 @@ export default function Home() {
           >
             {progress.sound ? <Volume2 /> : <VolumeX />}
           </button>
+          <FeedbackButton
+            onOpenChange={setFeedbackOpen}
+            en={en}
+            context={{
+              mode: training ? 'training' : progress.campaign,
+              level: run.level,
+              removed: run.removed.length,
+              total: level.arrows.length,
+              mistakes: run.mistakes,
+              hints: run.hints,
+            }}
+          />
           <button
             className="icon-button"
             title={t('设置', 'Settings')}
@@ -679,10 +720,13 @@ export default function Home() {
                 {!en && ' 关'}
               </h1>
             </div>
-            <button className="level-picker" onClick={() => openLevels()}>
-              <Grid2X2 size={17} />
-              <span>{t('选关', 'Levels')}</span>
-            </button>
+            <div className="level-actions">
+              <SpecialLink en={en} />
+              <button className="level-picker" onClick={() => openLevels()}>
+                <Grid2X2 size={17} />
+                <span>{t('选关', 'Levels')}</span>
+              </button>
+            </div>
           </div>
           <div className={`board-shell ${release ? 'has-breakthrough' : ''}`}>
             {release && (
@@ -777,7 +821,9 @@ export default function Home() {
               data-zoom={zoom}
             >
               <Board
-                disabled={!ready || lost || complete || panel !== null}
+                disabled={
+                  !ready || lost || complete || panel !== null || feedbackOpen
+                }
                 level={level}
                 run={run}
                 flying={flying}
@@ -1474,6 +1520,7 @@ export default function Home() {
               <DialogDescription>
                 {t('找到最适合你的解谜节奏。', 'Find your own puzzle pace.')}
               </DialogDescription>
+              <SkinSwitch en={en} />
               <div className="settings-row">
                 <label htmlFor="sound">
                   <strong>{t('音效', 'Sound effects')}</strong>
@@ -1772,6 +1819,9 @@ export default function Home() {
                   <span>{t('使用提示', 'Hints used')}</span>
                 </div>
               </div>
+              {challenge && !training && (
+                <SpecialInvitation after={run.level} en={en} />
+              )}
               <button className="primary-button" onClick={nextStep}>
                 {training
                   ? training.sequence && training.id < 6

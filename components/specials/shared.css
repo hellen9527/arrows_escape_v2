@@ -1,0 +1,129 @@
+.kite-head,
+.kite-tail {
+  display: inline;
+}
+.line-head {
+  display: none;
+}
+[data-arrow-skin='line'] .kite-head,
+[data-arrow-skin='line'] .kite-tail {
+  display: none;
+}
+[data-arrow-skin='line'] .line-head {
+  display: inline;
+}
+.giant-arrow .arrow-visible {
+  stroke-width: 8;
+}
+.giant-arrow .kite-head {
+  filter: drop-shadow(0 2px 2px #bb754020);
+}
+.special-token text {
+  font-size: 16px;
+  font-weight: 800;
+}
+.level-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.special-link,
+.skin-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #d8dce4;
+  border-radius: 14px;
+  background: #fff;
+  color: #455e66;
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+}
+.special-link:hover,
+.skin-switch:hover {
+  background: #e9f4f0;
+}
+.special-invitation {
+  position: relative;
+  text-align: left;
+  padding: 15px 70px 15px 16px;
+  background: #eef6f1;
+  border: 1px solid #d9e9dd;
+  border-radius: 16px;
+}
+.special-invitation > span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #527767;
+}
+.special-invitation strong {
+  display: block;
+  font-size: 17px;
+  margin: 4px 0;
+}
+.special-invitation p {
+  font-size: 12px;
+  margin: 0;
+  color: #61766c;
+}
+.special-invitation a {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 14px 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #276653;
+}
+@media (max-width: 380px) {
+  .level-actions {
+    gap: 5px;
+  }
+  .special-link {
+    padding: 8px;
+  }
+  .level-actions .level-picker {
+    padding: 8px;
+    gap: 4px;
+  }
+}
+
+.wind-buddy {
+  opacity: 0.95;
+  transition: opacity 0.2s;
+}
+.wind-buddy-flying {
+  opacity: 0.25;
+}
+.buddy-eyes {
+  transform-origin: 60px 51px;
+  animation: buddy-blink 7s infinite;
+}
+@keyframes buddy-blink {
+  0%,
+  44%,
+  48%,
+  100% {
+    transform: scaleY(1);
+  }
+  46% {
+    transform: scaleY(0.1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .buddy-eyes {
+    animation: none;
+  }
+  .wind-buddy {
+    transition: none;
+  }
+}
+
+.reduce-motion .buddy-eyes{animation:none}.reduce-motion .wind-buddy{transition:none}

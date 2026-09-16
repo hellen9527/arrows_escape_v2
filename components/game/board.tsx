@@ -1,6 +1,7 @@
 /* oxlint-disable jsx-a11y/prefer-tag-over-role -- Interactive SVG paths cannot use HTML button elements; keyboard and accessible names are provided. */
 'use client';
 import { useRef, type CSSProperties } from 'react';
+import { WindBuddy } from './wind-buddy';
 import {
   direction,
   isLocked,
@@ -20,6 +21,7 @@ export function Board({
   directionWords,
   label,
   en,
+  appearances,
 }: {
   level: Level;
   disabled?: boolean;
@@ -31,6 +33,10 @@ export function Board({
   directionWords: string[];
   label: string;
   en: boolean;
+  appearances?: Record<
+    number,
+    { color?: string; symbol?: string; giant?: boolean }
+  >;
 }) {
   const gesture = useRef({ x: 0, y: 0, pointer: -1, cancelled: true });
   const unit = 40,
@@ -67,7 +73,11 @@ export function Board({
       .join(' ');
     const headPath = `M ${head[0] - dx * 10 + dy * 8} ${head[1] - dy * 10 - dx * 8} L ${head[0]} ${head[1]} L ${head[0] - dx * 10 - dy * 8} ${head[1] - dy * 10 + dx * 8}`;
     const dirIndex = dx === 1 ? 0 : dy === 1 ? 1 : dx === -1 ? 2 : 3;
+    const appearance = appearances?.[a.id];
     const style = {
+      ...(appearance?.color && !locked && !a.key && !target && !highlighted
+        ? { color: appearance.color }
+        : {}),
       '--travel': `${travel}px`,
       '--head-x': `${dx * travel}px`,
       '--head-y': `${dy * travel}px`,
@@ -77,7 +87,7 @@ export function Board({
     return (
       <g
         key={`${a.id}-${isBump ? bump?.serial : 'stable'}`}
-        className={`game-arrow ${a.key ? 'key-arrow' : ''} ${locked ? 'locked-arrow' : ''} ${target ? 'target-arrow' : ''} ${outgoing ? 'escaping' : ''} ${isBump ? 'bumping' : ''} ${highlighted ? 'highlighted' : ''} ${reducedMotion ? 'quick-motion' : ''}`}
+        className={`game-arrow ${appearance?.giant ? 'giant-arrow' : ''} ${a.key ? 'key-arrow' : ''} ${locked ? 'locked-arrow' : ''} ${target ? 'target-arrow' : ''} ${outgoing ? 'escaping' : ''} ${isBump ? 'bumping' : ''} ${highlighted ? 'highlighted' : ''} ${reducedMotion ? 'quick-motion' : ''}`}
         style={style}
       >
         {highlighted && !outgoing && (
@@ -97,8 +107,47 @@ export function Board({
               outgoing || isBump ? `${length} ${travel + length}` : undefined
             }
           />
-          <path className="arrow-head" d={headPath} />
+          <path className="arrow-head line-head" d={headPath} />
+          <g
+            className="arrow-head kite-head"
+            pointerEvents="none"
+            aria-hidden="true"
+          >
+            <path
+              d={`M ${head[0]} ${head[1]} L ${head[0] - dx * 15 + dy * 9} ${head[1] - dy * 15 - dx * 9} L ${head[0] - dx * 10} ${head[1] - dy * 10} L ${head[0] - dx * 15 - dy * 9} ${head[1] - dy * 15 + dx * 9} Z`}
+              fill="currentColor"
+              strokeWidth={1}
+            />
+          </g>
         </g>
+        {!outgoing && !a.key && !locked && !target && (
+          <g
+            className="kite-tail"
+            transform={`translate(${marker[0]} ${marker[1]})`}
+            pointerEvents="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M -5 -4 L 0 0 L 5 -4 M -5 4 L 0 0 L 5 4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+            />
+          </g>
+        )}
+        {!outgoing && appearance?.symbol && (
+          <g
+            className="special-token"
+            transform={`translate(${marker[0]} ${marker[1]})`}
+            pointerEvents="none"
+            aria-hidden="true"
+          >
+            <circle r={14} fill="white" stroke="currentColor" strokeWidth={2} />
+            <text y={5} textAnchor="middle" fill="currentColor">
+              {appearance.symbol}
+            </text>
+          </g>
+        )}
         {target && !outgoing && (
           <g
             className="target-token"
@@ -167,8 +216,8 @@ export function Board({
             role="button"
             aria-label={
               en
-                ? `Arrow ${a.id + 1}, ${directionWords[dirIndex]}${target ? ', starred target' : ''}${a.key ? `, key ${a.key}` : ''}${locked ? `, lock ${a.lock}` : ''}`
-                : `箭头 ${a.id + 1}，向${directionWords[dirIndex]}${target ? '，星标目标' : ''}${a.key ? `，钥匙 ${a.key}` : ''}${locked ? `，锁 ${a.lock}` : ''}`
+                ? `Arrow ${a.id + 1}, ${directionWords[dirIndex]}${appearance?.symbol ? `, ${appearance.symbol}` : ''}${appearance?.giant ? ', long kite' : ''}${target ? ', starred target' : ''}${a.key ? `, key ${a.key}` : ''}${locked ? `, lock ${a.lock}` : ''}`
+                : `箭头 ${a.id + 1}，向${directionWords[dirIndex]}${appearance?.symbol ? `，${appearance.symbol}` : ''}${appearance?.giant ? '，长尾风筝' : ''}${target ? '，星标目标' : ''}${a.key ? `，钥匙 ${a.key}` : ''}${locked ? `，锁 ${a.lock}` : ''}`
             }
             onClick={() => {
               if (!disabled) onTap(a.id);
@@ -243,6 +292,7 @@ export function Board({
         height={(level.size - 1) * unit + 6}
         fill="url(#grid-dots)"
       />
+      <WindBuddy level={level} flying={flying.length > 0} />
       {level.arrows.filter((a) => !flying.includes(a.id)).map(draw)}
       {level.arrows.filter((a) => flying.includes(a.id)).map(draw)}
     </svg>
