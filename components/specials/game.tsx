@@ -449,6 +449,11 @@ export default function SpecialGame() {
               </button>
             ))}
           </div>
+          <a href="/practice/match" className="legacy-practice-link">
+            <span>还想慢慢配对？</span>
+            <strong>原版配对试玩 · 6 关</strong>
+            <ArrowUpRight size={19} />
+          </a>
           <p className="gallery-foot">
             奇遇可以直接试玩，不计入主线通关数。进度保存在这台设备。
           </p>

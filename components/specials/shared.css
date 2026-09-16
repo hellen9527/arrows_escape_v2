@@ -126,4 +126,17 @@
   }
 }
 
-.reduce-motion .buddy-eyes{animation:none}.reduce-motion .wind-buddy{transition:none}
+.reduce-motion .buddy-eyes {
+  animation: none;
+}
+.reduce-motion .wind-buddy {
+  transition: none;
+}
+
+.appearance-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}

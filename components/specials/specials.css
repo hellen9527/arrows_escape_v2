@@ -737,3 +737,35 @@ fieldset.special-tray {
   padding: 0;
   min-width: 0;
 }
+
+.legacy-practice-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  margin-top: 22px;
+  border: 1px dashed #cadacb;
+  border-radius: 16px;
+  color: #60816c;
+  text-decoration: none;
+  font-size: 12px;
+}
+.legacy-practice-link span {
+  color: #94a591;
+}
+.legacy-practice-link strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.legacy-practice-link svg {
+  margin-left: auto;
+}
+@media (max-width: 380px) {
+  .legacy-practice-link {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .legacy-practice-link span {
+    width: 100%;
+  }
+}

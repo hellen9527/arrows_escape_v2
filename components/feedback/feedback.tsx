@@ -31,6 +31,8 @@ export function FeedbackButton({
   en?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
+  // Feedback is opt-in: only the player's feedback button opens this dialog.
+  // Do not trigger it from progress, wins, losses, timers or draft restoration.
   const [open, setOpen] = useState(false),
     [feeling, setFeeling] = useState<Feeling | null>(null),
     [message, setMessage] = useState(''),
@@ -198,22 +200,26 @@ export function FeedbackButton({
               <div className="feedback-context">
                 <span>
                   {en ? 'Level included' : '自动附上'}：
-                  {snapshot?.mode === 'gallery'
+                  {snapshot?.mode === 'match-lab'
                     ? en
-                      ? 'Detour gallery'
-                      : '奇遇选关页'
-                    : snapshot?.mode === 'special'
+                      ? 'Matching practice'
+                      : '配对练习'
+                    : snapshot?.mode === 'gallery'
                       ? en
-                        ? 'Detour'
-                        : '奇遇'
-                      : snapshot?.mode === 'training'
+                        ? 'Detour gallery'
+                        : '奇遇选关页'
+                      : snapshot?.mode === 'special'
                         ? en
-                          ? 'Practice'
-                          : '引导'
-                        : en
-                          ? 'Level'
-                          : '主线'}{' '}
-                  {snapshot?.level}
+                          ? 'Detour'
+                          : '奇遇'
+                        : snapshot?.mode === 'training'
+                          ? en
+                            ? 'Practice'
+                            : '引导'
+                          : en
+                            ? 'Level'
+                            : '主线'}{' '}
+                  {snapshot?.mode === 'gallery' ? '' : snapshot?.level}
                 </span>
                 <span>{message.length}/600</span>
               </div>

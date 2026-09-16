@@ -23,7 +23,8 @@
     "audit:levels": "node --experimental-strip-types scripts/audit-weave.mjs",
     "generate:levels": "node --experimental-strip-types scripts/generate-weave.mjs",
     "assemble:levels": "node --experimental-strip-types scripts/assemble-weave.mjs",
-    "reproduce:levels": "node --experimental-strip-types scripts/reproduce-weave.mjs"
+    "reproduce:levels": "node --experimental-strip-types scripts/reproduce-weave.mjs",
+    "preview:feedback": "node scripts/preview-feedback.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

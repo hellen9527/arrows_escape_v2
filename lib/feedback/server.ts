@@ -9,7 +9,13 @@ export const feelings = [
 ] as const;
 export type Feeling = (typeof feelings)[number];
 export type FeedbackContext = {
-  mode: 'classic' | 'challenge' | 'training' | 'special' | 'gallery';
+  mode:
+    | 'classic'
+    | 'challenge'
+    | 'training'
+    | 'special'
+    | 'gallery'
+    | 'match-lab';
   level: number;
   removed: number;
   total: number;
@@ -39,7 +45,14 @@ export function parseFeedback(input: unknown): Feedback | null {
     typeof c !== 'object'
   )
     return null;
-  const modes = ['classic', 'challenge', 'training', 'special', 'gallery'];
+  const modes = [
+    'classic',
+    'challenge',
+    'training',
+    'special',
+    'gallery',
+    'match-lab',
+  ];
   if (
     !modes.includes(c.mode as string) ||
     !['line', 'kite'].includes(c.skin as string)
@@ -48,13 +61,15 @@ export function parseFeedback(input: unknown): Feedback | null {
   const maxLevel =
     c.mode === 'gallery'
       ? 0
-      : c.mode === 'special'
-        ? 12
-        : c.mode === 'training'
-          ? 8
-          : c.mode === 'classic'
-            ? 60
-            : 300;
+      : c.mode === 'match-lab'
+        ? 6
+        : c.mode === 'special'
+          ? 12
+          : c.mode === 'training'
+            ? 8
+            : c.mode === 'classic'
+              ? 60
+              : 300;
   for (const [key, max] of [
     ['level', maxLevel],
     ['removed', 1000],

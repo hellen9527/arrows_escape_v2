@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import './garden.css';
 import '@/components/specials/shared.css';
 export const metadata: Metadata = {
   title: '箭头出逃 · Arrow Escape',
@@ -25,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" data-garden="true" suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

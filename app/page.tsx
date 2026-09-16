@@ -1,4 +1,5 @@
 'use client';
+import { GardenSwitch, Botanical } from '@/components/experiments/garden';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowUpRight,
@@ -221,6 +222,10 @@ export default function Home() {
   };
   useEffect(() => {
     try {
+      document.documentElement.dataset.garden = String(
+        localStorage.getItem('arrow-escape:experiment:garden:theme') !==
+          'original',
+      );
       document.documentElement.dataset.arrowSkin =
         localStorage.getItem('arrow-escape:arrow-skin:v1') === 'line'
           ? 'line'
@@ -1073,6 +1078,7 @@ export default function Home() {
           </div>
         </section>
         <aside className="notes-sidebar">
+          <Botanical />
           <div className="note-card">
             <span className="note-icon">
               <ArrowUpRight size={24} />
@@ -1520,7 +1526,10 @@ export default function Home() {
               <DialogDescription>
                 {t('找到最适合你的解谜节奏。', 'Find your own puzzle pace.')}
               </DialogDescription>
-              <SkinSwitch en={en} />
+              <div className="appearance-controls">
+                <GardenSwitch en={en} />
+                <SkinSwitch en={en} />
+              </div>
               <div className="settings-row">
                 <label htmlFor="sound">
                   <strong>{t('音效', 'Sound effects')}</strong>
