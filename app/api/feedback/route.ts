@@ -53,7 +53,7 @@ export async function POST(request: Request) {
                   f.feeling,
                   f.message,
                   JSON.stringify(f.context),
-                  'specials-v1',
+                  'journey-800-v1',
                 )
                 .run();
             },

@@ -1,3 +1,5 @@
+import { CHALLENGE_COUNT } from '../game/campaign-size.ts';
+
 export const feelings = [
   'enjoyed',
   'easy',
@@ -69,7 +71,7 @@ export function parseFeedback(input: unknown): Feedback | null {
             ? 8
             : c.mode === 'classic'
               ? 60
-              : 300;
+              : CHALLENGE_COUNT;
   for (const [key, max] of [
     ['level', maxLevel],
     ['removed', 1000],

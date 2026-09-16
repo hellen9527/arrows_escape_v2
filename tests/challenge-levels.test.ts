@@ -24,7 +24,7 @@ const briefs = JSON.parse(
 ).levels;
 
 void test('300 stable formal boards, eight separate tutorials and bilingual labels', () => {
-  assert.equal(CHALLENGE_COUNT, 300);
+  assert.equal(CHALLENGE_COUNT, 800);
   const signatures = new Set<string>();
   for (let id = 1; id <= 300; id++) {
     const l = challengeLevel(id);
@@ -45,7 +45,7 @@ void test('300 stable formal boards, eight separate tutorials and bilingual labe
     );
   }
   assert.equal(signatures.size, 300);
-  assert.equal(challengeLevel(999).id, 300);
+  assert.equal(challengeLevel(999).id, CHALLENGE_COUNT);
   assert.equal(challengeLevel(NaN).id, 1);
   for (let id = 1; id <= 8; id++) {
     const l = tutorialLevel(id);

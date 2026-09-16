@@ -7,5 +7,20 @@
   "workers_dev": true,
   "preview_urls": false,
   "routes": [{ "pattern": "arrows.fategenie.com", "custom_domain": true }],
-  "observability": { "enabled": true }
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "FEEDBACK_DB",
+      "database_name": "arrows-escape-feedback",
+      "database_id": "69fc20d0-9a50-4791-b83e-fe151e47675d",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "ratelimits": [
+    {
+      "name": "FEEDBACK_RATE_LIMITER",
+      "namespace_id": "20260915",
+      "simple": { "limit": 5, "period": 60 },
+    },
+  ],
 }

@@ -1,13 +1,17 @@
 import type { Level } from './engine.ts';
 import { challengeData } from './challenge-data.ts';
 import { challengeBriefs } from './challenge-briefs.ts';
+import { expansionData } from './expansion-data.ts';
+import { expansionBriefs } from './expansion-briefs.ts';
+const allData = [...challengeData, ...expansionData];
+const allBriefs = [...challengeBriefs, ...expansionBriefs];
 
-export const CHALLENGE_COUNT = challengeBriefs.length;
+export const CHALLENGE_COUNT = allBriefs.length;
 function normalizedId(requested: number) {
   return Math.max(1, Math.min(CHALLENGE_COUNT, Math.floor(requested) || 1));
 }
 export function challengeInfo(requested: number) {
-  const brief = challengeBriefs[normalizedId(requested) - 1];
+  const brief = allBriefs[normalizedId(requested) - 1];
   return {
     title: brief.title,
     focus: brief.focus,
@@ -18,7 +22,7 @@ export function challengeInfo(requested: number) {
 }
 export function challengeLevel(requested: number): Level {
   const id = normalizedId(requested);
-  const data = challengeData[id - 1];
+  const data = allData[id - 1];
   const keys: Record<number, string | undefined> = data.keys;
   const locks: Record<number, string | undefined> = data.locks;
   return {

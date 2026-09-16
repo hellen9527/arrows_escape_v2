@@ -23,9 +23,9 @@ void test('a central open square gets a mascot; occupied and tiny boards do not'
   };
   assert.equal(mascotSpace(blocked), null);
 });
-void test('every mascot footprint stays inside originally empty cells across the 300 levels', () => {
+void test('every mascot footprint stays inside originally empty cells across all formal levels', () => {
   let count = 0;
-  for (let id = 1; id <= 300; id++) {
+  for (let id = 1; id <= 800; id++) {
     const l = makeLevel(id, 'challenge'),
       s = mascotSpace(l);
     if (!s) continue;
@@ -38,5 +38,5 @@ void test('every mascot footprint stays inside originally empty cells across the
       ),
     );
   }
-  assert.ok(count > 0 && count < 300);
+  assert.ok(count > 0 && count < 800);
 });

@@ -18,11 +18,13 @@
 node_modules/.bin/wrangler d1 execute FEEDBACK_DB --local --config .wrangler/feedback-local.json --persist-to .wrangler/feedback-local-state --command 'SELECT id, feeling, message, context_json, created_at FROM feedback ORDER BY created_at DESC LIMIT 20'
 ```
 
-## 正式启用（待取得D1权限，不能略过）
+## 正式启用
 
-1. 当前OAuth缺`d1:write`。仅在用户确认新增数据库权限后，用限于所需范围的Wrangler授权，保留现有Worker部署权限；不要默认申请所有Cloudflare权限。
-2. 查询并复用或创建`arrows-escape-feedback`数据库，记录Cloudflare实际返回的ID。
-3. 在生产`wrangler.jsonc`添加`d1_databases`，binding为`FEEDBACK_DB`；添加`FEEDBACK_RATE_LIMITER`限频绑定。不得用本机ID替代真实ID。
-4. 对这个新增数据库应用`migrations/0001_feedback.sql`，确认表已建立。
+2026-09-15：用户已批准新增D1授权，Wrangler授权成功；已创建数据库 `arrows-escape-feedback`（`69fc20d0-9a50-4791-b83e-fe151e47675d`），已成功应用0001迁移。生产配置已加入两个绑定。以下是完整流程，发布和线上验收仍须最后完成。
+
+1. 已取得用户确认并完成D1授权；未申请其他新权限。
+2. 已创建上方记录的真实数据库。
+3. 已在生产配置添加`FEEDBACK_DB`与`FEEDBACK_RATE_LIMITER`；本机预览仍使用独立本地配置。
+4. 远程0001迁移成功，反馈表已建立。
 5. 按GitHub/Cloudflare原部署链发布已验证提交，再从正式域名实际提交一条明确标注的验收反馈，并只查询这条验收记录核实。不要读取无关用户数据。
 6. 用户可在Cloudflare D1控制台查看/导出自己的反馈数据。无需发布一个所有人都能访问的反馈列表。运营分析应将正式关、引导、特殊关、老配对和选关页分开，不把测试反馈当玩家数据。

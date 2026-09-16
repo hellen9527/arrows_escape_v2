@@ -1807,6 +1807,11 @@ button:active:not(:disabled) {
 }
 .chapter-tabs {
   flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
+  min-width: 0;
+  padding: 0;
+  border: 0;
 }
 .chapter-tabs button {
   min-width: 38px;
@@ -1825,6 +1830,8 @@ button:active:not(:disabled) {
 .chapter-list {
   max-height: 54dvh;
   overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 .board-viewport[data-zoom='1'] .puzzle-board {
   width: 200%;

@@ -76,6 +76,11 @@ import { challengeInfo } from '@/lib/game/challenge-levels';
 import { useGameTools } from '@/lib/game/webmcp';
 import { playSound } from '@/lib/game/sound';
 import { hintCopy } from '@/lib/game/hint-copy';
+import {
+  challengeChapterCopy,
+  chapterLevelIds,
+  clampChapter,
+} from '@/lib/game/chapter-copy';
 
 const MODE_KEY = 'arrow-escape:campaign';
 const classicChapters = [
@@ -91,42 +96,6 @@ const classicNotes = [
   ['耐心观察，解开交错的线。', 'Untangle the paths, one at a time.'],
   ['从外到内，慢慢找到线索。', 'Look a little closer. Follow the clues.'],
   ['相信直觉，也享受思考。', 'Trust your eye. Enjoy the challenge.'],
-];
-const challengeChapters = [
-  ['目标与共根', 'Goals and common roots'],
-  ['真假支路', 'Branches that matter'],
-  ['跨区追踪', 'Across the gaps'],
-  ['权限与出口', 'Keys and exits'],
-  ['双钥接力', 'Two-key connections'],
-  ['三颗星的交集', 'Three-star overlaps'],
-  ['分区交织', 'Woven regions'],
-  ['多次展开', 'Several breakthroughs'],
-  ['步数与选择', 'Moves that matter'],
-  ['全局解题', 'Bring it together'],
-];
-const challengeNotes = [
-  ['从目标回溯，找到共同阻挡。', 'Trace the targets to their shared blockers.'],
-  ['能走的箭头，不一定需要走。', 'A free arrow is not always a needed arrow.'],
-  ['留白之后，射线仍会向前延伸。', 'An exit ray continues across every gap.'],
-  [
-    '开锁和出口畅通，是两个条件。',
-    'Unlocking and clearing the exit are separate conditions.',
-  ],
-  [
-    '认字母，也要追踪钥匙的前置。',
-    'Match the letters and trace the keys’ prerequisites.',
-  ],
-  [
-    '分清哪些关系共享，哪些只属一星。',
-    'Distinguish shared and private prerequisites.',
-  ],
-  ['沿连续的线，理清不同区域。', 'Follow each line across the regions.'],
-  ['每次展开后，重新看看目标。', 'Revisit the goals after each opening.'],
-  ['把动作留给确实需要的路线。', 'Spend moves on routes the targets need.'],
-  [
-    '拆分全局，组合已学过的关系。',
-    'Break down the board using what you have learned.',
-  ],
 ];
 type Panel =
   | 'entry'
@@ -151,6 +120,7 @@ export default function Home() {
   const [ready, setReady] = useState(false);
   const [panel, setPanel] = useState<Panel>(null);
   const [chapterPage, setChapterPage] = useState(0);
+  const chapterList = useRef<HTMLElement>(null);
   const [flying, setFlying] = useState<number[]>([]);
   const [bump, setBump] = useState<{
     id: number;
@@ -176,8 +146,14 @@ export default function Home() {
   const challenge = progress.campaign === 'challenge';
   const count = levelCount(progress.campaign);
   const perChapter = challenge ? 30 : 12;
-  const chapters = challenge ? challengeChapters : classicChapters;
-  const chapterNotes = challenge ? challengeNotes : classicNotes;
+  const challengeCopy = useMemo(() => challengeChapterCopy(count), [count]);
+  const chapters = challenge
+    ? challengeCopy.map((c) => c.title)
+    : classicChapters;
+  const chapterNotes = challenge
+    ? challengeCopy.map((c) => c.note)
+    : classicNotes;
+  const selectedChapter = clampChapter(chapterPage, perChapter, count);
   const run = activeRun(progress);
   const training = progress.training;
   const info = challenge
@@ -200,7 +176,11 @@ export default function Home() {
   );
   const lost = failed(level, run);
   const hearts = lives(level, run);
-  const chapter = Math.floor((progress.run.level - 1) / perChapter);
+  const chapter = clampChapter(
+    Math.floor((progress.run.level - 1) / perChapter),
+    perChapter,
+    count,
+  );
   const complete = isComplete(level, run);
   const objective = level.objective;
   const targetsFound =
@@ -212,6 +192,16 @@ export default function Home() {
   const keysFound = keyArrows.filter((a) => run.removed.includes(a.id)).length;
   const previousCount = Object.keys(progress.previousBest).length;
   const totalStars = Object.values(progress.best).reduce((a, b) => a + b, 0);
+  useEffect(() => {
+    const list = chapterList.current;
+    const current = list?.querySelector<HTMLElement>('[aria-current="step"]');
+    if (list && current) {
+      list.scrollTop +=
+        current.getBoundingClientRect().top -
+        list.getBoundingClientRect().top -
+        (list.clientHeight - current.clientHeight) / 2;
+    }
+  }, [chapter, challenge, ready]);
   const update = useCallback((next: Progress) => {
     progressRef.current = next;
     setProgress(next);
@@ -572,7 +562,7 @@ export default function Home() {
     winShown.current = '';
   }
   function openLevels(c = chapter) {
-    setChapterPage(c);
+    setChapterPage(clampChapter(c, perChapter, count));
     setPanel('levels');
   }
   useGameTools({
@@ -648,8 +638,13 @@ export default function Home() {
             <br />
             {t('解开所有方向。', 'One clear path.')}
           </h2>
-          <nav className="chapter-list" aria-label={t('章节', 'Chapters')}>
+          <nav
+            ref={chapterList}
+            className="chapter-list"
+            aria-label={t('章节', 'Chapters')}
+          >
             {chapters.map((names, i) => {
+              const ids = chapterLevelIds(i, perChapter, count);
               const done = Object.keys(progress.best).filter(
                 (k) => Math.floor((+k - 1) / perChapter) === i,
               ).length;
@@ -657,6 +652,7 @@ export default function Home() {
                 <button
                   key={i}
                   className={`chapter-link ${i === chapter ? 'active' : ''}`}
+                  aria-current={i === chapter ? 'step' : undefined}
                   onClick={() => openLevels(i)}
                 >
                   <span className="chapter-number">
@@ -667,12 +663,12 @@ export default function Home() {
                     <small>
                       {i === chapter
                         ? t('正在探索', 'EXPLORING')
-                        : done === perChapter
+                        : done === ids.length
                           ? t('已完成', 'COMPLETED')
-                          : `${i * perChapter + 1} – ${(i + 1) * perChapter}`}
+                          : `${i * perChapter + 1} – ${ids[ids.length - 1]}`}
                     </small>
                   </span>
-                  {done === perChapter ? (
+                  {done === ids.length ? (
                     <Check size={16} />
                   ) : !canStartLevel(progress, i * perChapter + 1) ? (
                     <LockKeyhole size={14} />
@@ -712,10 +708,10 @@ export default function Home() {
               <div className="section-eyebrow">
                 {t(
                   challenge
-                    ? `挑战 5.0 · ${info!.title[0]}`
+                    ? `旅程新版 · ${info!.title[0]}`
                     : `第 ${chapter + 1} 章 · ${chapters[chapter][0]}`,
                   challenge
-                    ? `CHALLENGE 5.0 · ${info!.title[1]}`
+                    ? `EXPANDED JOURNEY · ${info!.title[1]}`
                     : `CHAPTER ${chapter + 1} · ${chapters[chapter][1].toUpperCase()}`,
                 )}
               </div>
@@ -1176,10 +1172,10 @@ export default function Home() {
               <DialogDescription>
                 {t(
                   challenge
-                    ? '300 个正式谜题，另有 8 关引导。每个阶段都可直接进入，之后按顺序挑战；跳关不会赠送成绩。'
+                    ? `共 ${count} 个正式谜题，另有 8 关引导。每个阶段都可直接进入，之后按顺序挑战；跳关不会赠送成绩。`
                     : '已完成的关卡可以随时重玩，刷新自己的星级。',
                   challenge
-                    ? '300 formal puzzles and 8 practice boards. Enter any chapter, then progress in order. Skipping never awards clears.'
+                    ? `A total of ${count} formal puzzles and 8 practice boards. Enter any chapter, then progress in order. Skipping never awards clears.`
                     : 'Replay completed levels anytime to improve your stars.',
                 )}
               </DialogDescription>
@@ -1191,20 +1187,26 @@ export default function Home() {
                   aria-pressed={challenge}
                   onClick={() => switchCampaign('challenge')}
                 >
-                  {t('挑战 5.0 · 300 关', 'Challenge 5.0 · 300')}
+                  {t(
+                    `旅程新版 · ${levelCount('challenge')} 关`,
+                    `Expanded journey · ${levelCount('challenge')}`,
+                  )}
                 </button>
                 <button
                   aria-pressed={!challenge}
                   onClick={() => switchCampaign('classic')}
                 >
-                  {t('经典篇 · 60 关', 'Classic · 60')}
+                  {t(
+                    `经典篇 · ${levelCount('classic')} 关`,
+                    `Classic · ${levelCount('classic')}`,
+                  )}
                 </button>
               </fieldset>
               {challenge && previousCount > 0 && (
                 <p className="revision-history">
                   {t(
-                    `旧版已过 ${previousCount} 关，成绩已归档；本次 300 关成绩单独记录。`,
-                    `${previousCount} original clears archived. The 300 new boards have separate achievements.`,
+                    `旧版已过 ${previousCount} 关，成绩已归档；本次 ${count} 关成绩单独记录。`,
+                    `${previousCount} original clears archived. The ${count}-level collection has separate achievements.`,
                   )}
                 </p>
               )}
@@ -1218,10 +1220,14 @@ export default function Home() {
                   </button>
                 </div>
               )}
-              <div className="chapter-tabs">
+              <fieldset
+                className="chapter-tabs"
+                aria-label={t('选择章节', 'Choose a chapter')}
+              >
                 {chapters.map((_, i) => (
                   <button
-                    className={chapterPage === i ? 'selected' : ''}
+                    className={selectedChapter === i ? 'selected' : ''}
+                    aria-pressed={selectedChapter === i}
                     key={i}
                     onClick={() => setChapterPage(i)}
                     aria-label={t(`第${i + 1}章`, `Chapter ${i + 1}`)}
@@ -1229,63 +1235,68 @@ export default function Home() {
                     {String(i + 1).padStart(2, '0')}
                   </button>
                 ))}
-              </div>
+              </fieldset>
               <div className="chapter-dialog-title">
-                <h3>{chapters[chapterPage][en ? 1 : 0]}</h3>
-                <span>{chapterNotes[chapterPage][en ? 1 : 0]}</span>
+                <h3>
+                  {t(
+                    `第 ${selectedChapter + 1} 章`,
+                    `Chapter ${selectedChapter + 1}`,
+                  )}{' '}
+                  · {chapters[selectedChapter][en ? 1 : 0]}
+                </h3>
+                <span>{chapterNotes[selectedChapter][en ? 1 : 0]}</span>
               </div>
               <div className="level-grid">
-                {Array.from(
-                  { length: perChapter },
-                  (_, i) => chapterPage * perChapter + i + 1,
-                ).map((id) => (
-                  <button
-                    className={`level-tile ${challenge && challengeInfo(id).tier === 'hard' ? 'hard-tile' : ''} ${id === run.level ? 'current' : ''} ${progress.best[id] ? 'done' : ''}`}
-                    key={id}
-                    disabled={!canStartLevel(progress, id)}
-                    onClick={() =>
-                      id === progress.run.level && !training && !complete
-                        ? setPanel(null)
-                        : startLevel(id)
-                    }
-                    aria-label={t(
-                      `第${id}关，${progress.best[id] || 0}星`,
-                      `Level ${id}, ${progress.best[id] || 0} stars`,
-                    )}
-                  >
-                    {!canStartLevel(progress, id) ? (
-                      <LockKeyhole size={20} />
-                    ) : (
-                      <strong>{String(id).padStart(2, '0')}</strong>
-                    )}
-                    {challenge && challengeInfo(id).tier === 'hard' && (
-                      <Trophy
-                        className="tile-trophy"
-                        size={12}
-                        aria-label={t('挑战关', 'Hard level')}
-                      />
-                    )}
-                    <span>
-                      {!canStartLevel(progress, id)
-                        ? ''
-                        : progress.best[id]
-                          ? [1, 2, 3].map((n) => (
-                              <Star
-                                size={10}
-                                key={n}
-                                fill={
-                                  n <= progress.best[id]
-                                    ? 'currentColor'
-                                    : 'none'
-                                }
-                              />
-                            ))
-                          : id === run.level
-                            ? t('进行中', 'PLAYING')
-                            : t('开始', 'PLAY')}
-                    </span>
-                  </button>
-                ))}
+                {chapterLevelIds(selectedChapter, perChapter, count).map(
+                  (id) => (
+                    <button
+                      className={`level-tile ${challenge && challengeInfo(id).tier === 'hard' ? 'hard-tile' : ''} ${id === run.level ? 'current' : ''} ${progress.best[id] ? 'done' : ''}`}
+                      key={id}
+                      disabled={!canStartLevel(progress, id)}
+                      onClick={() =>
+                        id === progress.run.level && !training && !complete
+                          ? setPanel(null)
+                          : startLevel(id)
+                      }
+                      aria-label={t(
+                        `第${id}关，${progress.best[id] || 0}星`,
+                        `Level ${id}, ${progress.best[id] || 0} stars`,
+                      )}
+                    >
+                      {!canStartLevel(progress, id) ? (
+                        <LockKeyhole size={20} />
+                      ) : (
+                        <strong>{String(id).padStart(2, '0')}</strong>
+                      )}
+                      {challenge && challengeInfo(id).tier === 'hard' && (
+                        <Trophy
+                          className="tile-trophy"
+                          size={12}
+                          aria-label={t('挑战关', 'Hard level')}
+                        />
+                      )}
+                      <span>
+                        {!canStartLevel(progress, id)
+                          ? ''
+                          : progress.best[id]
+                            ? [1, 2, 3].map((n) => (
+                                <Star
+                                  size={10}
+                                  key={n}
+                                  fill={
+                                    n <= progress.best[id]
+                                      ? 'currentColor'
+                                      : 'none'
+                                  }
+                                />
+                              ))
+                            : id === run.level
+                              ? t('进行中', 'PLAYING')
+                              : t('开始', 'PLAY')}
+                      </span>
+                    </button>
+                  ),
+                )}
               </div>
               <p className="dialog-footnote">
                 {t(
@@ -1301,7 +1312,9 @@ export default function Home() {
           )}
           {(panel === 'entry' || panel === 'revision') && (
             <>
-              <span className="section-eyebrow">ARROW ESCAPE 5.0 · 300</span>
+              <span className="section-eyebrow">
+                {t(`旅程新版 · ${count} 关`, `EXPANDED JOURNEY · ${count}`)}
+              </span>
               <DialogTitle>
                 {t('选一个适合你的起点', 'Choose your starting point')}
               </DialogTitle>
@@ -1780,8 +1793,8 @@ export default function Home() {
               <DialogDescription>
                 {objective
                   ? t(
-                      `${objective.targets.length} 支星标全部出逃，用了 ${run.removed.length}/${objective.moves} 步。${remaining} 支普通箭头留在原地，也一样完成目标。`,
-                      `All ${objective.targets.length} stars escaped in ${run.removed.length}/${objective.moves} moves. ${remaining} ordinary arrows stayed behind. Goal complete.`,
+                      `${objective.targets.length} 支星标全部出逃，用了 ${run.removed.length}/${objective.moves} 步，余下 ${Math.max(0, objective.moves - run.removed.length)} 步。${remaining} 支普通箭头无需移走。`,
+                      `All ${objective.targets.length} stars escaped in ${run.removed.length}/${objective.moves} moves, with ${Math.max(0, objective.moves - run.removed.length)} moves to spare. ${remaining} ordinary arrows could stay behind.`,
                     )
                   : run.level === count
                     ? t(
@@ -1789,8 +1802,8 @@ export default function Home() {
                         `This level is complete. You have solved ${Object.keys(progress.best).length}/${count} puzzles. Explore other chapters whenever you like.`,
                       )
                     : t(
-                        '每一条交错的线，都找到了自己的方向。',
-                        'Every tangled path found its own way out.',
+                        `全部 ${run.removed.length} 支箭头已出逃，误点 ${run.mistakes} 次。`,
+                        `All ${run.removed.length} arrows escaped, with ${run.mistakes} blocked taps.`,
                       )}
               </DialogDescription>
               <p className="completion-record">

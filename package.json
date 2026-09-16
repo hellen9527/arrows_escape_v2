@@ -20,11 +20,14 @@
     "test:rescue:browser": "node --experimental-strip-types tests/rescue-browser.mjs",
     "test:challenge:browser": "node --experimental-strip-types tests/challenge-browser.mjs && node --experimental-strip-types tests/challenge-input.mjs && node --experimental-strip-types tests/challenge-storage.mjs",
     "test:remix:browser": "node --experimental-strip-types tests/remix-browser.mjs && node --experimental-strip-types tests/remix-regressions.mjs",
-    "audit:levels": "node --experimental-strip-types scripts/audit-weave.mjs",
+    "audit:levels": "node --experimental-strip-types scripts/audit-weave.mjs && node --experimental-strip-types scripts/audit-expansion.mjs",
+    "generate:expansion": "node --experimental-strip-types scripts/generate-expansion.mjs",
+    "assemble:expansion": "node --experimental-strip-types scripts/assemble-expansion.mjs",
     "generate:levels": "node --experimental-strip-types scripts/generate-weave.mjs",
     "assemble:levels": "node --experimental-strip-types scripts/assemble-weave.mjs",
     "reproduce:levels": "node --experimental-strip-types scripts/reproduce-weave.mjs",
-    "preview:feedback": "node scripts/preview-feedback.mjs"
+    "preview:feedback": "node scripts/preview-feedback.mjs",
+    "reproduce:expansion": "node --experimental-strip-types scripts/reproduce-expansion.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
