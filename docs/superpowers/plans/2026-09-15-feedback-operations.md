@@ -20,7 +20,7 @@ node_modules/.bin/wrangler d1 execute FEEDBACK_DB --local --config .wrangler/fee
 
 ## 正式启用
 
-2026-09-15：用户已批准新增D1授权，Wrangler授权成功；已创建数据库 `arrows-escape-feedback`（`69fc20d0-9a50-4791-b83e-fe151e47675d`），已成功应用0001迁移。生产配置已加入两个绑定。以下是完整流程，发布和线上验收仍须最后完成。
+2026-09-15：用户已批准新增D1授权，Wrangler授权成功；已创建数据库 `arrows-escape-feedback`（`69fc20d0-9a50-4791-b83e-fe151e47675d`），已成功应用0001迁移。生产配置已加入两个绑定，已发布并完成真实线上入库验收。
 
 1. 已取得用户确认并完成D1授权；未申请其他新权限。
 2. 已创建上方记录的真实数据库。
@@ -28,3 +28,7 @@ node_modules/.bin/wrangler d1 execute FEEDBACK_DB --local --config .wrangler/fee
 4. 远程0001迁移成功，反馈表已建立。
 5. 按GitHub/Cloudflare原部署链发布已验证提交，再从正式域名实际提交一条明确标注的验收反馈，并只查询这条验收记录核实。不要读取无关用户数据。
 6. 用户可在Cloudflare D1控制台查看/导出自己的反馈数据。无需发布一个所有人都能访问的反馈列表。运营分析应将正式关、引导、特殊关、老配对和选关页分开，不把测试反馈当玩家数据。
+
+发布代码：`89fb2cf`，GitHub main与功能分支已同步。Worker版本：`859b0ea7-f30a-4ed5-8688-af4eed2acf5f`。Git连接在Cloudflare显示断开，故沿用Wrangler手动发布；此次未修复或扩大GitHub授权，不能宣称推送后会自动部署。
+
+正式Chrome从 `https://arrows.fategenie.com/` 主动提交标记 `AE800-20260915`，页面显示保存成功，远程D1按该标记查询确认唯一记录 `d2ae35e7-5ae0-4063-9e57-0560e216d583`；版本 `journey-800-v1`，主线31关。验收记录保留并明确排除玩家统计。页面资源 `page-CqFiKaI-.js` 与本次本地生产构建SHA256一致：`6920707107661fc25da403feafe34d08ed46d69ea9ac7802b74e112a31c05ee5`。
